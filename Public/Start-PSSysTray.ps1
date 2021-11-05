@@ -1,4 +1,4 @@
-
+﻿
 <#PSScriptInfo
 
 .VERSION 0.1.0
@@ -19,7 +19,7 @@
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES 
+.EXTERNALMODULEDEPENDENCIES
 
 .REQUIREDSCRIPTS
 
@@ -32,17 +32,13 @@ Created [24/10/2021_05:59] Initital Script Creating
 
 #>
 
-<# 
+<#
 
-.DESCRIPTION 
- Gui menu app in your systray with custom executable functions 
+.DESCRIPTION
+ Gui menu app in your systray with custom executable functions
 
-#> 
-#.ExternalHelp PSLauncher-help.xml
-
-Function Start-PSSysTray {
-
-	<#
+#>
+<#
 .SYNOPSIS
 Gui menu app in your systray with custom executable functions
 
@@ -56,146 +52,149 @@ Path to .csv config file created from Install-PSSysTrayConfigFile
 Start-PSSysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 
 #>
-	[Cmdletbinding()]
- Param (
-		[Parameter(Mandatory = $true, Position = 0)]
-		[ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.csv') })]
-		[string]$ConfigFilePath
-	) 
-	Add-Type -Name Window -Namespace Console -MemberDefinition '
+Function Start-PSSysTray {
+    [Cmdletbinding(SupportsShouldProcess = $true)]
+    Param (
+        [Parameter(Mandatory = $true, Position = 0)]
+        [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.csv') })]
+        [string]$ConfigFilePath
+    )
+    if ($pscmdlet.ShouldProcess('Target', 'Operation')) {
+
+        Add-Type -Name Window -Namespace Console -MemberDefinition '
     [DllImport("Kernel32.dll")]
     public static extern IntPtr GetConsoleWindow();
- 
+
     [DllImport("user32.dll")]
     public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
 '
 
-	# Declare assemblies 
-	[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms') | Out-Null
-	[System.Reflection.Assembly]::LoadWithPartialName('presentationframework') | Out-Null 
-	[System.Reflection.Assembly]::LoadWithPartialName('System.Drawing') | Out-Null
-	[System.Reflection.Assembly]::LoadWithPartialName('WindowsFormsIntegration') | Out-Null
- 
-	# Add an icon to the systrauy button
-	$icopath = (Join-Path (Get-Module PSLauncher).ModuleBase '\Private\pslauncher.ico') | Get-Item
-	$icon = [System.Drawing.Icon]::ExtractAssociatedIcon($icopath.FullName)
- 
-	# Create object for the systray 
-	$Systray_Tool_Icon = New-Object System.Windows.Forms.NotifyIcon
-	# Text displayed when you pass the mouse over the systray icon
-	$Systray_Tool_Icon.Text = 'PS Utils'
-	# Systray icon
-	$Systray_Tool_Icon.Icon = $icon
-	$Systray_Tool_Icon.Visible = $true
-	$contextmenu = New-Object System.Windows.Forms.ContextMenu
-	$Systray_Tool_Icon.ContextMenu = $contextmenu
+        # Declare assemblies
+        [System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms') | Out-Null
+        [System.Reflection.Assembly]::LoadWithPartialName('presentationframework') | Out-Null
+        [System.Reflection.Assembly]::LoadWithPartialName('System.Drawing') | Out-Null
+        [System.Reflection.Assembly]::LoadWithPartialName('WindowsFormsIntegration') | Out-Null
 
-	function Start-ShowConsole {
-		$PSConsole = [Console.Window]::GetConsoleWindow()
-		[Console.Window]::ShowWindow($PSConsole, 5)
-	}
-	function Start-HideConsole {
-		$PSConsole = [Console.Window]::GetConsoleWindow()
-		[Console.Window]::ShowWindow($PSConsole, 0)
-	}
-	function New-MenuItem {
-		param(
-			[string]$Text = 'Placeholder Text',
-			$MyScriptPath,
-			[ValidateSet('PSFile', 'PSCommand', 'Other')]
-			[string]$method,
-			[System.Windows.Forms.MenuItem]$MainMenu
-		)
+        # Add an icon to the systrauy button
+        $icopath = (Join-Path (Get-Module PSLauncher).ModuleBase '\Private\pslauncher.ico') | Get-Item
+        $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($icopath.FullName)
 
-		#Initialization
-		$MenuItem = New-Object System.Windows.Forms.MenuItem
+        # Create object for the systray
+        $Systray_Tool_Icon = New-Object System.Windows.Forms.NotifyIcon
+        # Text displayed when you pass the mouse over the systray icon
+        $Systray_Tool_Icon.Text = 'PS Utils'
+        # Systray icon
+        $Systray_Tool_Icon.Icon = $icon
+        $Systray_Tool_Icon.Visible = $true
+        $contextmenu = New-Object System.Windows.Forms.ContextMenu
+        $Systray_Tool_Icon.ContextMenu = $contextmenu
 
-		#Apply desired text
-		if ($Text) {
-			$MenuItem.Text = $Text
-		}
+        function ShowConsole {
+            $PSConsole = [Console.Window]::GetConsoleWindow()
+            [Console.Window]::ShowWindow($PSConsole, 5)
+        }
+        function HideConsole {
+            $PSConsole = [Console.Window]::GetConsoleWindow()
+            [Console.Window]::ShowWindow($PSConsole, 0)
+        }
+        function NMenuItem {
+            param(
+                [string]$Text = 'Placeholder Text',
+                $MyScriptPath,
+                [ValidateSet('PSFile', 'PSCommand', 'Other')]
+                [string]$method,
+                [System.Windows.Forms.MenuItem]$MainMenu
+            )
 
-		#Apply click event logic
-		if ($MyScriptPath -and !$ExitOnly) {
-			$MenuItem | Add-Member -Name MyScriptPath -Value $MyScriptPath -MemberType NoteProperty
-			if ($method -eq 'PSFile') {
-				$MenuItem.Add_Click( {
-						Start-ShowConsole
-						$MyScriptPath = $This.MyScriptPath #Used to find proper path during click event               
-						Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoProfile -NoLogo -ExecutionPolicy Bypass -File `"$MyScriptPath`"" -ErrorAction Stop
-						Start-HideConsole
-					})
-			}
-                
-			if ($method -eq 'PSCommand') {
-				$MenuItem.Add_Click( {
-						Start-ShowConsole
-						$MyScriptPath = $This.MyScriptPath #Used to find proper path during click event               
-						Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoProfile -NoLogo -ExecutionPolicy Bypass -Command `"& {$MyScriptPath}""" -ErrorAction Stop
-						Start-HideConsole
-					})
-			}
-			if ($method -eq 'Other') {
-				$MenuItem.Add_Click( {
-						Start-ShowConsole
-						$MyScriptPath = $This.MyScriptPath #Used to find proper path during click event               
-						Start-Process $MyScriptPath
-						Start-HideConsole
+            #Initialization
+            $MenuItem = New-Object System.Windows.Forms.MenuItem
 
-					})
-			}
-        
-		}
+            #Apply desired text
+            if ($Text) {
+                $MenuItem.Text = $Text
+            }
 
-		#Return our new MenuItem
-		$MainMenu.MenuItems.AddRange($MenuItem)
-	}
-	function New-MainMenu {
-		param(
-			[string]$Text = 'Placeholder Text',
-			[switch]$AddExit = $false
-		)
-		$MainMenu = New-Object System.Windows.Forms.MenuItem
-		$MainMenu.Text = $Text
-		$Systray_Tool_Icon.contextMenu.MenuItems.AddRange($MainMenu)
-		$MainMenu
+            #Apply click event logic
+            if ($MyScriptPath -and !$ExitOnly) {
+                $MenuItem | Add-Member -Name MyScriptPath -Value $MyScriptPath -MemberType NoteProperty
+                if ($method -eq 'PSFile') {
+                    $MenuItem.Add_Click( {
+                            ShowConsole
+                            $MyScriptPath = $This.MyScriptPath #Used to find proper path during click event
+                            Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoProfile -NoLogo -ExecutionPolicy Bypass -File `"$MyScriptPath`"" -ErrorAction Stop
+                            HideConsole
+                        })
+                }
 
-		if ($AddExit) {
-			$Menu_Exit = New-Object System.Windows.Forms.MenuItem
-			$Menu_Exit.Text = 'Exit'
-			$Menu_Exit.add_Click( {
-					$Systray_Tool_Icon.Visible = $false
-					$window.Close()
-					# $window_Config.Close() 
-					Stop-Process $pid
-				})
-			$Systray_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Exit)
-		}
-	}
+                if ($method -eq 'PSCommand') {
+                    $MenuItem.Add_Click( {
+                            ShowConsole
+                            $MyScriptPath = $This.MyScriptPath #Used to find proper path during click event
+                            Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoProfile -NoLogo -ExecutionPolicy Bypass -Command `"& {$MyScriptPath}""" -ErrorAction Stop
+                            HideConsole
+                        })
+                }
+                if ($method -eq 'Other') {
+                    $MenuItem.Add_Click( {
+                            ShowConsole
+                            $MyScriptPath = $This.MyScriptPath #Used to find proper path during click event
+                            Start-Process $MyScriptPath
+                            HideConsole
 
-	$config = Import-Csv -Path $ConfigFilePath	
-	foreach ($main in ($config.mainmenu | Get-Unique)) {
-		$tmpmenu = New-MainMenu -Text $main
-		$config | Where-Object { $_.Mainmenu -like $main } | ForEach-Object { New-MenuItem -Text $_.ScriptName -MyScriptPath $_.ScriptPath -method $_.mode -MainMenu $tmpmenu }
-	}
-	$Menu_Exit = New-Object System.Windows.Forms.MenuItem
-	$Menu_Exit.Text = 'Exit'
-	$Menu_Exit.add_Click( {
-			$Systray_Tool_Icon.Visible = $false
-			$window.Close()
-			$window_Config.Close() 
-			Stop-Process $pid
-		})
-	$Systray_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Exit)
+                        })
+                }
 
+            }
 
-	# Create an application context for it to all run within.
-	# This helps with responsiveness, especially when clicking Exit.
-	Start-HideConsole
-	$appContext = New-Object System.Windows.Forms.ApplicationContext
-	[void][System.Windows.Forms.Application]::Run($appContext)
+            #Return our new MenuItem
+            $MainMenu.MenuItems.AddRange($MenuItem)
+        }
+        function NMainMenu {
+            param(
+                [string]$Text = 'Placeholder Text',
+                [switch]$AddExit = $false
+            )
+            $MainMenu = New-Object System.Windows.Forms.MenuItem
+            $MainMenu.Text = $Text
+            $Systray_Tool_Icon.contextMenu.MenuItems.AddRange($MainMenu)
+            $MainMenu
+
+            if ($AddExit) {
+                $Menu_Exit = New-Object System.Windows.Forms.MenuItem
+                $Menu_Exit.Text = 'Exit'
+                $Menu_Exit.add_Click( {
+                        $Systray_Tool_Icon.Visible = $false
+                        $window.Close()
+                        # $window_Config.Close()
+                        Stop-Process $pid
+                    })
+                $Systray_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Exit)
+            }
+        }
+
+        $config = Import-Csv -Path $ConfigFilePath
+        foreach ($main in ($config.mainmenu | Get-Unique)) {
+            $tmpmenu = NMainMenu -Text $main
+            $config | Where-Object { $_.Mainmenu -like $main } | ForEach-Object { NMenuItem -Text $_.ScriptName -MyScriptPath $_.ScriptPath -method $_.mode -MainMenu $tmpmenu }
+        }
+        $Menu_Exit = New-Object System.Windows.Forms.MenuItem
+        $Menu_Exit.Text = 'Exit'
+        $Menu_Exit.add_Click( {
+                $Systray_Tool_Icon.Visible = $false
+                $window.Close()
+                $window_Config.Close()
+                Stop-Process $pid
+            })
+        $Systray_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Exit)
 
 
+        # Create an application context for it to all run within.
+        # This helps with responsiveness, especially when clicking Exit.
+        HideConsole
+        $appContext = New-Object System.Windows.Forms.ApplicationContext
+        [void][System.Windows.Forms.Application]::Run($appContext)
 
+
+    }
 } #end Function
 

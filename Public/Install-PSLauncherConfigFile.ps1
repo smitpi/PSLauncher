@@ -1,4 +1,4 @@
-
+﻿
 <#PSScriptInfo
 
 .VERSION 1.1.2
@@ -19,7 +19,7 @@
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES 
+.EXTERNALMODULEDEPENDENCIES
 
 .REQUIREDSCRIPTS
 
@@ -32,23 +32,19 @@ Updated [24/10/2021_05:59] 'Updated module/script info'
 
 .PRIVATEDATA
 
-#> 
+#>
 
 
 
 
 
-<# 
+<#
 
-.DESCRIPTION 
+.DESCRIPTION
 Creates the config file with the provided settings
 
-#> 
-
-#.ExternalHelp PSLauncher-help.xml
-
-Function Install-PSLauncherConfigFile {
-	<#
+#>
+<#
 .SYNOPSIS
 Creates the config file with the provided settings
 
@@ -86,28 +82,29 @@ Path where the config file will be saved.
 Creates a shortcut in the same directory that calls powershell and the config.
 
 .PARAMETER LaunchColorPicker
-Launches Start-PSLauncherColorPicker 
+Launches Start-PSLauncherColorPicker
 
 .EXAMPLE
 Install-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker
 
 #>
-	param(
-		[string]$Color1 = '#E5E5E5',
-		[string]$Color2 = '#061820',
-		[string]$LabelColor = '#FFD400',
-		[string]$TextColor = '#000000',
-		[string]$LogoPath = 'https://gist.githubusercontent.com/smitpi/0e36b701419dbf9282ecfc6d0f7b654c/raw/8fe6a2fc91a27a9ebccb753f6508a2edd039c208/default-monochrome-black.png',
-		[string]$Title = 'PowerShell Launcher',
-		[string]$Panel01 = 'First',
-		[string]$Panel02 = 'Second',
-		[ValidateScript( { (Test-Path $_) })]
-		[System.IO.DirectoryInfo]$ConfigPath = (Join-Path (Get-Module pslauncher).ModuleBase \config),
-		[switch]$CreateShortcut = $false,
-		[switch]$LaunchColorPicker = $false
-	)
+Function Install-PSLauncherConfigFile {
+    param(
+        [string]$Color1 = '#E5E5E5',
+        [string]$Color2 = '#061820',
+        [string]$LabelColor = '#FFD400',
+        [string]$TextColor = '#000000',
+        [string]$LogoPath = 'https://gist.githubusercontent.com/smitpi/0e36b701419dbf9282ecfc6d0f7b654c/raw/8fe6a2fc91a27a9ebccb753f6508a2edd039c208/default-monochrome-black.png',
+        [string]$Title = 'PowerShell Launcher',
+        [string]$Panel01 = 'First',
+        [string]$Panel02 = 'Second',
+        [ValidateScript( { (Test-Path $_) })]
+        [System.IO.DirectoryInfo]$ConfigPath = (Join-Path (Get-Module pslauncher).ModuleBase \config),
+        [switch]$CreateShortcut = $false,
+        [switch]$LaunchColorPicker = $false
+    )
 
-	$json = @"
+    $json = @"
 {
     "Config":  [
                    {
@@ -145,37 +142,37 @@ Install-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker
 }
 
 "@
-	$Configfile = (Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json)
-	$check = Test-Path -Path $Configfile -ErrorAction SilentlyContinue
-	if (-not($check)) {
-		Write-Output 'Config File does not exit, creating default settings.'
-		Set-Content -Value $json -Path $Configfile
-	}
- else {
-		Write-Warning 'File exists, renaming file now'
-		Rename-Item $Configfile -NewName "PSSysTrayConfig_$(Get-Date -Format ddMMyyyy_HHmm).csv"
-		Set-Content -Value $json -Path $Configfile
-	}
-	if ($CreateShortcut) {
+    $Configfile = (Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json)
+    $check = Test-Path -Path $Configfile -ErrorAction SilentlyContinue
+    if (-not($check)) {
+        Write-Output 'Config File does not exit, creating default settings.'
+        Set-Content -Value $json -Path $Configfile
+    }
+    else {
+        Write-Warning 'File exists, renaming file now'
+        Rename-Item $Configfile -NewName "PSSysTrayConfig_$(Get-Date -Format ddMMyyyy_HHmm).csv"
+        Set-Content -Value $json -Path $Configfile
+    }
+    if ($CreateShortcut) {
 
-		$string = "import-module  $((Join-Path (Get-Module pslauncher).ModuleBase \PSLauncher.psm1 -Resolve)) -Force -ErrorAction SilentlyContinue;"
-		$string += 'Import-Module PSLauncher -Force -ErrorAction SilentlyContinue;'
-		$string += "Start-PSLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))"
+        $string = "import-module  $((Join-Path (Get-Module pslauncher).ModuleBase \PSLauncher.psm1 -Resolve)) -Force -ErrorAction SilentlyContinue;"
+        $string += 'Import-Module PSLauncher -Force -ErrorAction SilentlyContinue;'
+        $string += "Start-PSLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))"
 
-		Set-Content -Value $string.Split(';') -Path (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1)
-		$WScriptShell = New-Object -ComObject WScript.Shell
-		$lnkfile = (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1 -Resolve).Replace('ps1', 'lnk')
-		$Shortcut = $WScriptShell.CreateShortcut($($lnkfile))
-		$Shortcut.TargetPath = 'powershell.exe'
-		$Shortcut.Arguments = "-NoLogo -NoProfile -ExecutionPolicy bypass -file `"$((Join-Path $ConfigPath -ChildPath \PSLauncher.ps1))`""
-		$icon = Get-Item (Join-Path (Get-Module pslauncher).ModuleBase .\Private\pslauncher.ico)
+        Set-Content -Value $string.Split(';') -Path (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1)
+        $WScriptShell = New-Object -ComObject WScript.Shell
+        $lnkfile = (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1 -Resolve).Replace('ps1', 'lnk')
+        $Shortcut = $WScriptShell.CreateShortcut($($lnkfile))
+        $Shortcut.TargetPath = 'powershell.exe'
+        $Shortcut.Arguments = "-NoLogo -NoProfile -ExecutionPolicy bypass -file `"$((Join-Path $ConfigPath -ChildPath \PSLauncher.ps1))`""
+        $icon = Get-Item (Join-Path (Get-Module pslauncher).ModuleBase .\Private\pslauncher.ico)
         $Shortcut.IconLocation = $icon.FullName
-		#Save the Shortcut to the TargetPath
-		$Shortcut.Save()
-		Start-Process explorer.exe $ConfigPath
-	}
+        #Save the Shortcut to the TargetPath
+        $Shortcut.Save()
+        Start-Process explorer.exe $ConfigPath
+    }
 
-	if ($LaunchColorPicker -like $true) {
-		Start-PSLauncherColorPicker -ConfigFilePath (Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json)
-	}
+    if ($LaunchColorPicker -like $true) {
+        Start-PSLauncherColorPicker -ConfigFilePath (Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json)
+    }
 } #end Function

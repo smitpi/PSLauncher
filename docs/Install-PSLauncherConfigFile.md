@@ -1,6 +1,6 @@
 ---
-external help file:
-Module Name:
+external help file: PSLauncher-help.xml
+Module Name: PSLauncher
 online version:
 schema: 2.0.0
 ---
@@ -39,7 +39,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: 1
 Default value: #E5E5E5
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -54,8 +54,98 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 2
 Default value: #061820
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LabelColor
+Run Start-PSLauncherColorPicker to change.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: #FFD400
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TextColor
+Run Start-PSLauncherColorPicker to change.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
+Default value: #000000
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LogoPath
+Run Start-PSLauncherColorPicker to change.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: Https://gist.githubusercontent.com/smitpi/0e36b701419dbf9282ecfc6d0f7b654c/raw/8fe6a2fc91a27a9ebccb753f6508a2edd039c208/default-monochrome-black.png
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Title
+Text in the titple of the app.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: PowerShell Launcher
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Panel01
+Name of the 1st panel
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: First
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Panel02
+Name of the 2nd panel
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 8
+Default value: Second
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -69,7 +159,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 9
 Default value: (Join-Path (Get-Module pslauncher).ModuleBase \config)
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -90,21 +180,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -LabelColor
-Run Start-PSLauncherColorPicker to change.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: #FFD400
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -LaunchColorPicker
 Launches Start-PSLauncherColorPicker
 
@@ -120,92 +195,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -LogoPath
-Run Start-PSLauncherColorPicker to change.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: Https://gist.githubusercontent.com/smitpi/0e36b701419dbf9282ecfc6d0f7b654c/raw/8fe6a2fc91a27a9ebccb753f6508a2edd039c208/default-monochrome-black.png
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Panel01
-Name of the 1st panel
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 6
-Default value: First
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Panel02
-Name of the 2nd panel
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 7
-Default value: Second
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TextColor
-Run Start-PSLauncherColorPicker to change.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: #000000
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Title
-Text in the titple of the app.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 5
-Default value: PowerShell Launcher
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
-General notes
 
 ## RELATED LINKS

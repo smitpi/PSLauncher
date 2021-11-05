@@ -21,9 +21,9 @@ Gui menu app in your systray with custom executable functions
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> Start-PSSysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
+### EXAMPLE 1
+```
+Start-PSSysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 ```
 
 ## PARAMETERS
@@ -44,7 +44,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

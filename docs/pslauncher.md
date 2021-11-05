@@ -2,7 +2,7 @@
 Module Name: PSLauncher
 Module Guid: 5a3184bf-ebc3-4ed5-b7b2-f04863597f68
 Download Help Link:
-help Version: 0.1.4
+help Version: 0.1.5
 Locale: en-US
 ---
 
@@ -10,7 +10,6 @@ Locale: en-US
 ## Description
 a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access.
 Gui is build from a json / csv config file. Also included helper functions to create the buttons for you.
-
 
 ## PSLauncher Cmdlets
 ### [Install-PSLauncherConfigFile](Install-PSLauncherConfigFile.md)
