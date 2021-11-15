@@ -2,26 +2,25 @@
 ## about_PSLauncher
 
 # SHORT DESCRIPTION
-a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access.
-Gui is build from a json / csv config file. Also included helper functions to create the buttons for you.
+a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
+the same json config file as the full gui. Or create a separate systray tool with a .csv as a config file. 
+Also included is helper functions to create buttons and panels for you.
 
 # LONG DESCRIPTION
-a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access.
-Gui is build from a json / csv config file. Also included helper functions to create the buttons for you.
+a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
+the same json config file as the full gui. Or create a separate systray tool with a .csv as a config file. 
+Also included is helper functions to create buttons and panels for you.
 
-# EXAMPLES
--------------------------- Install-PSLauncherConfigFile --------------------------
-Install-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker
--------------------------- Install-PSSysTrayConfigFile --------------------------
-Install-PSSysTrayConfigFile -ConfigPath C:\temp -CreateShortcut
--------------------------- Start-PSLauncher --------------------------
-Start-PSLauncher -ConfigFilePath c:\temp\config.json
--------------------------- Start-PSLauncherColorPicker --------------------------
-Start-PSLauncherColorPicker -ConfigFilePath c:\temp\config.json
--------------------------- Start-PSSysTray --------------------------
-Start-PSSysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
+# NOTES
+New-PS_CSV_SysTrayConfigFile -- Creates the config file for Start-PSSysTray
+New-PSLauncherConfigFile -- Creates the config file with the provided settings
+Start-PS_CSV_SysTray -- Gui menu app in your systray with custom executable functions
+Start-PSLauncher -- Reads the config file and launches the gui
+Start-PSLauncherColorPicker -- Launches a gui form to test and change the color of PSLauncher.
+Start-PSSysTrayLauncher -- Gui menu app in your systray with custom executable functions
 
 
 # SEE ALSO
 https://github.com/smitpi/PSLauncher
+https://smitpi.github.io/PSLauncher/
 

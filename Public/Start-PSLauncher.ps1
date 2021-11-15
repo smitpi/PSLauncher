@@ -147,10 +147,11 @@ Function Start-PSLauncher {
                 $processArguments.Remove('NoNewWindow')
                 $processArguments.Remove('Wait')
             }
-            if ( $options -contains 'AsAdmin' ) { 
+            if ( $options -contains 'AsAdmin' ) {
                 $processArguments.Remove('NoNewWindow')
                 $processArguments.Remove('Wait')
-                $processArguments.Add( 'Verb' , 'RunAs' ) }
+                $processArguments.Add( 'Verb' , 'RunAs' ) 
+            }
 
             $process = $null
             ShowConsole
@@ -265,8 +266,8 @@ Function Start-PSLauncher {
 
             Clear-Host
             Write-Color 'Do you want to add a Button or a Panel' -Color DarkYellow -LinesAfter 1
-            write-Color "0", ': ', "Panel" -Color Yellow, Yellow, Green
-            write-Color "1", ': ', "Button" -Color Yellow, Yellow, Green
+            Write-Color "0", ': ', "Panel" -Color Yellow, Yellow, Green
+            Write-Color "1", ': ', "Button" -Color Yellow, Yellow, Green
             Write-Output ' '
             [int]$GuiAddChoice = Read-Host 'Decide '
             if ($GuiAddChoice -eq 0) {
@@ -280,8 +281,8 @@ Function Start-PSLauncher {
                 }
                 $PanelName = Read-Host "Panel Name "
                 [int]$PanelNumber = [int]($NewConfig.Values.config.PanelNumber | Sort-Object -Descending | Select-Object -First 1) +1
-                
-$AddPanel = @"
+
+                $AddPanel = @"
 		{
 			"Config": {
 				"PanelNumber": "$($PanelNumber)"
@@ -293,59 +294,59 @@ $AddPanel = @"
                 $NewConfig += @{$PanelName = ($AddPanel | ConvertFrom-Json)}
                 $Update = @()
                 $Update = [psobject]@{
-                    Config      = $jsondata.Config
-                    Buttons     = $NewConfig
+                    Config  = $jsondata.Config
+                    Buttons = $NewConfig
                 }
                 $Update | ConvertTo-Json -Depth 5 | Set-Content -Path $ConfigFilePath -Verbose -Force
-          
+
             }
             if ($GuiAddChoice -eq 1) {
-            $data = $jsondata.Buttons
-            $panellist = $jsondata.Buttons | Get-Member | Where-Object { $_.membertype -eq 'NoteProperty' } | Select-Object name
-            $panellistSorted = $panellist | ForEach-Object { [pscustomobject]@{
-                    name        = $_.Name
-                    PanelNumber = $data.($_.name).config.PanelNumber
-                }
-            } | Sort-Object -Property PanelNumber
-            $index = 0
-
-            Clear-Host
-            Write-Color 'Select the panel where the button will be added' -Color DarkYellow -LinesAfter 1
-            foreach ($p in $panellistSorted) {
-                Write-Color $index, ': ', $p.name -Color Yellow, Yellow, Green
-                $index++
-            }
-            Write-Output ' '
-            [int]$indexnum = Read-Host 'Panel Number '
-
-            do {
-                Write-Color 'Details of the button' -Color DarkYellow -LinesAfter 1
-                $Mode = mode
-                if ($Mode -like 'ps*') {
-                    $jsondata.Buttons.($panellist[$indexnum].name).buttons += [PSCustomObject] @{
-                        Name      = Read-Host 'New Button Name '
-                        Command   = 'PowerShell.exe'
-                        Arguments = Read-Host '<PS Command> or <Path to ps1 file> '
-                        Mode      = $mode
-                        Options   = options
+                $data = $jsondata.Buttons
+                $panellist = $jsondata.Buttons | Get-Member | Where-Object { $_.membertype -eq 'NoteProperty' } | Select-Object name
+                $panellistSorted = $panellist | ForEach-Object { [pscustomobject]@{
+                        name        = $_.Name
+                        PanelNumber = $data.($_.name).config.PanelNumber
                     }
-                }
-                else {
-                    $jsondata.Buttons.($panellist[$indexnum].name).buttons += [PSCustomObject] @{
-                        Name      = Read-Host 'New Button Name '
-                        Command   = Read-Host 'Path to exe file'
-                        Arguments = Read-Host 'Arguments to run exe'
-                        Mode      = $Mode
-                        Options   = options
-                    }
+                } | Sort-Object -Property PanelNumber
+                $index = 0
+
+                Clear-Host
+                Write-Color 'Select the panel where the button will be added' -Color DarkYellow -LinesAfter 1
+                foreach ($p in $panellistSorted) {
+                    Write-Color $index, ': ', $p.name -Color Yellow, Yellow, Green
+                    $index++
                 }
                 Write-Output ' '
-                $yn = Read-Host "Add another button in $($panellist[$indexnum].name) (y/n)"
-            }
-            until ($yn.ToLower() -eq 'n')
+                [int]$indexnum = Read-Host 'Panel Number '
 
-            $jsondata | ConvertTo-Json -Depth 10 | Out-File $ConfigFilePath
-        }
+                do {
+                    Write-Color 'Details of the button' -Color DarkYellow -LinesAfter 1
+                    $Mode = mode
+                    if ($Mode -like 'ps*') {
+                        $jsondata.Buttons.($panellist[$indexnum].name).buttons += [PSCustomObject] @{
+                            Name      = Read-Host 'New Button Name '
+                            Command   = 'PowerShell.exe'
+                            Arguments = Read-Host '<PS Command> or <Path to ps1 file> '
+                            Mode      = $mode
+                            Options   = options
+                        }
+                    }
+                    else {
+                        $jsondata.Buttons.($panellist[$indexnum].name).buttons += [PSCustomObject] @{
+                            Name      = Read-Host 'New Button Name '
+                            Command   = Read-Host 'Path to exe file'
+                            Arguments = Read-Host 'Arguments to run exe'
+                            Mode      = $Mode
+                            Options   = options
+                        }
+                    }
+                    Write-Output ' '
+                    $yn = Read-Host "Add another button in $($panellist[$indexnum].name) (y/n)"
+                }
+                until ($yn.ToLower() -eq 'n')
+
+                $jsondata | ConvertTo-Json -Depth 10 | Out-File $ConfigFilePath
+            }
         }
         function EnableLogging {
             ShowConsole

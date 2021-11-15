@@ -9,7 +9,7 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    RootModule            = 'PSLauncher.psm1'
+    RootModule        = 'PSLauncher.psm1'
 
     # Version number of this module.
     ModuleVersion     = '0.1.8'
@@ -24,7 +24,7 @@
     Author            = 'Pierre Smit'
 
     # Company or vendor of this module
-    CompanyName       = 'iOCO Tech'
+    CompanyName           = 'iOCO Tech'
 
     # Copyright statement for this module
     Copyright         = '(c) 2021 Pierre. All rights reserved.'
@@ -76,13 +76,13 @@ Also included is helper functions to create buttons and panels for you.'
     'Start-PSLauncherColorPicker', 'Start-PSSysTrayLauncher'
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    #CmdletsToExport = @()
+    CmdletsToExport   = @()
 
     # Variables to export from this module
     # VariablesToExport = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    #AliasesToExport = @()
+    AliasesToExport   = @()
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()
@@ -99,7 +99,7 @@ Also included is helper functions to create buttons and panels for you.'
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = 'citrix','gui','powershell','wpf'
+            Tags             = 'citrix','gui','powershell','wpf'
 
             # A URL to the license for this module.
             # LicenseUri = ''
@@ -108,7 +108,7 @@ Also included is helper functions to create buttons and panels for you.'
             ProjectUri   = 'https://github.com/smitpi/PSLauncher'
 
             # A URL to an icon representing this module.
-            IconUri          = 'https://ioco.tech/wp-content/uploads/2020/10/ioco-logo-2020.png'
+            IconUri      = 'https://ioco.tech/wp-content/uploads/2020/10/ioco-logo-2020.png'
 
             # ReleaseNotes of this module
             ReleaseNotes = 'Updated [15/11/2021_15:55] Added button to add more panels'

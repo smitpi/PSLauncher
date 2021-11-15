@@ -5,71 +5,55 @@ online version:
 schema: 2.0.0
 ---
 
-# Start-PSSysTray
+# New-PS_CSV_SysTrayConfigFile
 
 ## SYNOPSIS
-Gui menu app in your systray with custom executable functions
+Creates the config file for Start-PSSysTray
 
 ## SYNTAX
 
 ```
-Start-PSSysTray [-ConfigFilePath] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+New-PS_CSV_SysTrayConfigFile [[-ConfigPath] <DirectoryInfo>] [-CreateShortcut] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Gui menu app in your systray with custom executable functions
+Creates the config file for Start-PSSysTray
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Start-PSSysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
+New-PS_CSV_SysTrayConfigFile -ConfigPath C:\temp -CreateShortcut
 ```
 
 ## PARAMETERS
 
-### -ConfigFilePath
-Path to .csv config file created from Install-PSSysTrayConfigFile
+### -ConfigPath
+Path where config file will be saved.
 
 ```yaml
-Type: String
+Type: DirectoryInfo
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+### -CreateShortcut
+Create a shortcut to launch the gui
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: wi
+Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -5,25 +5,27 @@ online version:
 schema: 2.0.0
 ---
 
-# Start-PSLauncherColorPicker
+# Start-PSSysTrayLauncher
 
 ## SYNOPSIS
-Launches a gui form to test and change the color of PSLauncher.
+Gui menu app in your systray with custom executable functions
 
 ## SYNTAX
 
 ```
-Start-PSLauncherColorPicker [-ConfigFilePath] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Start-PSSysTrayLauncher [-ConfigFilePath] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Launches a gui form to test and change the color of PSLauncher.
+Gui menu app in your systray with custom executable functions.
+If you double click on the icon,
+it will launch the full gui.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Start-PSLauncherColorPicker -ConfigFilePath c:\temp\config.json
+Start-PSSysTrayLauncher -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 ```
 
 ## PARAMETERS

@@ -61,7 +61,7 @@ Function Start-PSSysTrayLauncher {
         [string]$ConfigFilePath
     )
     if ($pscmdlet.ShouldProcess('Target', 'Operation')) {
-    $jsondata = Get-Content $ConfigFilePath | ConvertFrom-Json
+        $jsondata = Get-Content $ConfigFilePath | ConvertFrom-Json
 
 
         Add-Type -Name Window -Namespace Console -MemberDefinition '
@@ -136,11 +136,11 @@ Function Start-PSSysTrayLauncher {
                 $processArguments.Remove('NoNewWindow')
                 $processArguments.Remove('Wait')
             }
-            if ( $options -contains 'AsAdmin' ) { 
+            if ( $options -contains 'AsAdmin' ) {
                 $processArguments.Remove('NoNewWindow')
                 $processArguments.Remove('Wait')
                 $processArguments.Add( 'Verb' , 'RunAs' )
-             }
+            }
 
             $process = $null
             ShowConsole
@@ -228,12 +228,12 @@ Function Start-PSSysTrayLauncher {
         $Systray_Tool_Icon.contextMenu.MenuItems.AddRange($Menu_Exit)
 
         $Systray_Tool_Icon.Add_MouseDoubleClick( {
-		ShowConsole
-        $Config = Get-Item $ConfigFilePath
-        $launcher = (Join-Path $Config.DirectoryName -ChildPath \PSLauncher.ps1) | Get-Item
-        Start-Process PowerShell -ArgumentList "-NoLogo -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -file `"$($launcher.FullName)`""
-		HideConsole
-	    })
+                ShowConsole
+                $Config = Get-Item $ConfigFilePath
+                $launcher = (Join-Path $Config.DirectoryName -ChildPath \PSLauncher.ps1) | Get-Item
+                Start-Process PowerShell -ArgumentList "-NoLogo -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -file `"$($launcher.FullName)`""
+                HideConsole
+            })
 
         # Create an application context for it to all run within.
         # This helps with responsiveness, especially when clicking Exit.

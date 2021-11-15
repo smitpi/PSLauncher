@@ -156,7 +156,7 @@ Function New-PSLauncherConfigFile {
     if ($CreateShortcut) {
         $module = Get-Module pslauncher
         if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
-        
+
         $string = "import-module  $((Join-Path $module.ModuleBase \PSLauncher.psm1 -Resolve)) -Force;"
         $string += "Start-PSLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))"
         Set-Content -Value $string.Split(';') -Path (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1) | Get-Item

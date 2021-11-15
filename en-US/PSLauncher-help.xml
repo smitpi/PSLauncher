@@ -2,8 +2,8 @@
 <helpItems schema="maml" xmlns="http://msh">
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Install-PSLauncherConfigFile</command:name>
-      <command:verb>Install</command:verb>
+      <command:name>New-PSLauncherConfigFile</command:name>
+      <command:verb>New</command:verb>
       <command:noun>PSLauncherConfigFile</command:noun>
       <maml:description>
         <maml:para>Creates the config file with the provided settings</maml:para>
@@ -14,7 +14,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Install-PSLauncherConfigFile</maml:name>
+        <maml:name>New-PSLauncherConfigFile</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Color1</maml:name>
           <maml:description>
@@ -172,6 +172,30 @@
         </dev:type>
         <dev:defaultValue>#061820</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+        <maml:name>ConfigPath</maml:name>
+        <maml:description>
+          <maml:para>Path where the config file will be saved.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">DirectoryInfo</command:parameterValue>
+        <dev:type>
+          <maml:name>DirectoryInfo</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Join-Path (Get-Module pslauncher).ModuleBase \config)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CreateShortcut</maml:name>
+        <maml:description>
+          <maml:para>Creates a shortcut in the same directory that calls powershell and the config.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
         <maml:name>LabelColor</maml:name>
         <maml:description>
@@ -184,17 +208,17 @@
         </dev:type>
         <dev:defaultValue>#FFD400</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
-        <maml:name>TextColor</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>LaunchColorPicker</maml:name>
         <maml:description>
-          <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
+          <maml:para>Launches Start-PSLauncherColorPicker</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
-          <maml:name>String</maml:name>
+          <maml:name>SwitchParameter</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>#000000</dev:defaultValue>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
         <maml:name>LogoPath</maml:name>
@@ -207,18 +231,6 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>Https://gist.githubusercontent.com/smitpi/0e36b701419dbf9282ecfc6d0f7b654c/raw/8fe6a2fc91a27a9ebccb753f6508a2edd039c208/default-monochrome-black.png</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
-        <maml:name>Title</maml:name>
-        <maml:description>
-          <maml:para>Text in the titple of the app.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>PowerShell Launcher</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
         <maml:name>Panel01</maml:name>
@@ -244,41 +256,29 @@
         </dev:type>
         <dev:defaultValue>Second</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
-        <maml:name>ConfigPath</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <maml:name>TextColor</maml:name>
         <maml:description>
-          <maml:para>Path where the config file will be saved.</maml:para>
+          <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">DirectoryInfo</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
-          <maml:name>DirectoryInfo</maml:name>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>(Join-Path (Get-Module pslauncher).ModuleBase \config)</dev:defaultValue>
+        <dev:defaultValue>#000000</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CreateShortcut</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <maml:name>Title</maml:name>
         <maml:description>
-          <maml:para>Creates a shortcut in the same directory that calls powershell and the config.</maml:para>
+          <maml:para>Text in the titple of the app.</maml:para>
         </maml:description>
-        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
-          <maml:name>SwitchParameter</maml:name>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>LaunchColorPicker</maml:name>
-        <maml:description>
-          <maml:para>Launches Start-PSLauncherColorPicker</maml:para>
-        </maml:description>
-        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
+        <dev:defaultValue>PowerShell Launcher</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes />
@@ -291,7 +291,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Install-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker</dev:code>
+        <dev:code>New-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -301,9 +301,9 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Install-PSSysTrayConfigFile</command:name>
-      <command:verb>Install</command:verb>
-      <command:noun>PSSysTrayConfigFile</command:noun>
+      <command:name>New-PS_CSV_SysTrayConfigFile</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>PS_CSV_SysTrayConfigFile</command:noun>
       <maml:description>
         <maml:para>Creates the config file for Start-PSSysTray</maml:para>
       </maml:description>
@@ -313,7 +313,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Install-PSSysTrayConfigFile</maml:name>
+        <maml:name>New-PS_CSV_SysTrayConfigFile</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>ConfigPath</maml:name>
           <maml:description>
@@ -375,7 +375,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Install-PSSysTrayConfigFile -ConfigPath C:\temp -CreateShortcut</dev:code>
+        <dev:code>New-PS_CSV_SysTrayConfigFile -ConfigPath C:\temp -CreateShortcut</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -401,7 +401,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>ConfigFilePath</maml:name>
           <maml:description>
-            <maml:para>Path to the config file</maml:para>
+            <maml:para>Path to the config file created by New-PSLauncherConfigFile</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -410,10 +410,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-          <maml:name>WhatIf</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
           <maml:description>
-            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -421,10 +421,10 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-          <maml:name>Confirm</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
           <maml:description>
-            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -438,7 +438,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>ConfigFilePath</maml:name>
         <maml:description>
-          <maml:para>Path to the config file</maml:para>
+          <maml:para>Path to the config file created by New-PSLauncherConfigFile</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -447,10 +447,10 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-        <maml:name>WhatIf</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
         <maml:description>
-          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -459,10 +459,10 @@
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-        <maml:name>Confirm</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
         <maml:description>
-          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -508,7 +508,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>ConfigFilePath</maml:name>
           <maml:description>
-            <maml:para>Path to the config file created by Install-PSLauncherConfigFile</maml:para>
+            <maml:para>Path to the config file created by New-PSLauncherConfigFile</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -517,10 +517,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-          <maml:name>WhatIf</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
           <maml:description>
-            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -528,10 +528,10 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-          <maml:name>Confirm</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
           <maml:description>
-            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -545,7 +545,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>ConfigFilePath</maml:name>
         <maml:description>
-          <maml:para>Path to the config file created by Install-PSLauncherConfigFile</maml:para>
+          <maml:para>Path to the config file created by New-PSLauncherConfigFile</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -554,10 +554,10 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-        <maml:name>WhatIf</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
         <maml:description>
-          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -566,10 +566,10 @@
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-        <maml:name>Confirm</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
         <maml:description>
-          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -599,23 +599,23 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Start-PSSysTray</command:name>
+      <command:name>Start-PSSysTrayLauncher</command:name>
       <command:verb>Start</command:verb>
-      <command:noun>PSSysTray</command:noun>
+      <command:noun>PSSysTrayLauncher</command:noun>
       <maml:description>
         <maml:para>Gui menu app in your systray with custom executable functions</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Gui menu app in your systray with custom executable functions</maml:para>
+      <maml:para>Gui menu app in your systray with custom executable functions. If you double click on the icon, it will launch the full gui.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Start-PSSysTray</maml:name>
+        <maml:name>Start-PSSysTrayLauncher</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>ConfigFilePath</maml:name>
           <maml:description>
-            <maml:para>Path to .csv config file created from Install-PSSysTrayConfigFile</maml:para>
+            <maml:para>Path to the config file created by New-PSLauncherConfigFile</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -624,10 +624,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-          <maml:name>WhatIf</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
           <maml:description>
-            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -635,10 +635,10 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-          <maml:name>Confirm</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
           <maml:description>
-            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -652,7 +652,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>ConfigFilePath</maml:name>
         <maml:description>
-          <maml:para>Path to .csv config file created from Install-PSSysTrayConfigFile</maml:para>
+          <maml:para>Path to the config file created by New-PSLauncherConfigFile</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -661,10 +661,10 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-        <maml:name>WhatIf</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
         <maml:description>
-          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -673,10 +673,10 @@
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-        <maml:name>Confirm</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
         <maml:description>
-          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -696,7 +696,114 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Start-PSSysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv</dev:code>
+        <dev:code>Start-PSSysTrayLauncher -ConfigFilePath C:\temp\PSSysTrayConfig.csv</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Start-PS_CSV_SysTray</command:name>
+      <command:verb>Start</command:verb>
+      <command:noun>PS_CSV_SysTray</command:noun>
+      <maml:description>
+        <maml:para>Gui menu app in your systray with custom executable functions</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Gui menu app in your systray with custom executable functions</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Start-PS_CSV_SysTray</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>ConfigFilePath</maml:name>
+          <maml:description>
+            <maml:para>Path to .csv config file created from New-PS_CSV_SysTrayConfigFile</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>ConfigFilePath</maml:name>
+        <maml:description>
+          <maml:para>Path to .csv config file created from New-PS_CSV_SysTrayConfigFile</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Start-PS_CSV_SysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
