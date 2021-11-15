@@ -85,10 +85,10 @@ Creates a shortcut in the same directory that calls powershell and the config.
 Launches Start-PSLauncherColorPicker
 
 .EXAMPLE
-Install-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker
+New-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker
 
 #>
-Function Install-PSLauncherConfigFile {
+Function New-PSLauncherConfigFile {
     param(
         [string]$Color1 = '#E5E5E5',
         [string]$Color2 = '#061820',
@@ -150,22 +150,39 @@ Function Install-PSLauncherConfigFile {
     }
     else {
         Write-Warning 'File exists, renaming file now'
-        Rename-Item $Configfile -NewName "PSSysTrayConfig_$(Get-Date -Format ddMMyyyy_HHmm).csv"
+        Rename-Item $Configfile -NewName "PSSysTrayConfig_$(Get-Date -Format ddMMyyyy_HHmm).json"
         Set-Content -Value $json -Path $Configfile
     }
     if ($CreateShortcut) {
-
-        $string = "import-module  $((Join-Path (Get-Module pslauncher).ModuleBase \PSLauncher.psm1 -Resolve)) -Force -ErrorAction SilentlyContinue;"
-        $string += 'Import-Module PSLauncher -Force -ErrorAction SilentlyContinue;'
+        $module = Get-Module pslauncher
+        if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
+        
+        $string = "import-module  $((Join-Path $module.ModuleBase \PSLauncher.psm1 -Resolve)) -Force;"
         $string += "Start-PSLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))"
+        Set-Content -Value $string.Split(';') -Path (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1) | Get-Item
+        $launcher = (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1) | Get-Item
 
-        Set-Content -Value $string.Split(';') -Path (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1)
         $WScriptShell = New-Object -ComObject WScript.Shell
-        $lnkfile = (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1 -Resolve).Replace('ps1', 'lnk')
+        $lnkfile = ($launcher.FullName).Replace('ps1', 'lnk')
         $Shortcut = $WScriptShell.CreateShortcut($($lnkfile))
         $Shortcut.TargetPath = 'powershell.exe'
-        $Shortcut.Arguments = "-NoLogo -NoProfile -ExecutionPolicy bypass -file `"$((Join-Path $ConfigPath -ChildPath \PSLauncher.ps1))`""
-        $icon = Get-Item (Join-Path (Get-Module pslauncher).ModuleBase .\Private\pslauncher.ico)
+        $Shortcut.Arguments = "-NoLogo -NoProfile -ExecutionPolicy bypass -file `"$($launcher.FullName)`""
+        $icon = Get-Item (Join-Path $module.ModuleBase .\Private\pslauncher.ico)
+        $Shortcut.IconLocation = $icon.FullName
+        #Save the Shortcut to the TargetPath
+        $Shortcut.Save()
+
+        $string = "import-module  $((Join-Path $module.ModuleBase \PSLauncher.psm1 -Resolve)) -Force;"
+        $string += "Start-PSSysTrayLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))"
+        Set-Content -Value $string.Split(';') -Path (Join-Path $ConfigPath -ChildPath \PSSysTrayLauncher.ps1) | Get-Item
+        $PSSysTrayLauncher = (Join-Path $ConfigPath -ChildPath \PSSysTrayLauncher.ps1) | Get-Item
+
+        $WScriptShell = New-Object -ComObject WScript.Shell
+        $lnkfile = ($PSSysTrayLauncher.FullName).Replace('ps1', 'lnk')
+        $Shortcut = $WScriptShell.CreateShortcut($($lnkfile))
+        $Shortcut.TargetPath = 'powershell.exe'
+        $Shortcut.Arguments = "-NoLogo -NoProfile -ExecutionPolicy bypass -file `"$($PSSysTrayLauncher.FullName)`""
+        $icon = Get-Item (Join-Path $module.ModuleBase .\Private\pslauncher.ico)
         $Shortcut.IconLocation = $icon.FullName
         #Save the Shortcut to the TargetPath
         $Shortcut.Save()

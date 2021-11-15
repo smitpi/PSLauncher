@@ -52,7 +52,7 @@ Launches a gui form to test and change the color of PSLauncher.
 Launches a gui form to test and change the color of PSLauncher.
 
 .PARAMETER ConfigFilePath
-Path to the config file created by Install-PSLauncherConfigFile
+Path to the config file created by New-PSLauncherConfigFile
 
 .EXAMPLE
 Start-PSLauncherColorPicker -ConfigFilePath c:\temp\config.json

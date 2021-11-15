@@ -54,10 +54,10 @@ Path where config file will be saved.
 Create a shortcut to launch the gui
 
 .EXAMPLE
-Install-PSSysTrayConfigFile -ConfigPath C:\temp -CreateShortcut
+New-PS_CSV_SysTrayConfigFile -ConfigPath C:\temp -CreateShortcut
 
 #>
-Function Install-PSSysTrayConfigFile {
+Function New-PS_CSV_SysTrayConfigFile {
     [Cmdletbinding()]
     PARAM(
         [ValidateScript( { (Test-Path $_) })]

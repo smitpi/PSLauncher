@@ -46,13 +46,13 @@ Gui menu app in your systray with custom executable functions
 Gui menu app in your systray with custom executable functions
 
 .PARAMETER ConfigFilePath
-Path to .csv config file created from Install-PSSysTrayConfigFile
+Path to .csv config file created from New-PS_CSV_SysTrayConfigFile
 
 .EXAMPLE
-Start-PSSysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
+Start-PS_CSV_SysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 
 #>
-Function Start-PSSysTray {
+Function Start-PS_CSV_SysTray {
     [Cmdletbinding(SupportsShouldProcess = $true)]
     Param (
         [Parameter(Mandatory = $true, Position = 0)]

@@ -53,7 +53,7 @@ Reads the config file and launches the gui
 Reads the config file and launches the gui
 
 .PARAMETER ConfigFilePath
-Path to the config file
+Path to the config file created by New-PSLauncherConfigFile
 
 .EXAMPLE
 Start-PSLauncher -ConfigFilePath c:\temp\config.json
@@ -147,11 +147,14 @@ Function Start-PSLauncher {
                 $processArguments.Remove('NoNewWindow')
                 $processArguments.Remove('Wait')
             }
-            if ( $options -contains 'AsAdmin' ) { $processArguments.Add( 'Verb' , 'RunAs' ) }
+            if ( $options -contains 'AsAdmin' ) { 
+                $processArguments.Remove('NoNewWindow')
+                $processArguments.Remove('Wait')
+                $processArguments.Add( 'Verb' , 'RunAs' ) }
 
             $process = $null
             ShowConsole
-            Write-Output  @processArguments
+            Write-Output  $processArguments
             #Clear-Host
             Write-Color 'Running the following:' -Color DarkYellow -ShowTime
             Write-Color 'Command: ', $command -Color Cyan, Green -ShowTime
@@ -257,15 +260,53 @@ Function Start-PSLauncher {
                 '3' { 'Other' }
             }
         }
-        function AddGuiButtonToConfig {
+        function AddToConfig {
             $jsondata = Get-Content $ConfigFilePath | ConvertFrom-Json
+
+            Clear-Host
+            Write-Color 'Do you want to add a Button or a Panel' -Color DarkYellow -LinesAfter 1
+            write-Color "0", ': ', "Panel" -Color Yellow, Yellow, Green
+            write-Color "1", ': ', "Button" -Color Yellow, Yellow, Green
+            Write-Output ' '
+            [int]$GuiAddChoice = Read-Host 'Decide '
+            if ($GuiAddChoice -eq 0) {
+                $data = $jsondata.Buttons
+                $NewConfig = @{}
+                $panellist = $jsondata.Buttons | Get-Member | Where-Object { $_.membertype -eq 'NoteProperty' }
+                foreach ($mem in $panellist) {
+                    $NewConfig += @{
+                        $mem.Name = $jsondata.Buttons.$($mem.Name)
+                    }
+                }
+                $PanelName = Read-Host "Panel Name "
+                [int]$PanelNumber = [int]($NewConfig.Values.config.PanelNumber | Sort-Object -Descending | Select-Object -First 1) +1
+                
+$AddPanel = @"
+		{
+			"Config": {
+				"PanelNumber": "$($PanelNumber)"
+			},
+			"buttons": [
+			]
+		}
+"@
+                $NewConfig += @{$PanelName = ($AddPanel | ConvertFrom-Json)}
+                $Update = @()
+                $Update = [psobject]@{
+                    Config      = $jsondata.Config
+                    Buttons     = $NewConfig
+                }
+                $Update | ConvertTo-Json -Depth 5 | Set-Content -Path $ConfigFilePath -Verbose -Force
+          
+            }
+            if ($GuiAddChoice -eq 1) {
             $data = $jsondata.Buttons
             $panellist = $jsondata.Buttons | Get-Member | Where-Object { $_.membertype -eq 'NoteProperty' } | Select-Object name
             $panellistSorted = $panellist | ForEach-Object { [pscustomobject]@{
                     name        = $_.Name
                     PanelNumber = $data.($_.name).config.PanelNumber
                 }
-            }
+            } | Sort-Object -Property PanelNumber
             $index = 0
 
             Clear-Host
@@ -304,8 +345,7 @@ Function Start-PSLauncher {
             until ($yn.ToLower() -eq 'n')
 
             $jsondata | ConvertTo-Json -Depth 10 | Out-File $ConfigFilePath
-
-
+        }
         }
         function EnableLogging {
             ShowConsole
@@ -420,20 +460,21 @@ Function Start-PSLauncher {
         $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
         $DisableLogging.Add_Click( { DisableLogging })
 
-        $AddButton = New-Object system.Windows.Forms.Button
-        $AddButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
-        $AddButton.text = 'Add Gui Button'
-        $AddButton.width = 100
-        $AddButton.height = 30
-        $AddButton.location = New-Object System.Drawing.Point(1, 570)
-        $AddButton.Font = New-Object System.Drawing.Font('Tahoma', 8)
-        $AddButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
-        $AddButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
-        $AddButton.Add_Click( {
+        $AddToConfig = New-Object system.Windows.Forms.Button
+        $AddToConfig.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
+        $AddToConfig.text = 'Add Gui Config'
+        $AddToConfig.width = 100
+        $AddToConfig.height = 30
+        $AddToConfig.location = New-Object System.Drawing.Point(1, 570)
+        $AddToConfig.Font = New-Object System.Drawing.Font('Tahoma', 8)
+        $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+        $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
+        $AddToConfig.Add_Click( {
                 ShowConsole
-                AddGuiButtonToConfig
+                AddToConfig
                 HideConsole
             })
+
         $OpenConfigButton = New-Object system.Windows.Forms.Button
         $OpenConfigButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
         $OpenConfigButton.text = 'Open Config File'
@@ -452,7 +493,7 @@ Function Start-PSLauncher {
         $Form.controls.AddRange($reload)
         $Form.controls.AddRange($EnableLogging)
         $Form.controls.AddRange($DisableLogging)
-        $Form.controls.AddRange($AddButton)
+        $Form.controls.AddRange($AddToConfig)
         $Form.controls.AddRange($OpenConfigButton)
 
 
