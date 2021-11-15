@@ -9,7 +9,7 @@ Locale: en-US
 # PSLauncher Module
 ## Description
 a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
-the same json config file as the full gui. Or create a separate systray tool with a .csv as a config file. 
+the same json config file as the full gui. Or create a seperate systray tool with a .csv as a config file.
 Also included is helper functions to create buttons and panels for you.
 
 ## PSLauncher Cmdlets

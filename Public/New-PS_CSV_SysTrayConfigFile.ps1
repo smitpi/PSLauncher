@@ -35,17 +35,17 @@ Created [27/10/2021_05:31] Initital Script Creating
 <#
 
 .DESCRIPTION
-Creates the config file for Start-PSSysTray
+Creates the config file for Start-PS_CSV_SysTray
 
 #>
 
 
 <#
 .SYNOPSIS
-Creates the config file for Start-PSSysTray
+Creates the config file for Start-PS_CSV_SysTray
 
 .DESCRIPTION
-Creates the config file for Start-PSSysTray
+Creates the config file for Start-PS_CSV_SysTray
 
 .PARAMETER ConfigPath
 Path where config file will be saved.
@@ -90,23 +90,23 @@ Function New-PS_CSV_SysTrayConfigFile {
     $check = Test-Path -Path $Configfile -ErrorAction SilentlyContinue
     if (-not($check)) {
         Write-Output 'Config File does not exit, creating default settings.'
-        $export | Export-Csv -Path $Configfile -NoClobber
+        $export | Export-Csv -Path $Configfile -NoClobber -NoTypeInformation
     }
     else {
         Write-Warning 'File exists, renaming file now'
         Rename-Item $Configfile -NewName "PSSysTrayConfig_$(Get-Date -Format ddMMyyyy_HHmm).csv"
-        $export | Export-Csv -Path $Configfile -NoClobber
+        $export | Export-Csv -Path $Configfile -NoClobber -NoTypeInformation
     }
 
     if ($CreateShortcut) {
         $module = Get-Module pslauncher
         if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
 
-$string = @"
+        $string = @"
 `$psl = get-item `"$((Join-Path $module.ModuleBase \PSLauncher.psm1 -Resolve))`"
 import-module `$psl.fullname -Force
 Start-PS_CSV_SysTray -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PS_CSV_SysTrayConfig.csv -Resolve))
-"@        
+"@
         Set-Content -Value $string -Path (Join-Path $ConfigPath -ChildPath \PS_CSV_SysTray.ps1) | Get-Item
         $PS_CSV_SysTray = (Join-Path $ConfigPath -ChildPath \PS_CSV_SysTray.ps1) | Get-Item
 

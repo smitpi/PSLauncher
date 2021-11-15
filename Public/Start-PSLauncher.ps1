@@ -69,6 +69,7 @@ Function Start-PSLauncher {
     if ($pscmdlet.ShouldProcess('Target', 'Operation')) {
         $jsondata = Get-Content $ConfigFilePath | ConvertFrom-Json
 
+        $script:KeepOpen = $false
         $script:PanelDraw = 10
         $script:Color1st = $jsondata.Config.Color1st
         $script:Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
@@ -98,12 +99,15 @@ Function Start-PSLauncher {
         #region functions
         function ShowConsole {
             #Clear-Host
+
             $PSConsole = [Console.Window]::GetConsoleWindow()
             [Console.Window]::ShowWindow($PSConsole, 5)
         }
         function HideConsole {
-            $PSConsole = [Console.Window]::GetConsoleWindow()
-            [Console.Window]::ShowWindow($PSConsole, 0)
+            if (!$KeepOpen) {
+                $PSConsole = [Console.Window]::GetConsoleWindow()
+                [Console.Window]::ShowWindow($PSConsole, 0)
+            }
         }
         Function Invoke-Action {
             Param(
@@ -150,12 +154,12 @@ Function Start-PSLauncher {
             if ( $options -contains 'AsAdmin' ) {
                 $processArguments.Remove('NoNewWindow')
                 $processArguments.Remove('Wait')
-                $processArguments.Add( 'Verb' , 'RunAs' ) 
+                $processArguments.Add( 'Verb' , 'RunAs' )
             }
 
             $process = $null
             ShowConsole
-            Write-Output  $processArguments
+            Write-Output $processArguments
             #Clear-Host
             Write-Color 'Running the following:' -Color DarkYellow -ShowTime
             Write-Color 'Command: ', $command -Color Cyan, Green -ShowTime
@@ -266,10 +270,13 @@ Function Start-PSLauncher {
 
             Clear-Host
             Write-Color 'Do you want to add a Button or a Panel' -Color DarkYellow -LinesAfter 1
-            Write-Color "0", ': ', "Panel" -Color Yellow, Yellow, Green
-            Write-Color "1", ': ', "Button" -Color Yellow, Yellow, Green
+            Write-Color '0', ': ', 'Panel' -Color Yellow, Yellow, Green
+            Write-Color '1', ': ', 'Button' -Color Yellow, Yellow, Green
+            Write-Color '2', ': ', 'Launch Color Picker' -Color Yellow, Yellow, Green
             Write-Output ' '
             [int]$GuiAddChoice = Read-Host 'Decide '
+
+
             if ($GuiAddChoice -eq 0) {
                 $data = $jsondata.Buttons
                 $NewConfig = @{}
@@ -279,8 +286,8 @@ Function Start-PSLauncher {
                         $mem.Name = $jsondata.Buttons.$($mem.Name)
                     }
                 }
-                $PanelName = Read-Host "Panel Name "
-                [int]$PanelNumber = [int]($NewConfig.Values.config.PanelNumber | Sort-Object -Descending | Select-Object -First 1) +1
+                $PanelName = Read-Host 'Panel Name '
+                [int]$PanelNumber = [int]($NewConfig.Values.config.PanelNumber | Sort-Object -Descending | Select-Object -First 1) + 1
 
                 $AddPanel = @"
 		{
@@ -291,7 +298,7 @@ Function Start-PSLauncher {
 			]
 		}
 "@
-                $NewConfig += @{$PanelName = ($AddPanel | ConvertFrom-Json)}
+                $NewConfig += @{$PanelName = ($AddPanel | ConvertFrom-Json) }
                 $Update = @()
                 $Update = [psobject]@{
                     Config  = $jsondata.Config
@@ -347,8 +354,19 @@ Function Start-PSLauncher {
 
                 $jsondata | ConvertTo-Json -Depth 10 | Out-File $ConfigFilePath
             }
+            if ($GuiAddChoice -eq 2) {
+
+                $module = Get-Module pslauncher
+                if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
+                Import-Module $module -Force
+
+                $itm = Get-Item $ConfigFilePath
+                Start-PSLauncherColorPicker -ConfigFilePath $itm.FullName
+
+            }
         }
         function EnableLogging {
+            $script:KeepOpen = $true
             ShowConsole
             $script:guilogpath = "$env:TEMP\Utilgui-" + (Get-Date -Format yyyy.MM.dd-HH.mm) + '.log'
             Write-Output "creating log $guilogpath"
@@ -357,6 +375,7 @@ Function Start-PSLauncher {
         function DisableLogging {
             Stop-Transcript
             notepad $guilogpath
+            $script:KeepOpen = $false
             HideConsole
         }
 
