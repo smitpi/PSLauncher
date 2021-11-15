@@ -156,10 +156,12 @@ Function New-PSLauncherConfigFile {
     if ($CreateShortcut) {
         $module = Get-Module pslauncher
         if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
-
-        $string = "import-module  $((Join-Path $module.ModuleBase \PSLauncher.psm1 -Resolve)) -Force;"
-        $string += "Start-PSLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))"
-        Set-Content -Value $string.Split(';') -Path (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1) | Get-Item
+$string = @"
+`$psl = get-item `"$((Join-Path $module.ModuleBase \PSLauncher.psm1 -Resolve))`"
+import-module `$psl.fullname -Force
+Start-PSLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))
+"@
+        Set-Content -Value $string -Path (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1) | Get-Item
         $launcher = (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1) | Get-Item
 
         $WScriptShell = New-Object -ComObject WScript.Shell
@@ -172,9 +174,12 @@ Function New-PSLauncherConfigFile {
         #Save the Shortcut to the TargetPath
         $Shortcut.Save()
 
-        $string = "import-module  $((Join-Path $module.ModuleBase \PSLauncher.psm1 -Resolve)) -Force;"
-        $string += "Start-PSSysTrayLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))"
-        Set-Content -Value $string.Split(';') -Path (Join-Path $ConfigPath -ChildPath \PSSysTrayLauncher.ps1) | Get-Item
+$string = @"
+`$psl = get-item `"$((Join-Path $module.ModuleBase \PSLauncher.psm1 -Resolve))`"
+import-module `$psl.fullname -Force
+Start-PSSysTrayLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))
+"@
+        Set-Content -Value $string -Path (Join-Path $ConfigPath -ChildPath \PSSysTrayLauncher.ps1) | Get-Item
         $PSSysTrayLauncher = (Join-Path $ConfigPath -ChildPath \PSSysTrayLauncher.ps1) | Get-Item
 
         $WScriptShell = New-Object -ComObject WScript.Shell

@@ -323,7 +323,7 @@ Function Start-PSLauncher {
                     Write-Color 'Details of the button' -Color DarkYellow -LinesAfter 1
                     $Mode = mode
                     if ($Mode -like 'ps*') {
-                        $jsondata.Buttons.($panellist[$indexnum].name).buttons += [PSCustomObject] @{
+                        $jsondata.Buttons.($panellistSorted[$indexnum].name).buttons += [PSCustomObject] @{
                             Name      = Read-Host 'New Button Name '
                             Command   = 'PowerShell.exe'
                             Arguments = Read-Host '<PS Command> or <Path to ps1 file> '
@@ -332,7 +332,7 @@ Function Start-PSLauncher {
                         }
                     }
                     else {
-                        $jsondata.Buttons.($panellist[$indexnum].name).buttons += [PSCustomObject] @{
+                        $jsondata.Buttons.($panellistSorted[$indexnum].name).buttons += [PSCustomObject] @{
                             Name      = Read-Host 'New Button Name '
                             Command   = Read-Host 'Path to exe file'
                             Arguments = Read-Host 'Arguments to run exe'
@@ -341,7 +341,7 @@ Function Start-PSLauncher {
                         }
                     }
                     Write-Output ' '
-                    $yn = Read-Host "Add another button in $($panellist[$indexnum].name) (y/n)"
+                    $yn = Read-Host "Add another button in $($panellistSorted[$indexnum].name) (y/n)"
                 }
                 until ($yn.ToLower() -eq 'n')
 

@@ -86,8 +86,8 @@ Function New-PS_CSV_SysTrayConfigFile {
         Mode       = 'Other'
     }
 
-    $Configfile = (Join-Path $ConfigPath -ChildPath \PSSysTrayConfig.csv)
-    $check = Test-Path -Path $Configfile  -ErrorAction SilentlyContinue
+    $Configfile = (Join-Path $ConfigPath -ChildPath \PS_CSV_SysTrayConfig.csv)
+    $check = Test-Path -Path $Configfile -ErrorAction SilentlyContinue
     if (-not($check)) {
         Write-Output 'Config File does not exit, creating default settings.'
         $export | Export-Csv -Path $Configfile -NoClobber
@@ -99,22 +99,29 @@ Function New-PS_CSV_SysTrayConfigFile {
     }
 
     if ($CreateShortcut) {
+        $module = Get-Module pslauncher
+        if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
 
-        $string = "import-module  $((Join-Path (Get-Module pslauncher).ModuleBase \PSLauncher.psm1 -Resolve)) -Force -ErrorAction SilentlyContinue;"
-        $string += 'Import-Module PSLauncher -Force -ErrorAction SilentlyContinue;'
-        $string += "Start-PSSysTray -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSSysTrayConfig.csv -Resolve))"
-
-        Set-Content -Value $string.Split(';') -Path (Join-Path $ConfigPath -ChildPath \PSSystray.ps1)
+$string = @"
+`$psl = get-item `"$((Join-Path $module.ModuleBase \PSLauncher.psm1 -Resolve))`"
+import-module `$psl.fullname -Force
+Start-PS_CSV_SysTray -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PS_CSV_SysTrayConfig.csv -Resolve))
+"@        
+        Set-Content -Value $string -Path (Join-Path $ConfigPath -ChildPath \PS_CSV_SysTray.ps1) | Get-Item
+        $PS_CSV_SysTray = (Join-Path $ConfigPath -ChildPath \PS_CSV_SysTray.ps1) | Get-Item
 
         $WScriptShell = New-Object -ComObject WScript.Shell
-        $lnkfile = (Join-Path $ConfigPath -ChildPath \PSSystray.ps1 -Resolve).Replace('ps1', 'lnk')
+        $lnkfile = ($PS_CSV_SysTray.FullName).Replace('ps1', 'lnk')
         $Shortcut = $WScriptShell.CreateShortcut($($lnkfile))
         $Shortcut.TargetPath = 'powershell.exe'
-        $Shortcut.Arguments = "-NoLogo -NoProfile -ExecutionPolicy bypass -file `"$((Join-Path $ConfigPath -ChildPath \PSSystray.ps1))`""
-        $Shortcut.IconLocation = (Join-Path (Get-Module pslauncher).ModuleBase .\Private\pslauncher.ico -Resolve)
+        $Shortcut.Arguments = "-NoLogo -NoProfile -ExecutionPolicy bypass -file `"$($PS_CSV_SysTray.FullName)`""
+        $icon = Get-Item (Join-Path $module.ModuleBase .\Private\PS_CSV_SysTray.ico)
+        $Shortcut.IconLocation = $icon.FullName
         #Save the Shortcut to the TargetPath
         $Shortcut.Save()
         Start-Process explorer.exe $ConfigPath
+
+
     }
 
 

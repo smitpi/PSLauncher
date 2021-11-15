@@ -76,7 +76,11 @@ Function Start-PS_CSV_SysTray {
         [System.Reflection.Assembly]::LoadWithPartialName('WindowsFormsIntegration') | Out-Null
 
         # Add an icon to the systrauy button
-        $icopath = (Join-Path (Get-Module PSLauncher).ModuleBase '\Private\pslauncher.ico') | Get-Item
+        $module = Get-Module pslauncher
+        if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
+
+
+        $icopath = (join-path $module.ModuleBase '\Private\PS_CSV_SysTray.ico') | Get-Item
         $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($icopath.FullName)
 
         # Create object for the systray
