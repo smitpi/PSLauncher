@@ -9,7 +9,7 @@
   <meta name="author" content="Pierre Smit">
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Start-PSLauncher - PSLauncher</title>
+  <title>New-PSLauncherConfigFile - PSLauncher</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Start-PSLauncher";
-    var mkdocs_page_input_path = "Start-PSLauncher.md";
+    var mkdocs_page_name = "New-PSLauncherConfigFile";
+    var mkdocs_page_input_path = "New-PSLauncherConfigFile.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -50,20 +50,8 @@
                     <li class="toctree-l1"><a class="reference internal" href="..">PSLauncher</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../New-PSLauncherConfigFile/">New-PSLauncherConfigFile</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../New-PS_CSV_SysTrayConfigFile/">New-PS_CSV_SysTrayConfigFile</a>
-                    </li>
-                </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../PSLauncher/">PSLauncher Module</a>
-                    </li>
-                </ul>
                 <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Start-PSLauncher</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">New-PSLauncherConfigFile</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#synopsis">SYNOPSIS</a>
     </li>
@@ -79,11 +67,27 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#parameters">PARAMETERS</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#-configfilepath">-ConfigFilePath</a>
+    <li class="toctree-l3"><a class="reference internal" href="#-color1">-Color1</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#-confirm">-Confirm</a>
+    <li class="toctree-l3"><a class="reference internal" href="#-color2">-Color2</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#-whatif">-WhatIf</a>
+    <li class="toctree-l3"><a class="reference internal" href="#-configpath">-ConfigPath</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-createshortcut">-CreateShortcut</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-labelcolor">-LabelColor</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-launchcolorpicker">-LaunchColorPicker</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-logopath">-LogoPath</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-panel01">-Panel01</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-panel02">-Panel02</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-textcolor">-TextColor</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-title">-Title</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#commonparameters">CommonParameters</a>
     </li>
@@ -98,6 +102,18 @@
     <li class="toctree-l2"><a class="reference internal" href="#related-links">RELATED LINKS</a>
     </li>
     </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../New-PS_CSV_SysTrayConfigFile/">New-PS_CSV_SysTrayConfigFile</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../PSLauncher/">PSLauncher Module</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../Start-PSLauncher/">Start-PSLauncher</a>
                     </li>
                 </ul>
                 <ul>
@@ -137,10 +153,10 @@
     
       
     
-    <li>Start-PSLauncher</li>
+    <li>New-PSLauncherConfigFile</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/smitpi/PSLauncher/edit/master/docs/Start-PSLauncher.md"
+        <a href="https://github.com/smitpi/PSLauncher/edit/master/docs/New-PSLauncherConfigFile.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -152,53 +168,150 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="start-pslauncher">Start-PSLauncher</h1>
+                <h1 id="new-pslauncherconfigfile">New-PSLauncherConfigFile</h1>
 <h2 id="synopsis">SYNOPSIS</h2>
-<p>Reads the config file and launches the gui</p>
+<p>Creates the config file with the provided settings</p>
 <h2 id="syntax">SYNTAX</h2>
-<pre><code>Start-PSLauncher [-ConfigFilePath] &lt;String&gt; [-WhatIf] [-Confirm] [&lt;CommonParameters&gt;]
+<pre><code>New-PSLauncherConfigFile [[-Color1] &lt;String&gt;] [[-Color2] &lt;String&gt;] [[-LabelColor] &lt;String&gt;]
+ [[-TextColor] &lt;String&gt;] [[-LogoPath] &lt;String&gt;] [[-Title] &lt;String&gt;] [[-Panel01] &lt;String&gt;] [[-Panel02] &lt;String&gt;]
+ [[-ConfigPath] &lt;DirectoryInfo&gt;] [-CreateShortcut] [-LaunchColorPicker] [&lt;CommonParameters&gt;]
 </code></pre>
 <h2 id="description">DESCRIPTION</h2>
-<p>Reads the config file and launches the gui</p>
+<p>Creates the config file with the provided settings</p>
 <h2 id="examples">EXAMPLES</h2>
 <h3 id="example-1">EXAMPLE 1</h3>
-<pre><code>Start-PSLauncher -ConfigFilePath c:\temp\config.json
+<pre><code>New-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker
 </code></pre>
 <h2 id="parameters">PARAMETERS</h2>
-<h3 id="-configfilepath">-ConfigFilePath</h3>
-<p>Path to the config file created by New-PSLauncherConfigFile</p>
+<h3 id="-color1">-Color1</h3>
+<p>Run Start-PSLauncherColorPicker to change.</p>
 <pre><code class="language-yaml">Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
-Default value: None
+Default value: #E5E5E5
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
-<h3 id="-confirm">-Confirm</h3>
-<p>Prompts you for confirmation before running the cmdlet.</p>
-<pre><code class="language-yaml">Type: SwitchParameter
+<h3 id="-color2">-Color2</h3>
+<p>Run Start-PSLauncherColorPicker to change.</p>
+<pre><code class="language-yaml">Type: String
 Parameter Sets: (All)
-Aliases: cf
+Aliases:
 
 Required: False
-Position: Named
-Default value: None
+Position: 2
+Default value: #061820
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
-<h3 id="-whatif">-WhatIf</h3>
-<p>Shows what would happen if the cmdlet runs.
-The cmdlet is not run.</p>
+<h3 id="-configpath">-ConfigPath</h3>
+<p>Path where the config file will be saved.</p>
+<pre><code class="language-yaml">Type: DirectoryInfo
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 9
+Default value: (Join-Path (Get-Module pslauncher).ModuleBase \config)
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-createshortcut">-CreateShortcut</h3>
+<p>Creates a shortcut in the same directory that calls powershell and the config.</p>
 <pre><code class="language-yaml">Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: wi
+Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-labelcolor">-LabelColor</h3>
+<p>Run Start-PSLauncherColorPicker to change.</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: #FFD400
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-launchcolorpicker">-LaunchColorPicker</h3>
+<p>Launches Start-PSLauncherColorPicker</p>
+<pre><code class="language-yaml">Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-logopath">-LogoPath</h3>
+<p>Run Start-PSLauncherColorPicker to change.</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: Https://gist.githubusercontent.com/smitpi/0e36b701419dbf9282ecfc6d0f7b654c/raw/8fe6a2fc91a27a9ebccb753f6508a2edd039c208/default-monochrome-black.png
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-panel01">-Panel01</h3>
+<p>Name of the 1st panel</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: First
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-panel02">-Panel02</h3>
+<p>Name of the 2nd panel</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 8
+Default value: Second
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-textcolor">-TextColor</h3>
+<p>Run Start-PSLauncherColorPicker to change.</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
+Default value: #000000
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-title">-Title</h3>
+<p>Text in the titple of the app.</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: PowerShell Launcher
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
@@ -215,10 +328,10 @@ Accept wildcard characters: False
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../Start-PSLauncherColorPicker/" class="btn btn-neutral float-right" title="Start-PSLauncherColorPicker">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../New-PS_CSV_SysTrayConfigFile/" class="btn btn-neutral float-right" title="New-PS_CSV_SysTrayConfigFile">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../PSLauncher/" class="btn btn-neutral" title="PSLauncher Module"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href=".." class="btn btn-neutral" title="PSLauncher"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -248,10 +361,10 @@ Accept wildcard characters: False
         </span>
     
     
-      <span><a href="../PSLauncher/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../Start-PSLauncherColorPicker/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../New-PS_CSV_SysTrayConfigFile/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

@@ -9,7 +9,7 @@
   <meta name="author" content="Pierre Smit">
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Start-PSSysTray - PSLauncher</title>
+  <title>Start-PS_CSV_SysTray - PSLauncher</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Start-PSSysTray";
-    var mkdocs_page_input_path = "Start-PSSysTray.md";
+    var mkdocs_page_name = "Start-PS_CSV_SysTray";
+    var mkdocs_page_input_path = "Start-PS_CSV_SysTray.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -51,11 +51,11 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../Install-PSLauncherConfigFile/">Install-PSLauncherConfigFile</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../New-PSLauncherConfigFile/">New-PSLauncherConfigFile</a>
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../Install-PSSysTrayConfigFile/">Install-PSSysTrayConfigFile</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../New-PS_CSV_SysTrayConfigFile/">New-PS_CSV_SysTrayConfigFile</a>
                     </li>
                 </ul>
                 <ul>
@@ -70,8 +70,12 @@
                     <li class="toctree-l1"><a class="reference internal" href="../Start-PSLauncherColorPicker/">Start-PSLauncherColorPicker</a>
                     </li>
                 </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../Start-PSSysTrayLauncher/">Start-PSSysTrayLauncher</a>
+                    </li>
+                </ul>
                 <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Start-PSSysTray</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Start-PS_CSV_SysTray</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#synopsis">SYNOPSIS</a>
     </li>
@@ -89,9 +93,9 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#-configfilepath">-ConfigFilePath</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#-whatif">-WhatIf</a>
-    </li>
     <li class="toctree-l3"><a class="reference internal" href="#-confirm">-Confirm</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#-whatif">-WhatIf</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#commonparameters">CommonParameters</a>
     </li>
@@ -133,10 +137,10 @@
     
       
     
-    <li>Start-PSSysTray</li>
+    <li>Start-PS_CSV_SysTray</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/smitpi/PSLauncher/edit/master/docs/Start-PSSysTray.md"
+        <a href="https://github.com/smitpi/PSLauncher/edit/master/docs/Start-PS_CSV_SysTray.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -148,21 +152,21 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="start-pssystray">Start-PSSysTray</h1>
+                <h1 id="start-ps_csv_systray">Start-PS_CSV_SysTray</h1>
 <h2 id="synopsis">SYNOPSIS</h2>
 <p>Gui menu app in your systray with custom executable functions</p>
 <h2 id="syntax">SYNTAX</h2>
-<pre><code>Start-PSSysTray [-ConfigFilePath] &lt;String&gt; [-WhatIf] [-Confirm] [&lt;CommonParameters&gt;]
+<pre><code>Start-PS_CSV_SysTray [-ConfigFilePath] &lt;String&gt; [-WhatIf] [-Confirm] [&lt;CommonParameters&gt;]
 </code></pre>
 <h2 id="description">DESCRIPTION</h2>
 <p>Gui menu app in your systray with custom executable functions</p>
 <h2 id="examples">EXAMPLES</h2>
 <h3 id="example-1">EXAMPLE 1</h3>
-<pre><code>Start-PSSysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
+<pre><code>Start-PS_CSV_SysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 </code></pre>
 <h2 id="parameters">PARAMETERS</h2>
 <h3 id="-configfilepath">-ConfigFilePath</h3>
-<p>Path to .csv config file created from Install-PSSysTrayConfigFile</p>
+<p>Path to .csv config file created from New-PS_CSV_SysTrayConfigFile</p>
 <pre><code class="language-yaml">Type: String
 Parameter Sets: (All)
 Aliases:
@@ -173,12 +177,11 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
-<h3 id="-whatif">-WhatIf</h3>
-<p>Shows what would happen if the cmdlet runs.
-The cmdlet is not run.</p>
+<h3 id="-confirm">-Confirm</h3>
+<p>Prompts you for confirmation before running the cmdlet.</p>
 <pre><code class="language-yaml">Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: wi
+Aliases: cf
 
 Required: False
 Position: Named
@@ -186,11 +189,12 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
-<h3 id="-confirm">-Confirm</h3>
-<p>Prompts you for confirmation before running the cmdlet.</p>
+<h3 id="-whatif">-WhatIf</h3>
+<p>Shows what would happen if the cmdlet runs.
+The cmdlet is not run.</p>
 <pre><code class="language-yaml">Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: cf
+Aliases: wi
 
 Required: False
 Position: Named
@@ -214,7 +218,7 @@ Accept wildcard characters: False
         <a href="../about_PSLauncher/" class="btn btn-neutral float-right" title="PSLauncher">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../Start-PSLauncherColorPicker/" class="btn btn-neutral" title="Start-PSLauncherColorPicker"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../Start-PSSysTrayLauncher/" class="btn btn-neutral" title="Start-PSSysTrayLauncher"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -244,7 +248,7 @@ Accept wildcard characters: False
         </span>
     
     
-      <span><a href="../Start-PSLauncherColorPicker/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../Start-PSSysTrayLauncher/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
       <span><a href="../about_PSLauncher/" style="color: #fcfcfc">Next &raquo;</a></span>

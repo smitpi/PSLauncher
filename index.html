@@ -49,15 +49,33 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href=".">PSLauncher</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#description">Description</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#function-synopsis">Function Synopsis</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#new-ps_csv_systrayconfigfile">New-PS_CSV_SysTrayConfigFile</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#new-pslauncherconfigfile">New-PSLauncherConfigFile</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#start-ps_csv_systray">Start-PS_CSV_SysTray</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#start-pslauncher">Start-PSLauncher</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#start-pslaunchercolorpicker">Start-PSLauncherColorPicker</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#start-pssystraylauncher">Start-PSSysTrayLauncher</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="Install-PSLauncherConfigFile/">Install-PSLauncherConfigFile</a>
+                    <li class="toctree-l1"><a class="reference internal" href="New-PSLauncherConfigFile/">New-PSLauncherConfigFile</a>
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="Install-PSSysTrayConfigFile/">Install-PSSysTrayConfigFile</a>
+                    <li class="toctree-l1"><a class="reference internal" href="New-PS_CSV_SysTrayConfigFile/">New-PS_CSV_SysTrayConfigFile</a>
                     </li>
                 </ul>
                 <ul>
@@ -73,7 +91,11 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="Start-PSSysTray/">Start-PSSysTray</a>
+                    <li class="toctree-l1"><a class="reference internal" href="Start-PSSysTrayLauncher/">Start-PSSysTrayLauncher</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="Start-PS_CSV_SysTray/">Start-PS_CSV_SysTray</a>
                     </li>
                 </ul>
                 <ul>
@@ -117,25 +139,23 @@
             <div class="section">
               
                 <h1 id="pslauncher">PSLauncher</h1>
-<h1 id="short-description">SHORT DESCRIPTION</h1>
-<p>a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access.
-Gui is build from a json / csv config file. Also included helper functions to create the buttons for you.</p>
-<h1 id="long-description">LONG DESCRIPTION</h1>
-<p>a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access.
-Gui is build from a json / csv config file. Also included helper functions to create the buttons for you.</p>
-<h1 id="examples">EXAMPLES</h1>
-<h2 id="install-pslauncherconfigfile">Install-PSLauncherConfigFile</h2>
-<p>Creates the config file with the provided settings</p>
-<h2 id="install-pssystrayconfigfile">Install-PSSysTrayConfigFile</h2>
+<h2 id="description">Description</h2>
+<p>a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
+the same json config file as the full gui. Or create a separate systray tool with a .csv as a config file. 
+Also included is helper functions to create buttons and panels for you.</p>
+<h2 id="function-synopsis">Function Synopsis</h2>
+<h3 id="new-ps_csv_systrayconfigfile">New-PS_CSV_SysTrayConfigFile</h3>
 <p>Creates the config file for Start-PSSysTray</p>
-<h2 id="start-pslauncher">Start-PSLauncher</h2>
-<p>Reads the config file and launches the gui</p>
-<h2 id="start-pslaunchercolorpicker">Start-PSLauncherColorPicker</h2>
-<p>Launches a gui form to test and change the color of PSLauncher.</p>
-<h2 id="start-pssystray">Start-PSSysTray</h2>
+<h3 id="new-pslauncherconfigfile">New-PSLauncherConfigFile</h3>
+<p>Creates the config file with the provided settings</p>
+<h3 id="start-ps_csv_systray">Start-PS_CSV_SysTray</h3>
 <p>Gui menu app in your systray with custom executable functions</p>
-<h1 id="see-also">SEE ALSO</h1>
-<p>https://github.com/smitpi/PSLauncher</p>
+<h3 id="start-pslauncher">Start-PSLauncher</h3>
+<p>Reads the config file and launches the gui</p>
+<h3 id="start-pslaunchercolorpicker">Start-PSLauncherColorPicker</h3>
+<p>Launches a gui form to test and change the color of PSLauncher.</p>
+<h3 id="start-pssystraylauncher">Start-PSSysTrayLauncher</h3>
+<p>Gui menu app in your systray with custom executable functions</p>
               
             </div>
           </div>
@@ -143,7 +163,7 @@ Gui is build from a json / csv config file. Also included helper functions to cr
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Install-PSLauncherConfigFile/" class="btn btn-neutral float-right" title="Install-PSLauncherConfigFile">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="New-PSLauncherConfigFile/" class="btn btn-neutral float-right" title="New-PSLauncherConfigFile">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
     </div>
@@ -175,7 +195,7 @@ Gui is build from a json / csv config file. Also included helper functions to cr
     
     
     
-      <span><a href="Install-PSLauncherConfigFile/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="New-PSLauncherConfigFile/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -194,5 +214,5 @@ Gui is build from a json / csv config file. Also included helper functions to cr
 
 <!--
 MkDocs version : 1.2.3
-Build Date UTC : 2021-11-06 07:52:28.480058+00:00
+Build Date UTC : 2021-11-15 14:10:46.553253+00:00
 -->
