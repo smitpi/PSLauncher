@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-PS_CSV_SysTrayConfigFile
 
 ## SYNOPSIS
-Creates the config file for Start-PSSysTray
+Creates the config file for Start-PS_CSV_SysTray
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ New-PS_CSV_SysTrayConfigFile [[-ConfigPath] <DirectoryInfo>] [-CreateShortcut] [
 ```
 
 ## DESCRIPTION
-Creates the config file for Start-PSSysTray
+Creates the config file for Start-PS_CSV_SysTray
 
 ## EXAMPLES
 

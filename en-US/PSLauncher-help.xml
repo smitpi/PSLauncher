@@ -305,11 +305,11 @@
       <command:verb>New</command:verb>
       <command:noun>PS_CSV_SysTrayConfigFile</command:noun>
       <maml:description>
-        <maml:para>Creates the config file for Start-PSSysTray</maml:para>
+        <maml:para>Creates the config file for Start-PS_CSV_SysTray</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Creates the config file for Start-PSSysTray</maml:para>
+      <maml:para>Creates the config file for Start-PS_CSV_SysTray</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>

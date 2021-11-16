@@ -17,7 +17,7 @@ Also included is helper functions to create buttons and panels for you.
 Creates the config file with the provided settings
 
 ### [New-PS_CSV_SysTrayConfigFile](New-PS_CSV_SysTrayConfigFile.md)
-Creates the config file for Start-PSSysTray
+Creates the config file for Start-PS_CSV_SysTray
 
 ### [Start-PSLauncher](Start-PSLauncher.md)
 Reads the config file and launches the gui
