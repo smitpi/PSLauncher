@@ -26,7 +26,7 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Created [30/09/2021_21:20] Initital Script Creating
+Created [30/09/2021_21:20] Initial Script Creating
 Updated [05/10/2021_08:30] Spit into more functions
 Updated [24/10/2021_05:59] 'Updated module/script info'
 
@@ -67,7 +67,7 @@ Run Start-PSLauncherColorPicker to change.
 Run Start-PSLauncherColorPicker to change.
 
 .PARAMETER Title
-Text in the titple of the app.
+Text in the title of the app.
 
 .PARAMETER Panel01
 Name of the 1st panel
@@ -79,7 +79,7 @@ Name of the 2nd panel
 Path where the config file will be saved.
 
 .PARAMETER CreateShortcut
-Creates a shortcut in the same directory that calls powershell and the config.
+Creates a shortcut in the same directory that calls PowerShell and the config.
 
 .PARAMETER LaunchColorPicker
 Launches Start-PSLauncherColorPicker
