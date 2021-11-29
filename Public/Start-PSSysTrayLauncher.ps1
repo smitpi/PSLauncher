@@ -26,7 +26,7 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Created [24/10/2021_05:59] Initital Script Creating
+Created [24/10/2021_05:59] Initial Script Creating
 
 .PRIVATEDATA
 
