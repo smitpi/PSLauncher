@@ -76,7 +76,7 @@ Accept wildcard characters: False
 ```
 
 ### -CreateShortcut
-Creates a shortcut in the same directory that calls powershell and the config.
+Creates a shortcut in the same directory that calls PowerShell and the config.
 
 ```yaml
 Type: SwitchParameter
@@ -181,7 +181,7 @@ Accept wildcard characters: False
 ```
 
 ### -Title
-Text in the titple of the app.
+Text in the title of the app.
 
 ```yaml
 Type: String
