@@ -81,7 +81,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
       <a href=".." class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
         Previous</a><a href=".." class="btn btn-xs btn-link">
-        Home
+        PSLauncher
       </a>
     </div>
     
@@ -95,7 +95,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h2 id="syntax">SYNTAX</h2>
 <pre><code>New-PSLauncherConfigFile [[-Color1] &lt;String&gt;] [[-Color2] &lt;String&gt;] [[-LabelColor] &lt;String&gt;]
  [[-TextColor] &lt;String&gt;] [[-LogoPath] &lt;String&gt;] [[-Title] &lt;String&gt;] [[-Panel01] &lt;String&gt;] [[-Panel02] &lt;String&gt;]
- [[-ConfigPath] &lt;DirectoryInfo&gt;] [-CreateShortcut] [-LaunchColorPicker] [&lt;CommonParameters&gt;]
+ [[-ConfigPath] &lt;DirectoryInfo&gt;] [-CreateShortcut] [-LaunchColorPicker]
 </code></pre>
 <h2 id="description">DESCRIPTION</h2>
 <p>Creates the config file with the provided settings</p>
@@ -128,30 +128,6 @@ Default value: #061820
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
-<h3 id="-configpath">-ConfigPath</h3>
-<p>Path where the config file will be saved.</p>
-<pre><code class="language-yaml">Type: DirectoryInfo
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 9
-Default value: (Join-Path (Get-Module pslauncher).ModuleBase \config)
-Accept pipeline input: False
-Accept wildcard characters: False
-</code></pre>
-<h3 id="-createshortcut">-CreateShortcut</h3>
-<p>Creates a shortcut in the same directory that calls PowerShell and the config.</p>
-<pre><code class="language-yaml">Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-</code></pre>
 <h3 id="-labelcolor">-LabelColor</h3>
 <p>Run Start-PSLauncherColorPicker to change.</p>
 <pre><code class="language-yaml">Type: String
@@ -164,15 +140,15 @@ Default value: #FFD400
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
-<h3 id="-launchcolorpicker">-LaunchColorPicker</h3>
-<p>Launches Start-PSLauncherColorPicker</p>
-<pre><code class="language-yaml">Type: SwitchParameter
+<h3 id="-textcolor">-TextColor</h3>
+<p>Run Start-PSLauncherColorPicker to change.</p>
+<pre><code class="language-yaml">Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: False
+Position: 4
+Default value: #000000
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
@@ -185,6 +161,18 @@ Aliases:
 Required: False
 Position: 5
 Default value: Https://gist.githubusercontent.com/smitpi/0e36b701419dbf9282ecfc6d0f7b654c/raw/8fe6a2fc91a27a9ebccb753f6508a2edd039c208/default-monochrome-black.png
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
+<h3 id="-title">-Title</h3>
+<p>Text in the title of the app.</p>
+<pre><code class="language-yaml">Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: PowerShell Launcher
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
@@ -212,32 +200,42 @@ Default value: Second
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
-<h3 id="-textcolor">-TextColor</h3>
-<p>Run Start-PSLauncherColorPicker to change.</p>
-<pre><code class="language-yaml">Type: String
+<h3 id="-configpath">-ConfigPath</h3>
+<p>Path where the config file will be saved.</p>
+<pre><code class="language-yaml">Type: DirectoryInfo
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
-Default value: #000000
+Position: 9
+Default value: (Join-Path (Get-Module pslauncher).ModuleBase \config)
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
-<h3 id="-title">-Title</h3>
-<p>Text in the title of the app.</p>
-<pre><code class="language-yaml">Type: String
+<h3 id="-createshortcut">-CreateShortcut</h3>
+<p>Creates a shortcut in the same directory that calls PowerShell and the config.</p>
+<pre><code class="language-yaml">Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
-Default value: PowerShell Launcher
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
-<h3 id="commonparameters">CommonParameters</h3>
-<p>This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see <a href="http://go.microsoft.com/fwlink/?LinkID=113216">about_CommonParameters</a>.</p>
+<h3 id="-launchcolorpicker">-LaunchColorPicker</h3>
+<p>Launches Start-PSLauncherColorPicker</p>
+<pre><code class="language-yaml">Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+</code></pre>
 <h2 id="inputs">INPUTS</h2>
 <h2 id="outputs">OUTPUTS</h2>
 <h2 id="notes">NOTES</h2>
@@ -267,7 +265,7 @@ Accept wildcard characters: False
       <a href=".." class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
         Previous</a><a href=".." class="btn btn-xs btn-link">
-        Home
+        PSLauncher
       </a>
     </div>
     
