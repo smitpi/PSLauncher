@@ -2,14 +2,9 @@ site_name: 'Documentation for PSLauncher'
 site_description: 'Documentation for PSLauncher'
 site_author: 'Pierre Smit'
 site_url: 'https://smitpi.github.io/PSLauncher'
-
 theme:
   name: 'windmill'
   language: 'en'
-
-
 repo_name: 'smitpi/PSLauncher'
 repo_url: 'https://github.com/smitpi/PSLauncher'
-
 copyright: '(c) 2021 Pierre. All rights reserved.'
-

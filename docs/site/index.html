@@ -34,11 +34,10 @@
       var is_top_frame = (window === window.parent);
         
         var pageToc = [
-          {title: "Description", url: "#_top", children: [
-          ]},
-          {title: "Getting Started", url: "#getting-started", children: [
-          ]},
-          {title: "Functions", url: "#functions", children: [
+          {title: "PSLauncher", url: "#_top", children: [
+              {title: "Description", url: "#description" },
+              {title: "Getting Started", url: "#getting-started" },
+              {title: "Functions", url: "#functions" },
           ]},
         ];
 
@@ -104,13 +103,11 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
       </li>
     </ul>
   <ul class="wm-toctree">
-        <li class="wm-toc-li wm-toc-lev1 "><a href="" class="wm-article-link wm-toc-text">Home</a>
+        <li class="wm-toc-li wm-toc-lev1 "><a href="" class="wm-article-link wm-toc-text">PSLauncher</a>
 </li>
         <li class="wm-toc-li wm-toc-lev1 "><a href="New-PSLauncherConfigFile/" class="wm-article-link wm-toc-text">New-PSLauncherConfigFile</a>
 </li>
         <li class="wm-toc-li wm-toc-lev1 "><a href="New-PS_CSV_SysTrayConfigFile/" class="wm-article-link wm-toc-text">New-PS_CSV_SysTrayConfigFile</a>
-</li>
-        <li class="wm-toc-li wm-toc-lev1 "><a href="PSLauncher/" class="wm-article-link wm-toc-text">PSLauncher Module</a>
 </li>
         <li class="wm-toc-li wm-toc-lev1 "><a href="Start-PSLauncher/" class="wm-article-link wm-toc-text">Start-PSLauncher</a>
 </li>
@@ -153,24 +150,31 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h2 id="description">Description</h2>
+    <h1 id="pslauncher">PSLauncher</h1>
+<h2 id="description">Description</h2>
 <p>a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
 the same json config file as the full gui. Or create a seperate systray tool with a .csv as a config file.
 Also included is helper functions to create buttons and panels for you.</p>
 <h2 id="getting-started">Getting Started</h2>
-<ul>
-<li><code>Install-Module -Name PSLauncher -Verbose</code></li>
-<li><code>Import-Module PSLauncher -Verbose -Force</code></li>
-<li><code>Get-Command -Module PSLauncher</code></li>
-</ul>
+<pre><code>- Install-Module -Name PSLauncher -Verbose
+</code></pre>
+<p>OR</p>
+<pre><code>git clone https://github.com/smitpi/PSLauncher (Join-Path (get-item (Join-Path (Get-Item $profile).Directory 'Modules')).FullName -ChildPath PSLauncher)
+</code></pre>
+<p>Then:</p>
+<pre><code>- Import-Module PSLauncher -Verbose -Force
+
+- Get-Command -Module PSLauncher
+- Get-Help about_PSLauncher
+</code></pre>
 <h2 id="functions">Functions</h2>
 <ul>
-<li><a href="New-PS_CSV_SysTrayConfigFile/">New-PS_CSV_SysTrayConfigFile</a> -- Creates the config file for Start-PS_CSV_SysTray</li>
-<li><a href="New-PSLauncherConfigFile/">New-PSLauncherConfigFile</a> -- Creates the config file with the provided settings</li>
-<li><a href="Start-PS_CSV_SysTray/">Start-PS_CSV_SysTray</a> -- Gui menu app in your systray with custom executable functions</li>
-<li><a href="Start-PSLauncher/">Start-PSLauncher</a> -- Reads the config file and launches the gui</li>
-<li><a href="Start-PSLauncherColorPicker/">Start-PSLauncherColorPicker</a> -- Launches a gui form to test and change the color of PSLauncher.</li>
-<li><a href="Start-PSSysTrayLauncher/">Start-PSSysTrayLauncher</a> -- Gui menu app in your systray with custom executable functions</li>
+<li><a href="https://smitpi.github.io/PSLauncher/#New-PSLauncherConfigFile">New-PSLauncherConfigFile</a> -- Creates the config file with the provided settings</li>
+<li><a href="https://smitpi.github.io/PSLauncher/#New-PS_CSV_SysTrayConfigFile">New-PS_CSV_SysTrayConfigFile</a> -- Creates the config file for Start-PS_CSV_SysTray</li>
+<li><a href="https://smitpi.github.io/PSLauncher/#Start-PSLauncher">Start-PSLauncher</a> -- Reads the config file and launches the gui</li>
+<li><a href="https://smitpi.github.io/PSLauncher/#Start-PSLauncherColorPicker">Start-PSLauncherColorPicker</a> -- Launches a gui form to test and change the color of PSLauncher.</li>
+<li><a href="https://smitpi.github.io/PSLauncher/#Start-PSSysTrayLauncher">Start-PSSysTrayLauncher</a> -- Gui menu app in your systray with custom executable functions</li>
+<li><a href="https://smitpi.github.io/PSLauncher/#Start-PS_CSV_SysTray">Start-PS_CSV_SysTray</a> -- Gui menu app in your systray with custom executable functions</li>
 </ul>
 
   <br>
@@ -209,5 +213,5 @@ Also included is helper functions to create buttons and panels for you.</p>
 </html>
 <!--
 MkDocs version : 1.2.3
-Build Date UTC : 2021-12-08 23:49:09.594608+00:00
+Build Date UTC : 2021-12-21 20:49:51.032231+00:00
 -->

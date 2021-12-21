@@ -1,7 +1,7 @@
 ---
 external help file: PSLauncher-help.xml
 Module Name: PSLauncher
-online version:
+online version: https://smitpi.github.io/PSLauncher/#New-PS_CSV_SysTrayConfigFile
 schema: 2.0.0
 ---
 
