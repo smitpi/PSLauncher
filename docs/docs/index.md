@@ -22,9 +22,9 @@ Then:
 ```
  
 ## Functions
-- [New-PSLauncherConfigFile](https://smitpi.github.io/PSLauncher/#New-PSLauncherConfigFile) -- Creates the config file with the provided settings
 - [New-PS_CSV_SysTrayConfigFile](https://smitpi.github.io/PSLauncher/#New-PS_CSV_SysTrayConfigFile) -- Creates the config file for Start-PS_CSV_SysTray
+- [New-PSLauncherConfigFile](https://smitpi.github.io/PSLauncher/#New-PSLauncherConfigFile) -- Creates the config file with the provided settings
+- [Start-PS_CSV_SysTray](https://smitpi.github.io/PSLauncher/#Start-PS_CSV_SysTray) -- Gui menu app in your systray with custom executable functions
 - [Start-PSLauncher](https://smitpi.github.io/PSLauncher/#Start-PSLauncher) -- Reads the config file and launches the gui
 - [Start-PSLauncherColorPicker](https://smitpi.github.io/PSLauncher/#Start-PSLauncherColorPicker) -- Launches a gui form to test and change the color of PSLauncher.
 - [Start-PSSysTrayLauncher](https://smitpi.github.io/PSLauncher/#Start-PSSysTrayLauncher) -- Gui menu app in your systray with custom executable functions
-- [Start-PS_CSV_SysTray](https://smitpi.github.io/PSLauncher/#Start-PS_CSV_SysTray) -- Gui menu app in your systray with custom executable functions

@@ -1,7 +1,7 @@
 ---
 external help file: PSLauncher-help.xml
 Module Name: PSLauncher
-online version: https://smitpi.github.io/PSLauncher/#Start-PSLauncher
+online version:
 schema: 2.0.0
 ---
 
