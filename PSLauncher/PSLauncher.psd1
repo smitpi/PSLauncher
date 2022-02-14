@@ -24,7 +24,7 @@ GUID = '5a3184bf-ebc3-4ed5-b7b2-f04863597f68'
 Author = 'Pierre Smit'
 
 # Company or vendor of this module
-CompanyName = 'iOCO Tech'
+CompanyName = 'HTPCZA Tech'
 
 # Copyright statement for this module
 Copyright = '(c) 2021 Pierre. All rights reserved.'

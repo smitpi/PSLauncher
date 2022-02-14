@@ -3,7 +3,7 @@
 # Module: PSLauncher
 # version: 0.1.9
 # Author: Pierre Smit
-# Company: iOCO Tech
+# Company: HTPCZA Tech
 #############################################
  
 <#
@@ -166,7 +166,7 @@ Start-PSSysTrayLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSL
 # Module: PSLauncher
 # version: 0.1.9
 # Author: Pierre Smit
-# Company: iOCO Tech
+# Company: HTPCZA Tech
 #############################################
  
 <#
@@ -262,7 +262,7 @@ Start-PS_CSV_SysTray -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PS_CSV
 # Module: PSLauncher
 # version: 0.1.9
 # Author: Pierre Smit
-# Company: iOCO Tech
+# Company: HTPCZA Tech
 #############################################
  
 <#
@@ -761,7 +761,7 @@ Function Start-PSLauncher {
 # Module: PSLauncher
 # version: 0.1.9
 # Author: Pierre Smit
-# Company: iOCO Tech
+# Company: HTPCZA Tech
 #############################################
  
 <#
@@ -1031,7 +1031,7 @@ Function Start-PSLauncherColorPicker {
 # Module: PSLauncher
 # version: 0.1.9
 # Author: Pierre Smit
-# Company: iOCO Tech
+# Company: HTPCZA Tech
 #############################################
  
 <#
@@ -1247,7 +1247,7 @@ Function Start-PSSysTrayLauncher {
 # Module: PSLauncher
 # version: 0.1.9
 # Author: Pierre Smit
-# Company: iOCO Tech
+# Company: HTPCZA Tech
 #############################################
  
 <#
