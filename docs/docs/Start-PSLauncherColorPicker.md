@@ -1,6 +1,6 @@
 ---
-external help file: PSLauncher-help.xml
-Module Name: PSLauncher
+external help file: PsLauncher-help.xml
+Module Name: PsLauncher
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Start-PSLauncherColorPicker
 
 ## SYNOPSIS
-Launches a gui form to test and change the color of PSLauncher.
+Launches a Gui form to test and change the Color of PSLauncher.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Start-PSLauncherColorPicker [-ConfigFilePath] <String> [-WhatIf] [-Confirm] [<Co
 ```
 
 ## DESCRIPTION
-Launches a gui form to test and change the color of PSLauncher.
+Launches a Gui form to test and change the Color of PSLauncher.
 
 ## EXAMPLES
 

@@ -26,7 +26,7 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Created [27/10/2021_05:31] Initital Script Creating
+Created [27/10/2021_05:31] Initial Script Creating
 
 .PRIVATEDATA
 
@@ -58,7 +58,7 @@ New-PS_CSV_SysTrayConfigFile -ConfigPath C:\temp -CreateShortcut
 
 #>
 Function New-PS_CSV_SysTrayConfigFile {
-    [Cmdletbinding()]
+    [Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/New-PS_CSV_SysTrayConfigFile/')]
     PARAM(
         [ValidateScript( { (Test-Path $_) })]
         [System.IO.DirectoryInfo]$ConfigPath,

@@ -26,7 +26,7 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Created [24/10/2021_05:59] Initital Script Creating
+Created [24/10/2021_05:59] Initial Script Creating
 
 .PRIVATEDATA
 
@@ -53,7 +53,7 @@ Start-PS_CSV_SysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 
 #>
 Function Start-PS_CSV_SysTray {
-    [Cmdletbinding(SupportsShouldProcess = $true)]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/PSLauncherStart-PS_CSV_SysTray/')]
     Param (
         [Parameter(Mandatory = $true, Position = 0)]
         [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.csv') })]
@@ -75,7 +75,7 @@ Function Start-PS_CSV_SysTray {
         [System.Reflection.Assembly]::LoadWithPartialName('System.Drawing') | Out-Null
         [System.Reflection.Assembly]::LoadWithPartialName('WindowsFormsIntegration') | Out-Null
 
-        # Add an icon to the systrauy button
+        # Add an icon to the systray button
         $module = Get-Module pslauncher
         if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
 

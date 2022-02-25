@@ -35,7 +35,7 @@ Created [24/10/2021_05:59] Initial Script Creating
 <#
 
 .DESCRIPTION
- Gui menu app in your systray with custom executable functions
+Gui menu app in your systray with custom executable functions
 
 #>
 <#
@@ -54,7 +54,7 @@ Start-PSSysTrayLauncher -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 
 #>
 Function Start-PSSysTrayLauncher {
-    [Cmdletbinding(SupportsShouldProcess = $true)]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/Start-PSSysTrayLauncher/')]
     Param (
         [Parameter(Mandatory = $true, Position = 0)]
         [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.json') })]
@@ -78,7 +78,7 @@ Function Start-PSSysTrayLauncher {
         [System.Reflection.Assembly]::LoadWithPartialName('System.Drawing') | Out-Null
         [System.Reflection.Assembly]::LoadWithPartialName('WindowsFormsIntegration') | Out-Null
 
-        # Add an icon to the systrauy button
+        # Add an icon to the systray button
         $module = Get-Module pslauncher
         if (![bool]$module) {$module = Get-Module pslauncher -ListAvailable }
         $icopath = (Join-Path $module.ModuleBase '\Private\pslauncher.ico') | Get-Item

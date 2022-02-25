@@ -26,8 +26,8 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Created [30/09/2021_21:16] Initital Script Creating
-Updated [05/10/2021_08:31] Added Color boton
+Created [30/09/2021_21:16] Initial Script Creating
+Updated [05/10/2021_08:31] Added Color Button
 Updated [24/10/2021_06:00] 'Updated module/script info'
 
 .PRIVATEDATA
@@ -41,15 +41,15 @@ Updated [24/10/2021_06:00] 'Updated module/script info'
 <#
 
 .DESCRIPTION
-Launches a gui form to test and change the color of PSLauncher.
+Launches a Gui form to test and change the Color of PSLauncher.
 
 #>
 <#
 .SYNOPSIS
-Launches a gui form to test and change the color of PSLauncher.
+Launches a Gui form to test and change the Color of PSLauncher.
 
 .DESCRIPTION
-Launches a gui form to test and change the color of PSLauncher.
+Launches a Gui form to test and change the Color of PSLauncher.
 
 .PARAMETER ConfigFilePath
 Path to the config file created by New-PSLauncherConfigFile
@@ -59,7 +59,7 @@ Start-PSLauncherColorPicker -ConfigFilePath c:\temp\config.json
 
 #>
 Function Start-PSLauncherColorPicker {
-    [Cmdletbinding(SupportsShouldProcess = $true)]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/Start-PSLauncherColorPicker/')]
     Param (
         [Parameter(Mandatory = $true, Position = 0)]
         [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.json') })]

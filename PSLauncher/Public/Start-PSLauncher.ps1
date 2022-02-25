@@ -26,8 +26,8 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Created [30/09/2021_15:50] Initital Script Creating
-Updated [05/10/2021_08:31] Added Color boton
+Created [30/09/2021_15:50] Initial Script Creating
+Updated [05/10/2021_08:31] Added Color Button
 Updated [24/10/2021_06:00] 'Updated module/script info'
 
 .PRIVATEDATA
@@ -60,7 +60,7 @@ Start-PSLauncher -ConfigFilePath c:\temp\config.json
 
 #>
 Function Start-PSLauncher {
-    [Cmdletbinding(SupportsShouldProcess = $true)]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/Start-PSLauncher/')]
     Param (
         [Parameter(Mandatory = $true, Position = 0)]
         [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.json') })]

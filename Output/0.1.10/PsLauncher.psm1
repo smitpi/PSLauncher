@@ -1,7 +1,11 @@
-﻿############################################
+﻿#region Private Functions
+#endregion
+#region Public Functions
+#region New-PSLauncherConfigFile.ps1
+############################################
 # source: New-PSLauncherConfigFile.ps1
-# Module: PSLauncher
-# version: 0.1.9
+# Module: PsLauncher
+# version: 0.1.10
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -51,6 +55,7 @@ New-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker
 
 #>
 Function New-PSLauncherConfigFile {
+    [Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/New-PSLauncherConfigFile/')]
     param(
         [string]$Color1 = '#E5E5E5',
         [string]$Color2 = '#061820',
@@ -161,10 +166,14 @@ Start-PSSysTrayLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSL
     }
 } #end Function
  
+Export-ModuleMember -Function New-PSLauncherConfigFile
+#endregion
+ 
+#region New-PS_CSV_SysTrayConfigFile.ps1
 ############################################
 # source: New-PS_CSV_SysTrayConfigFile.ps1
-# Module: PSLauncher
-# version: 0.1.9
+# Module: PsLauncher
+# version: 0.1.10
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -187,7 +196,7 @@ New-PS_CSV_SysTrayConfigFile -ConfigPath C:\temp -CreateShortcut
 
 #>
 Function New-PS_CSV_SysTrayConfigFile {
-    [Cmdletbinding()]
+    [Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/New-PS_CSV_SysTrayConfigFile/')]
     PARAM(
         [ValidateScript( { (Test-Path $_) })]
         [System.IO.DirectoryInfo]$ConfigPath,
@@ -257,10 +266,14 @@ Start-PS_CSV_SysTray -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PS_CSV
 
 } #end Function
  
+Export-ModuleMember -Function New-PS_CSV_SysTrayConfigFile
+#endregion
+ 
+#region Start-PSLauncher.ps1
 ############################################
 # source: Start-PSLauncher.ps1
-# Module: PSLauncher
-# version: 0.1.9
+# Module: PsLauncher
+# version: 0.1.10
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -280,7 +293,7 @@ Start-PSLauncher -ConfigFilePath c:\temp\config.json
 
 #>
 Function Start-PSLauncher {
-    [Cmdletbinding(SupportsShouldProcess = $true)]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/Start-PSLauncher/')]
     Param (
         [Parameter(Mandatory = $true, Position = 0)]
         [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.json') })]
@@ -756,20 +769,24 @@ Function Start-PSLauncher {
     }
 } #end Function
  
+Export-ModuleMember -Function Start-PSLauncher
+#endregion
+ 
+#region Start-PSLauncherColorPicker.ps1
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
-# Module: PSLauncher
-# version: 0.1.9
+# Module: PsLauncher
+# version: 0.1.10
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
  
 <#
 .SYNOPSIS
-Launches a gui form to test and change the color of PSLauncher.
+Launches a Gui form to test and change the Color of PSLauncher.
 
 .DESCRIPTION
-Launches a gui form to test and change the color of PSLauncher.
+Launches a Gui form to test and change the Color of PSLauncher.
 
 .PARAMETER ConfigFilePath
 Path to the config file created by New-PSLauncherConfigFile
@@ -779,7 +796,7 @@ Start-PSLauncherColorPicker -ConfigFilePath c:\temp\config.json
 
 #>
 Function Start-PSLauncherColorPicker {
-    [Cmdletbinding(SupportsShouldProcess = $true)]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/Start-PSLauncherColorPicker/')]
     Param (
         [Parameter(Mandatory = $true, Position = 0)]
         [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.json') })]
@@ -1026,10 +1043,14 @@ Function Start-PSLauncherColorPicker {
     }
 } #end Function
  
+Export-ModuleMember -Function Start-PSLauncherColorPicker
+#endregion
+ 
+#region Start-PSSysTrayLauncher.ps1
 ############################################
 # source: Start-PSSysTrayLauncher.ps1
-# Module: PSLauncher
-# version: 0.1.9
+# Module: PsLauncher
+# version: 0.1.10
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -1050,7 +1071,7 @@ Start-PSSysTrayLauncher -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 
 #>
 Function Start-PSSysTrayLauncher {
-    [Cmdletbinding(SupportsShouldProcess = $true)]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/Start-PSSysTrayLauncher/')]
     Param (
         [Parameter(Mandatory = $true, Position = 0)]
         [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.json') })]
@@ -1074,7 +1095,7 @@ Function Start-PSSysTrayLauncher {
         [System.Reflection.Assembly]::LoadWithPartialName('System.Drawing') | Out-Null
         [System.Reflection.Assembly]::LoadWithPartialName('WindowsFormsIntegration') | Out-Null
 
-        # Add an icon to the systrauy button
+        # Add an icon to the systray button
         $module = Get-Module pslauncher
         if (![bool]$module) {$module = Get-Module pslauncher -ListAvailable }
         $icopath = (Join-Path $module.ModuleBase '\Private\pslauncher.ico') | Get-Item
@@ -1242,10 +1263,14 @@ Function Start-PSSysTrayLauncher {
 } #end Function
 
  
+Export-ModuleMember -Function Start-PSSysTrayLauncher
+#endregion
+ 
+#region Start-PS_CSV_SysTray.ps1
 ############################################
 # source: Start-PS_CSV_SysTray.ps1
-# Module: PSLauncher
-# version: 0.1.9
+# Module: PsLauncher
+# version: 0.1.10
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -1265,7 +1290,7 @@ Start-PS_CSV_SysTray -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 
 #>
 Function Start-PS_CSV_SysTray {
-    [Cmdletbinding(SupportsShouldProcess = $true)]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/PSLauncherStart-PS_CSV_SysTray/')]
     Param (
         [Parameter(Mandatory = $true, Position = 0)]
         [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.csv') })]
@@ -1287,7 +1312,7 @@ Function Start-PS_CSV_SysTray {
         [System.Reflection.Assembly]::LoadWithPartialName('System.Drawing') | Out-Null
         [System.Reflection.Assembly]::LoadWithPartialName('WindowsFormsIntegration') | Out-Null
 
-        # Add an icon to the systrauy button
+        # Add an icon to the systray button
         $module = Get-Module pslauncher
         if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
 
@@ -1415,3 +1440,7 @@ Function Start-PS_CSV_SysTray {
 } #end Function
 
  
+Export-ModuleMember -Function Start-PS_CSV_SysTray
+#endregion
+ 
+#endregion

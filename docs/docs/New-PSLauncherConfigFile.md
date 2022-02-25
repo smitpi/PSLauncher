@@ -1,6 +1,6 @@
 ---
-external help file: PSLauncher-help.xml
-Module Name: PSLauncher
+external help file: PsLauncher-help.xml
+Module Name: PsLauncher
 online version:
 schema: 2.0.0
 ---
@@ -15,7 +15,7 @@ Creates the config file with the provided settings
 ```
 New-PSLauncherConfigFile [[-Color1] <String>] [[-Color2] <String>] [[-LabelColor] <String>]
  [[-TextColor] <String>] [[-LogoPath] <String>] [[-Title] <String>] [[-Panel01] <String>] [[-Panel02] <String>]
- [[-ConfigPath] <DirectoryInfo>] [-CreateShortcut] [-LaunchColorPicker]
+ [[-ConfigPath] <DirectoryInfo>] [-CreateShortcut] [-LaunchColorPicker] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -194,6 +194,9 @@ Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

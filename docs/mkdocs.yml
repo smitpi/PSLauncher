@@ -1,10 +1,10 @@
-site_name: 'PSLauncher'
-site_description: 'Documentation for PowerShell Module: PSLauncher'
+site_name: 'PsLauncher'
+site_description: 'Documentation for PowerShell Module: PsLauncher'
 site_author: 'Pierre Smit'
-site_url: 'https://smitpi.github.io/PSLauncher'
+site_url: 'https://smitpi.github.io/PsLauncher'
  
-repo_url: 'https://github.com/smitpi/PSLauncher'
-repo_name:  'smitpi/PSLauncher'
+repo_url: 'https://github.com/smitpi/PsLauncher'
+repo_name:  'smitpi/PsLauncher'
  
 copyright: '(c) 2021 Pierre. All rights reserved.'
  
@@ -12,7 +12,7 @@ extra:
   manifest: manifest.webmanifest
   social:
     - icon: fontawesome/brands/github-square
-      link: 'https://smitpi.github.io/PSLauncher'
+      link: 'https://smitpi.github.io/PsLauncher'
  
 markdown_extensions:
   - pymdownx.keys

@@ -89,6 +89,7 @@ New-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker
 
 #>
 Function New-PSLauncherConfigFile {
+    [Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/New-PSLauncherConfigFile/')]
     param(
         [string]$Color1 = '#E5E5E5',
         [string]$Color2 = '#061820',
