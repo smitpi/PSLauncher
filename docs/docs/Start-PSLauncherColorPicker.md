@@ -1,6 +1,6 @@
 ---
-external help file: PsLauncher-help.xml
-Module Name: PsLauncher
+external help file: PSLauncher-help.xml
+Module Name: PSLauncher
 online version:
 schema: 2.0.0
 ---

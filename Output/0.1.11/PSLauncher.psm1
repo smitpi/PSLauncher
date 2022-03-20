@@ -4,8 +4,8 @@
 #region New-PSLauncherConfigFile.ps1
 ############################################
 # source: New-PSLauncherConfigFile.ps1
-# Module: PsLauncher
-# version: 0.1.10
+# Module: PSLauncher
+# version: 0.1.11
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -172,8 +172,8 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 #region New-PS_CSV_SysTrayConfigFile.ps1
 ############################################
 # source: New-PS_CSV_SysTrayConfigFile.ps1
-# Module: PsLauncher
-# version: 0.1.10
+# Module: PSLauncher
+# version: 0.1.11
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -272,8 +272,8 @@ Export-ModuleMember -Function New-PS_CSV_SysTrayConfigFile
 #region Start-PSLauncher.ps1
 ############################################
 # source: Start-PSLauncher.ps1
-# Module: PsLauncher
-# version: 0.1.10
+# Module: PSLauncher
+# version: 0.1.11
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -775,8 +775,8 @@ Export-ModuleMember -Function Start-PSLauncher
 #region Start-PSLauncherColorPicker.ps1
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
-# Module: PsLauncher
-# version: 0.1.10
+# Module: PSLauncher
+# version: 0.1.11
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -1049,8 +1049,8 @@ Export-ModuleMember -Function Start-PSLauncherColorPicker
 #region Start-PSSysTrayLauncher.ps1
 ############################################
 # source: Start-PSSysTrayLauncher.ps1
-# Module: PsLauncher
-# version: 0.1.10
+# Module: PSLauncher
+# version: 0.1.11
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -1269,8 +1269,8 @@ Export-ModuleMember -Function Start-PSSysTrayLauncher
 #region Start-PS_CSV_SysTray.ps1
 ############################################
 # source: Start-PS_CSV_SysTray.ps1
-# Module: PsLauncher
-# version: 0.1.10
+# Module: PSLauncher
+# version: 0.1.11
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################

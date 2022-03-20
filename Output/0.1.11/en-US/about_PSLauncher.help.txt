@@ -1,6 +1,6 @@
 
-PsLauncher
-	 about_PsLauncher
+PSLauncher
+	 about_PSLauncher
  
 SHORT DESCRIPTION
 	 a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
