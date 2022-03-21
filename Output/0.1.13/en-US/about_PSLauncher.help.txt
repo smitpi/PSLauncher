@@ -10,12 +10,12 @@ Also included is helper functions to create buttons and panels for you.
  
 NOTES
 Functions in this module:
-	 New-PSLauncherConfigFile -- Creates the config file with the provided settings
 	 New-PS_CSV_SysTrayConfigFile -- Creates the config file for Start-PS_CSV_SysTray
+	 New-PSLauncherConfigFile -- Creates the config file with the provided settings
+	 Start-PS_CSV_SysTray -- Gui menu app in your systray with custom executable functions
 	 Start-PSLauncher -- Reads the config file and launches the gui
 	 Start-PSLauncherColorPicker -- Launches a Gui form to test and change the Color of PSLauncher.
 	 Start-PSSysTrayLauncher -- Gui menu app in your systray with custom executable functions
-	 Start-PS_CSV_SysTray -- Gui menu app in your systray with custom executable functions
  
 SEE ALSO
 	 https://github.com/smitpi/PSLauncher
