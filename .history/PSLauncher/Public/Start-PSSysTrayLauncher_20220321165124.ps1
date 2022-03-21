@@ -144,7 +144,7 @@ Function Start-PSSysTrayLauncher {
 
             $process = $null
             ShowConsole
-            Write-Output $processArguments
+            Write-Output  $processArguments
             #Clear-Host
             Write-Color 'Running the following:' -Color DarkYellow -ShowTime
             Write-Color 'Command: ', $command -Color Cyan, Green -ShowTime
@@ -156,7 +156,8 @@ Function Start-PSSysTrayLauncher {
 
             if ( ! $process ) {
                 [void][Windows.MessageBox]::Show( "Failed to run $($processArguments.FilePath)" , 'Action Error' , 'Ok' , 'Exclamation' )
-            } else {
+            }
+            else {
                 Write-Verbose -Message "$(Get-Date -Format G): pid $($process.Id) - $($process.Name) `"$($processArguments[ 'ArgumentList'] )`""
 
                 if ( $options -contains 'Wait' ) {
@@ -228,7 +229,7 @@ Function Start-PSSysTrayLauncher {
 
         $Systray_Tool_Icon.Add_MouseDoubleClick( {
                 ShowConsole
-                $launcher = (Join-Path $PSScriptRoot -ChildPath '\PSLauncher.ps1') | Get-Item
+                $launcher = (Join-Path $PSScriptRoot -ChildPath "\PSLauncher.ps1") | Get-Item
                 Start-Process PowerShell -ArgumentList "-NoLogo -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -file `"$($launcher.FullName)`""
                 HideConsole
             })
