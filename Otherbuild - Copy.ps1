@@ -1,4 +1,5 @@
-`	PARAM(
+function Otherbuild {
+	PARAM(
 		[Parameter(Mandatory = $true)]
 		[ValidateScript( { $IsAdmin = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 				if ($IsAdmin.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) { $True }
@@ -29,3 +30,4 @@
 		Get-ChildItem -Directory "\\dfnas\Profile\Utils\PSModules\$($ModuleName)" | Remove-Item -Recurse -Force
 		Copy-Item -Path $newmod.FullName -Destination "\\dfnas\Profile\Utils\PSModules\$($ModuleName)\" -Force -Recurse
 	} catch {Write-Warning "Unable to copy the new module `nMessage:$($_.Exception.Message)`nItem:$($_.Exception.ItemName)"}
+}
