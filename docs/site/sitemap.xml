@@ -2,37 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://smitpi.github.io/PSLauncher/</loc>
-         <lastmod>2022-03-21</lastmod>
+         <lastmod>2022-03-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://smitpi.github.io/PSLauncher/New-PSLauncherConfigFile/</loc>
-         <lastmod>2022-03-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://smitpi.github.io/PSLauncher/New-PS_CSV_SysTrayConfigFile/</loc>
-         <lastmod>2022-03-21</lastmod>
+         <lastmod>2022-03-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://smitpi.github.io/PSLauncher/Start-PSLauncher/</loc>
-         <lastmod>2022-03-21</lastmod>
+         <lastmod>2022-03-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://smitpi.github.io/PSLauncher/Start-PSLauncherColorPicker/</loc>
-         <lastmod>2022-03-21</lastmod>
+         <lastmod>2022-03-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://smitpi.github.io/PSLauncher/Start-PSSysTrayLauncher/</loc>
-         <lastmod>2022-03-21</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://smitpi.github.io/PSLauncher/Start-PS_CSV_SysTray/</loc>
-         <lastmod>2022-03-21</lastmod>
+         <lastmod>2022-03-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

@@ -1,86 +1,110 @@
 ---
 external help file: PSLauncher-help.xml
 Module Name: PSLauncher
-online version:
+online version: 
 schema: 2.0.0
 ---
 
 # Start-PSLauncherColorPicker
 
 ## SYNOPSIS
+
 Launches a Gui form to test and change the Color of PSLauncher.
 
 ## SYNTAX
 
+### __AllParameterSets
+
 ```
-Start-PSLauncherColorPicker [-ConfigFilePath] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Start-PSLauncherColorPicker [-ConfigFilePath] <String> [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Launches a Gui form to test and change the Color of PSLauncher.
+
 
 ## EXAMPLES
 
-### EXAMPLE 1
+### Example 1: EXAMPLE 1
+
 ```
 Start-PSLauncherColorPicker -ConfigFilePath c:\temp\config.json
 ```
 
+
+
+
+
+
+
+
 ## PARAMETERS
 
 ### -ConfigFilePath
+
 Path to the config file created by New-PSLauncherConfigFile
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: 
+Accepted values: 
 
-Required: True
-Position: 1
-Default value: None
+Required: True (All) False (None)
+Position: 0
+Default value: 
 Accept pipeline input: False
 Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+DontShow: False
 ```
 
 ### -Confirm
-Prompts you for confirmation before running the cmdlet.
+
+{{ Fill Confirm Description }}
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+Accepted values: 
 
-Required: False
+Required: True (None) False (All)
 Position: Named
-Default value: None
+Default value: 
 Accept pipeline input: False
 Accept wildcard characters: False
+DontShow: False
 ```
 
+### -WhatIf
+
+{{ Fill WhatIf Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+Accepted values: 
+
+Required: True (None) False (All)
+Position: Named
+Default value: 
+Accept pipeline input: False
+Accept wildcard characters: False
+DontShow: False
+```
+
+
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
-
-## INPUTS
-
-## OUTPUTS
 
 ## NOTES
 
+
+
 ## RELATED LINKS
+
+Fill Related Links Here
+
