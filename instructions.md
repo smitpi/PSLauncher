@@ -1,22 +1,25 @@
 # PSLauncher
  
 ## Description
-a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
-the same json config file as the full gui. Or create a seperate systray tool with a .csv as a config file.
-Also included is helper functions to create buttons and panels for you.
+A GUI to launch any PowerShell script, function, file, or any other executables. You can also create a SysTray tool for quick access. Both apps use the same json config file. So, all your config is in sync.
+    Also created menus that assists in creating the buttons and panels. It just asks you a couple of questions, and it adds the config to the json file. After a refresh, the new buttons or panels are available to everyone using it.
  
 ## Getting Started
+- Install from PowerShell Gallery [PS Gallery](https://www.powershellgallery.com/packages/PSLauncher)
 ```
-- Install-Module -Name PSLauncher -Verbose
+Install-Module -Name PSLauncher -Verbose
 ```
-OR
+- or from GitHub [GitHub Repo](https://github.com/smitpi/PSLauncher)
 ```
 git clone https://github.com/smitpi/PSLauncher (Join-Path (get-item (Join-Path (Get-Item $profile).Directory 'Modules')).FullName -ChildPath PSLauncher)
 ```
-Then:
+- Then import the module into your session
 ```
-- Import-Module PSLauncher -Verbose -Force
- 
-- Get-Command -Module PSLauncher
-- Get-Help about_PSLauncher
+Import-Module PSLauncher -Verbose -Force
 ```
+- or run these commands for more help and details.
+```
+Get-Command -Module PSLauncher
+Get-Help about_PSLauncher
+```
+Documentation can be found at: [Github_Pages](https://smitpi.github.io/PSLauncher)

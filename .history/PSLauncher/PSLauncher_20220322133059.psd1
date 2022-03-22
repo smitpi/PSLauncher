@@ -30,8 +30,7 @@
     Copyright         = '(c) 2021 Pierre. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description       = 'a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
-the same json config file as the full gui. Or create a seperate systray tool with a .csv as a config file.
+    Description       = 'A GUI to launch any PowerShell script, function, file or any other executables. You can also create a systray tool for quick access. Both apps will  use the same json config file.
 Also included is helper functions to create buttons and panels for you.'
 
     # Minimum version of the PowerShell engine required by this module

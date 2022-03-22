@@ -12,7 +12,7 @@
 RootModule = 'PSLauncher.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.11'
+ModuleVersion = '0.1.12'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,24 +30,23 @@ CompanyName = 'HTPCZA Tech'
 Copyright = '(c) 2021 Pierre. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
-the same json config file as the full gui. Or create a seperate systray tool with a .csv as a config file.
-Also included is helper functions to create buttons and panels for you.'
+Description = 'A GUI to launch any PowerShell script, function, file, or any other executables. You can also create a SysTray tool for quick access. Both apps use the same json config file. So, all your config is in sync.
+    Also created menus that assists in creating the buttons and panels. It just asks you a couple of questions, and it adds the config to the json file. After a refresh, the new buttons or panels are available to everyone using it.'
 
-# Minimum version of the PowerShell engine required by this module
+# Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''
 
-# Name of the PowerShell host required by this module
+# Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
 
-# Minimum version of the PowerShell host required by this module
+# Minimum version of the Windows PowerShell host required by this module
 # PowerShellHostVersion = ''
 
 # Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
 # DotNetFrameworkVersion = ''
 
 # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-# ClrVersion = ''
+# CLRVersion = ''
 
 # Processor architecture (None, X86, Amd64) required by this module
 # ProcessorArchitecture = ''
@@ -98,19 +97,19 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = 'gui','powershell','wpf'
 
         # A URL to the license for this module.
         # LicenseUri = ''
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/smitpi/PSLauncher'
 
         # A URL to an icon representing this module.
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = 'Updated [22/03/2022_13:21] I removed the csv systray functions and moved them into a new module called PSSysTray'
 
         # Prerelease string of this module
         # Prerelease = ''
@@ -123,7 +122,7 @@ PrivateData = @{
 
     } # End of PSData hashtable
 
-} # End of PrivateData hashtable
+ } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
 HelpInfoURI = 'https://smitpi.github.io/PSLauncher/'

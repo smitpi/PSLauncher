@@ -423,21 +423,25 @@
 
 <h1 id="pslauncher">PSLauncher</h1>
 <h2 id="description">Description</h2>
-<p>a GUI to launch any PowerShell function, file or executable. You can also create a systray tool for quick access. One systray tool will use
-the same json config file as the full gui. Or create a seperate systray tool with a .csv as a config file.
-Also included is helper functions to create buttons and panels for you.</p>
+<p>A GUI to launch any PowerShell script, function, file, or any other executables. You can also create a SysTray tool for quick access. Both apps use the same json config file. So, all your config is in sync.
+    Also created menus that assists in creating the buttons and panels. It just asks you a couple of questions, and it adds the config to the json file. After a refresh, the new buttons or panels are available to everyone using it.</p>
 <h2 id="getting-started">Getting Started</h2>
-<p><div class="highlight"><pre><span></span><code>- Install-Module -Name PSLauncher -Verbose
-</code></pre></div>
-OR
+<ul>
+<li>Install from PowerShell Gallery <a href="https://www.powershellgallery.com/packages/PSLauncher">PS Gallery</a>
+<div class="highlight"><pre><span></span><code>Install-Module -Name PSLauncher -Verbose
+</code></pre></div></li>
+<li>or from GitHub <a href="https://github.com/smitpi/PSLauncher">GitHub Repo</a>
 <div class="highlight"><pre><span></span><code>git clone https://github.com/smitpi/PSLauncher (Join-Path (get-item (Join-Path (Get-Item $profile).Directory &#39;Modules&#39;)).FullName -ChildPath PSLauncher)
+</code></pre></div></li>
+<li>Then import the module into your session
+<div class="highlight"><pre><span></span><code>Import-Module PSLauncher -Verbose -Force
+</code></pre></div></li>
+<li>or run these commands for more help and details.
+<div class="highlight"><pre><span></span><code>Get-Command -Module PSLauncher
+Get-Help about_PSLauncher
 </code></pre></div>
-Then:
-<div class="highlight"><pre><span></span><code>- Import-Module PSLauncher -Verbose -Force
-
-- Get-Command -Module PSLauncher
-- Get-Help about_PSLauncher
-</code></pre></div></p>
+Documentation can be found at: <a href="https://smitpi.github.io/PSLauncher">Github_Pages</a></li>
+</ul>
 <h2 id="functions">Functions</h2>
 <ul>
 <li><a href="https://smitpi.github.io/PSLauncher/#New-PSLauncherConfigFile">New-PSLauncherConfigFile</a> -- Creates the config file with the provided settings</li>
