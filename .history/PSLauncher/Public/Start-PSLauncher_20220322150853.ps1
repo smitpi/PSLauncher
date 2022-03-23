@@ -117,6 +117,7 @@ Function Start-PSLauncher {
                 [ValidateSet('PSFile', 'PSCommand', 'Other')]
                 [string]$mode,
                 [string[]]$options
+
             )
 
             Write-Verbose "Invoke-Action -name $name -command $command -arguments $arguments -mode $mode -options $options"

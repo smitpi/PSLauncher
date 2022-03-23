@@ -228,8 +228,8 @@ Function Start-PSSysTrayLauncher {
 
         $Systray_Tool_Icon.Add_MouseDoubleClick( {
                 ShowConsole
-                $launcher = (Join-Path $PSScriptRoot -ChildPath '\PSLauncher.ps1') | Get-Item
-                Start-Process PowerShell -ArgumentList "-NoLogo -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -file `"$($launcher.FullName)`""
+                $item = get-item $ConfigFilePath
+                Start-PSLauncher -ConfigFilePath $item.FullName                
                 HideConsole
             })
 
