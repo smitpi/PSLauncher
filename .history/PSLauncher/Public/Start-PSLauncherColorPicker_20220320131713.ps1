@@ -51,23 +51,22 @@ Launches a Gui form to test and change the Color of PSLauncher.
 .DESCRIPTION
 Launches a Gui form to test and change the Color of PSLauncher.
 
-.PARAMETER PSLauncherConfigFile
+.PARAMETER ConfigFilePath
 Path to the config file created by New-PSLauncherConfigFile
 
 .EXAMPLE
-Start-PSLauncherColorPicker -PSLauncherConfigFile c:\temp\config.json
+Start-PSLauncherColorPicker -ConfigFilePath c:\temp\config.json
 
 #>
 Function Start-PSLauncherColorPicker {
-    [Cmdletbinding(HelpURI = 'https://smitpi.github.io/Start-PSLauncherColorPicker/')]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/Start-PSLauncherColorPicker/')]
     Param (
-        [Parameter(Mandatory = $true)]
-        [ValidateScript( { if ((Test-Path $_) -and ((Get-Item $_).Extension -eq '.json')) { $true}
-                else {throw 'Not a valid config file.'} })]
-        [System.IO.FileInfo]$PSLauncherConfigFile
+        [Parameter(Mandatory = $true, Position = 0)]
+        [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.json') })]
+        [string]$ConfigFilePath
     )
-
-        $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
+    if ($pscmdlet.ShouldProcess('Target', 'Operation')) {
+        $jsondata = Get-Content $ConfigFilePath | ConvertFrom-Json
 
         $Color1st = $jsondata.Config.Color1st
         $Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
@@ -279,9 +278,8 @@ Function Start-PSLauncherColorPicker {
                     }
                     Buttons = $jsondata.Buttons
                 }
-                $new | ConvertTo-Json -Depth 10 | Set-Content $PSLauncherConfigFile -Force
-                if (Get-Command code -ErrorAction SilentlyContinue) {code $PSLauncherConfigFile }
-                else {notepad.exe $PSLauncherConfigFile}
+                $new | ConvertTo-Json -Depth 10 | Set-Content $ConfigFilePath -Force
+                notepad.exe $ConfigFilePath
                 Stop-Process $pid
             })
         $Set_Button.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
@@ -305,4 +303,5 @@ Function Start-PSLauncherColorPicker {
 
         HideConsole
         [void]$Form.ShowDialog()
+    }
 } #end Function

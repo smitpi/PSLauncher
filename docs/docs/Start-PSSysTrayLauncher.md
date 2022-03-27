@@ -13,7 +13,7 @@ Gui menu app in your systray with custom executable functions
 ## SYNTAX
 
 ```
-Start-PSSysTrayLauncher [-ConfigFilePath] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Start-PSSysTrayLauncher [-PSLauncherConfigFile] <FileInfo> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,52 +25,21 @@ it will launch the full gui.
 
 ### EXAMPLE 1
 ```
-Start-PSSysTrayLauncher -ConfigFilePath C:\temp\PSSysTrayConfig.csv
+Start-PSSysTrayLauncher -PSLauncherConfigFile C:\temp\PSSysTrayConfig.csv
 ```
 
 ## PARAMETERS
 
-### -ConfigFilePath
+### -PSLauncherConfigFile
 Path to the config file created by New-PSLauncherConfigFile
 
 ```yaml
-Type: String
+Type: FileInfo
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

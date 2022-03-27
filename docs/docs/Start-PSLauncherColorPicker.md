@@ -13,7 +13,7 @@ Launches a Gui form to test and change the Color of PSLauncher.
 ## SYNTAX
 
 ```
-Start-PSLauncherColorPicker [-ConfigFilePath] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Start-PSLauncherColorPicker [-PSLauncherConfigFile] <FileInfo> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,52 +23,21 @@ Launches a Gui form to test and change the Color of PSLauncher.
 
 ### EXAMPLE 1
 ```
-Start-PSLauncherColorPicker -ConfigFilePath c:\temp\config.json
+Start-PSLauncherColorPicker -PSLauncherConfigFile c:\temp\config.json
 ```
 
 ## PARAMETERS
 
-### -ConfigFilePath
+### -PSLauncherConfigFile
 Path to the config file created by New-PSLauncherConfigFile
 
 ```yaml
-Type: String
+Type: FileInfo
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

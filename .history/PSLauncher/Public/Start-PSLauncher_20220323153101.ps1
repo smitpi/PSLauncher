@@ -52,22 +52,22 @@ Reads the config file and launches the gui
 .DESCRIPTION
 Reads the config file and launches the gui
 
-.PARAMETER PSLauncherConfigFile
+.PARAMETER ConfigFilePath
 Path to the config file created by New-PSLauncherConfigFile
 
 .EXAMPLE
-Start-PSLauncher -PSLauncherConfigFile c:\temp\config.json
+Start-PSLauncher -ConfigFilePath c:\temp\config.json
 
 #>
 Function Start-PSLauncher {
-    [Cmdletbinding(HelpURI = 'https://smitpi.github.io/Start-PSLauncher/')]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/Start-PSLauncher/')]
     Param (
-        [Parameter(Mandatory = $true)]
-        [ValidateScript( { if ((Test-Path $_) -and ((Get-Item $_).Extension -eq '.json')) { $true}
-                else {throw 'Not a valid config file.'} })]
-        [System.IO.FileInfo]$PSLauncherConfigFile
+        [Parameter(Mandatory = $true, Position = 0)]
+        [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.json') })]
+        [string]$ConfigFilePath
     )
-        $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
+    if ($pscmdlet.ShouldProcess('Target', 'Operation')) {
+        $jsondata = Get-Content $ConfigFilePath | ConvertFrom-Json
 
         $script:KeepOpen = $false
         $script:PanelDraw = 10
@@ -264,8 +264,7 @@ Function Start-PSLauncher {
             }
         }
         function AddToConfig {
-            $form.close()
-            $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
+            $jsondata = Get-Content $ConfigFilePath | ConvertFrom-Json
 
             Clear-Host
             Write-Color 'Do you want to add a Button or a Panel' -Color DarkYellow -LinesAfter 1
@@ -303,7 +302,7 @@ Function Start-PSLauncher {
                     Config  = $jsondata.Config
                     Buttons = $NewConfig
                 }
-                $Update | ConvertTo-Json -Depth 5 | Set-Content -Path $PSLauncherConfigFile -Verbose -Force
+                $Update | ConvertTo-Json -Depth 5 | Set-Content -Path $ConfigFilePath -Verbose -Force
 
             }
             if ($GuiAddChoice -eq 1) {
@@ -351,7 +350,7 @@ Function Start-PSLauncher {
                 }
                 until ($yn.ToLower() -eq 'n')
 
-                $jsondata | ConvertTo-Json -Depth 10 | Out-File $PSLauncherConfigFile
+                $jsondata | ConvertTo-Json -Depth 10 | Out-File $ConfigFilePath
             }
             if ($GuiAddChoice -eq 2) {
 
@@ -359,8 +358,8 @@ Function Start-PSLauncher {
                 if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
                 Import-Module $module -Force
 
-                $itm = Get-Item $PSLauncherConfigFile
-                Start-PSLauncherColorPicker -PSLauncherConfigFile $itm.FullName
+                $itm = Get-Item $ConfigFilePath
+                Start-PSLauncherColorPicker -ConfigFilePath $itm.FullName
 
             }
         }
@@ -377,6 +376,7 @@ Function Start-PSLauncher {
             $script:KeepOpen = $false
             HideConsole
         }
+
         #endregion
 
         #region GUI Icon
@@ -404,6 +404,7 @@ Function Start-PSLauncher {
         $Form.Height = $objImage.Height
         $Form.AutoSizeMode = [System.Windows.Forms.AutoSizeMode]::GrowAndShrink
         $Form.AutoScroll = $True
+
         #endregion
 
         #region create panels and buttons
@@ -451,7 +452,8 @@ Function Start-PSLauncher {
         $reload.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
         $reload.Add_Click( {
                 Write-Output 'Reloading Util'
-                Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
+                Import-Module (Join-Path -Path $jsondata.Config.moduleroot -ChildPath '\PSLauncher.psm1') -Force -Verbose
+                Start-PSLauncher -ConfigFilePath $ConfigFilePath
                 Stop-Process $pid
             })
         $EnableLogging = New-Object system.Windows.Forms.Button
@@ -501,7 +503,7 @@ Function Start-PSLauncher {
         $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
         $OpenConfigButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
         $OpenConfigButton.Add_Click( {
-                Start-Process notepad -ArgumentList $PSLauncherConfigFile
+                Start-Process notepad -ArgumentList $ConfigFilePath
             })
         $Form.controls.AddRange($exit)
         $Form.controls.AddRange($reload)
@@ -526,4 +528,6 @@ Function Start-PSLauncher {
         #ShowConsole
         HideConsole
         [void]$Form.ShowDialog()
+
+    }
 } #end Function

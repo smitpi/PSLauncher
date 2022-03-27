@@ -46,15 +46,15 @@ Gui menu app in your systray with custom executable functions
 Gui menu app in your systray with custom executable functions. If you double click on the icon,
 it will launch the full gui.
 
-.PARAMETER PSLauncherConfigFile
+.PARAMETER ConfigFilePath
 Path to the config file created by New-PSLauncherConfigFile
 
 .EXAMPLE
-Start-PSSysTrayLauncher -PSLauncherConfigFile C:\temp\PSSysTrayConfig.csv
+Start-PSSysTrayLauncher -ConfigFilePath C:\temp\PSSysTrayConfig.csv
 
 #>
 Function Start-PSSysTrayLauncher {
-    [Cmdletbinding(HelpURI = 'https://smitpi.github.io/Start-PSSysTrayLauncher/')]
+    [Cmdletbinding(SupportsShouldProcess = $true, HelpURI = 'https://smitpi.github.io/Start-PSSysTrayLauncher/')]
     Param (
         [Parameter(Mandatory = $true)]
         [ValidateScript( { if ((Test-Path $_) -and ((Get-Item $_).Extension -eq '.json')) { $true}
@@ -62,7 +62,9 @@ Function Start-PSSysTrayLauncher {
         [System.IO.FileInfo]$PSLauncherConfigFile
     )
 
-        $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
+    
+    if ($pscmdlet.ShouldProcess('Target', 'Operation')) {
+        $jsondata = Get-Content $ConfigFilePath | ConvertFrom-Json
 
 
         Add-Type -Name Window -Namespace Console -MemberDefinition '
@@ -229,8 +231,8 @@ Function Start-PSSysTrayLauncher {
 
         $Systray_Tool_Icon.Add_MouseDoubleClick( {
                 ShowConsole
-                $item = get-item $PSLauncherConfigFile
-                Start-PSLauncher -PSLauncherConfigFile $item.FullName
+                $item = get-item $ConfigFilePath
+                Start-PSLauncher -ConfigFilePath $item.FullName                
                 HideConsole
             })
 
@@ -239,5 +241,8 @@ Function Start-PSSysTrayLauncher {
         HideConsole
         $appContext = New-Object System.Windows.Forms.ApplicationContext
         [void][System.Windows.Forms.Application]::Run($appContext)
+
+
+    }
 } #end Function
 

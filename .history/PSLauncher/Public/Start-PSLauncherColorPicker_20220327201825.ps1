@@ -61,10 +61,9 @@ Start-PSLauncherColorPicker -PSLauncherConfigFile c:\temp\config.json
 Function Start-PSLauncherColorPicker {
     [Cmdletbinding(HelpURI = 'https://smitpi.github.io/Start-PSLauncherColorPicker/')]
     Param (
-        [Parameter(Mandatory = $true)]
-        [ValidateScript( { if ((Test-Path $_) -and ((Get-Item $_).Extension -eq '.json')) { $true}
-                else {throw 'Not a valid config file.'} })]
-        [System.IO.FileInfo]$PSLauncherConfigFile
+        [Parameter(Mandatory = $true, Position = 0)]
+        [ValidateScript( { (Test-Path $_) -and ((Get-Item $_).Extension -eq '.json') })]
+        [string]$PSLauncherConfigFile
     )
 
         $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json

@@ -91,10 +91,6 @@ New-PSLauncherConfigFile -ConfigPath c:\temp -LaunchColorPicker
 Function New-PSLauncherConfigFile {
     [Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/New-PSLauncherConfigFile/')]
     param(
-        [Parameter(Mandatory = $true)]
-        [ValidateScript( { (Test-Path $_) })]
-        [System.IO.DirectoryInfo]$ConfigPath,
-        [switch]$CreateShortcut = $false,
         [string]$Color1 = '#E5E5E5',
         [string]$Color2 = '#061820',
         [string]$LabelColor = '#FFD400',
@@ -103,6 +99,9 @@ Function New-PSLauncherConfigFile {
         [string]$Title = 'PowerShell Launcher',
         [string]$Panel01 = 'First',
         [string]$Panel02 = 'Second',
+        [ValidateScript( { (Test-Path $_) })]
+        [System.IO.DirectoryInfo]$ConfigPath = (Join-Path (Get-Module pslauncher).ModuleBase \config),
+        [switch]$CreateShortcut = $false,
         [switch]$LaunchColorPicker = $false
     )
 
@@ -115,7 +114,8 @@ Function New-PSLauncherConfigFile {
                        "LabelColor": "$labelColor",
                        "TextColor": "$TextColor",
                        "LogoUrl":  "$LogoPath",
-                       "AppTitle":  "$title",
+                       "AppTitle":  "$title by Pierre Smit",
+                       "ModuleRoot": $((Get-Module pslauncher).ModuleBase | ConvertTo-Json)
                    }
                ],
     "Buttons":  [
@@ -148,7 +148,8 @@ Function New-PSLauncherConfigFile {
     if (-not($check)) {
         Write-Output 'Config File does not exit, creating default settings.'
         Set-Content -Value $json -Path $Configfile
-    } else {
+    }
+    else {
         Write-Warning 'File exists, renaming file now'
         Rename-Item $Configfile -NewName "PSSysTrayConfig_$(Get-Date -Format ddMMyyyy_HHmm).json"
         Set-Content -Value $json -Path $Configfile
@@ -157,10 +158,10 @@ Function New-PSLauncherConfigFile {
         $module = Get-Module pslauncher
         if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
 
-        $string = @"
+$string = @"
 `$psl = Get-ChildItem `"$((Join-Path ((Get-Item $module.ModuleBase).Parent).FullName "\*\$($module.name).psm1"))`" | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 1
-Import-Module `$psl.fullname -Force
-Start-PSLauncher -PSLauncherConfigFile $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))
+import-module `$psl.fullname -Force
+Start-PSLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))
 "@
         Set-Content -Value $string -Path (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1) | Get-Item
         $launcher = (Join-Path $ConfigPath -ChildPath \PSLauncher.ps1) | Get-Item
@@ -169,16 +170,16 @@ Start-PSLauncher -PSLauncherConfigFile $((Join-Path $ConfigPath -ChildPath \PSLa
         $lnkfile = ($launcher.FullName).Replace('ps1', 'lnk')
         $Shortcut = $WScriptShell.CreateShortcut($($lnkfile))
         $Shortcut.TargetPath = 'powershell.exe'
-        $Shortcut.Arguments = "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -file `"$($launcher.FullName)`""
+        $Shortcut.Arguments = "-NoLogo -NoProfile -ExecutionPolicy bypass -file `"$($launcher.FullName)`""
         $icon = Get-Item (Join-Path $module.ModuleBase .\Private\pslauncher.ico)
         $Shortcut.IconLocation = $icon.FullName
         #Save the Shortcut to the TargetPath
         $Shortcut.Save()
 
-        $string = @"
+$string = @"
 `$psl = Get-ChildItem `"$((Join-Path ((Get-Item $module.ModuleBase).Parent).FullName "\*\$($module.name).psm1"))`" | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 1
-Import-Module `$psl.fullname -Force
-Start-PSSysTrayLauncher -PSLauncherConfigFile $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))
+import-module `$psl.fullname -Force
+Start-PSSysTrayLauncher -ConfigFilePath $((Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json -Resolve))
 "@
         Set-Content -Value $string -Path (Join-Path $ConfigPath -ChildPath \PSSysTrayLauncher.ps1) | Get-Item
         $PSSysTrayLauncher = (Join-Path $ConfigPath -ChildPath \PSSysTrayLauncher.ps1) | Get-Item
@@ -187,7 +188,7 @@ Start-PSSysTrayLauncher -PSLauncherConfigFile $((Join-Path $ConfigPath -ChildPat
         $lnkfile = ($PSSysTrayLauncher.FullName).Replace('ps1', 'lnk')
         $Shortcut = $WScriptShell.CreateShortcut($($lnkfile))
         $Shortcut.TargetPath = 'powershell.exe'
-        $Shortcut.Arguments = "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -file `"$($PSSysTrayLauncher.FullName)`""
+        $Shortcut.Arguments = "-NoLogo -NoProfile -ExecutionPolicy bypass -file `"$($PSSysTrayLauncher.FullName)`""
         $icon = Get-Item (Join-Path $module.ModuleBase .\Private\pslauncher.ico)
         $Shortcut.IconLocation = $icon.FullName
         #Save the Shortcut to the TargetPath
@@ -196,6 +197,6 @@ Start-PSSysTrayLauncher -PSLauncherConfigFile $((Join-Path $ConfigPath -ChildPat
     }
 
     if ($LaunchColorPicker -like $true) {
-        Start-PSLauncherColorPicker -PSLauncherConfigFile (Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json)
+        Start-PSLauncherColorPicker -ConfigFilePath (Join-Path $ConfigPath -ChildPath \PSLauncherConfig.json)
     }
 } #end Function
