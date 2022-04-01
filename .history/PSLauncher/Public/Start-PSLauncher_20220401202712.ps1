@@ -67,32 +67,25 @@ Function Start-PSLauncher {
                 else {throw 'Not a valid config file.'} })]
         [System.IO.FileInfo]$PSLauncherConfigFile
     )
-    $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
+    jsondata   = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
 
-    $script:KeepOpen = $false
-    $script:PanelDraw = 10
-    $script:Color1st = $jsondata.Config.Color1st
-    $script:Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
-    $script:LabelColor = $jsondata.Config.LabelColor
-    $script:TextColor = $jsondata.Config.TextColor
-
-
+    $global:PSLauncherSettings = [hashtable]::Synchronized(@{
+            jsondata   = $jsondata
+            KeepOpen   = $false
+            PanelDraw  = 10
+            Color1st   = $jsondata.Config.Color1st
+            Color2nd   = $jsondata.Config.Color2nd #The darker background for the panels
+            LabelColor = $jsondata.Config.LabelColor
+            TextColor  = $jsondata.Config.TextColor
+        })
+    
     $rs = [RunspaceFactory]::CreateRunspace()
     $rs.ApartmentState = 'STA'
     $rs.ThreadOptions = 'ReuseThread'
     $rs.Open()
 
-    $rs.SessionStateProxy.SetVariable('jsondata', $jsondata)
-    $rs.SessionStateProxy.SetVariable('KeepOpen', $KeepOpen)
-    $rs.SessionStateProxy.SetVariable('PanelDraw', $PanelDraw)
-    $rs.SessionStateProxy.SetVariable('Color1st', $Color1st)
-    $rs.SessionStateProxy.SetVariable('Color2nd', $Color2nd)
-    $rs.SessionStateProxy.SetVariable('LabelColor', $LabelColor)
-    $rs.SessionStateProxy.SetVariable('TextColor', $TextColor)
-    $rs.SessionStateProxy.SetVariable('PSLauncherConfigFile', $PSLauncherConfigFile)
-    $rs.SessionStateProxy.SetVariable('Runspace', $rs)
-
-
+    $global:PSLauncherSettings.add('Runspace', $rs)
+    $rs.SessionStateProxy.SetVariable('PSLauncherSettings', $global:PSLauncherSettings)
     $psCmd = [PowerShell]::Create().AddScript({
             #region Assembly
             Add-Type -AssemblyName System.Windows.Forms
@@ -205,10 +198,10 @@ Function Start-PSLauncher {
                 )
                 $Button = New-Object system.Windows.Forms.Button
                 $Button | Add-Member -Name MyScriptPath -Value $MyScriptPath -MemberType NoteProperty
-                $Button.text = $text
+            PSLauncherSettings.    $Button.text = $text
                 $Button.width = 200
                 $Button.height = 30
-                $Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+                $Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($PSLauncherSettings.Color1st)
                 $Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
                 $Button.location = New-Object System.Drawing.Point(10, $panel.ButtonDraw)
                 $Button.Font = New-Object System.Drawing.Font('Tahoma', 10)
@@ -281,6 +274,7 @@ Function Start-PSLauncher {
                 }
             }
             function AddToConfig {
+                $form.close()
                 $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
 
                 Clear-Host
@@ -402,15 +396,12 @@ Function Start-PSLauncher {
             #endregion
 
             #region build main form
-            $module = Get-Module pslauncher
-            if (-not($module)){Get-Module pslauncher -ListAvailable}
-
             $Form = New-Object system.Windows.Forms.Form
             $Form.ClientSize = New-Object System.Drawing.Point(1050, 800)
-            $Form.text = "$($jsondata.Config.AppTitle) (ver: $($module.Version)) "
+            $Form.text = $PSLauncherSettings.jsondata.Config.AppTitle
             $Form.StartPosition = 'CenterScreen'
             $Form.TopMost = $false
-            $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+            $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($PSLauncherSettings.Color1st)
             $Form.AutoScaleDimensions = '256, 256'
             $Form.AutoScaleMode = 'Dpi'
             $Form.AutoScale = $True
@@ -422,7 +413,6 @@ Function Start-PSLauncher {
             $Form.Height = $objImage.Height
             $Form.AutoSizeMode = [System.Windows.Forms.AutoSizeMode]::GrowAndShrink
             $Form.AutoScroll = $True
-            $Form.Refresh()
             #endregion
 
             #region create panels and buttons
@@ -448,22 +438,14 @@ Function Start-PSLauncher {
             $exit = New-Object system.Windows.Forms.Button
             $exit.text = 'Exit'
             $exit.width = 100
-            $exit.height = 30
+     PSLauncherSettings.       $exit.height = 30
             $exit.location = New-Object System.Drawing.Point(1, 510)
             $exit.Font = New-Object System.Drawing.Font('Tahoma', 8)
-            $exit.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+            $exit.BackColor = [System.Drawing.ColorTranslator]::FromHtml($PSLauncherSettings.Color1st)
             $exit.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
             $exit.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
             $exit.Add_Click( {
                     Write-Output 'exiting Util'
-                    #define a thread job to clean up the runspace
-                    $cmd = {
-                        Param([int]$ID)
-                        $r = Get-Runspace -Id $id
-                        $r.close()
-                        $r.dispose()
-                    }
-                    Start-ThreadJob -ScriptBlock $cmd -ArgumentList $runspace.id
                     $Form.Close()
                     Stop-Process $pid
                 })
@@ -472,21 +454,14 @@ Function Start-PSLauncher {
             $reload.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
             $reload.text = 'Reload'
             $reload.width = 100
-            $reload.height = 30
+       PSLauncherSettings.     $reload.height = 30
             $reload.location = New-Object System.Drawing.Point(100, 510)
             $reload.Font = New-Object System.Drawing.Font('Tahoma', 8)
-            $reload.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+            $reload.BackColor = [System.Drawing.ColorTranslator]::FromHtml($PSLauncherSettings.Color1st)
             $reload.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
             $reload.Add_Click( {
                     Write-Output 'Reloading Util'
                     Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
-                    $cmd = {
-                        Param([int]$ID)
-                        $r = Get-Runspace -Id $id
-                        $r.close()
-                        $r.dispose()
-                    }
-                    Start-ThreadJob -ScriptBlock $cmd -ArgumentList $runspace.id
                     $Form.Close()
                     Stop-Process $pid
                 })
@@ -494,10 +469,10 @@ Function Start-PSLauncher {
             $EnableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
             $EnableLogging.text = 'Enable Logging'
             $EnableLogging.width = 100
-            $EnableLogging.height = 30
+            $EPSLauncherSettings.nableLogging.height = 30
             $EnableLogging.location = New-Object System.Drawing.Point(1, 540)
             $EnableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-            $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+            $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($PSLauncherSettings.Color1st)
             $EnableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
             $EnableLogging.Add_Click( { EnableLogging })
 
@@ -505,10 +480,10 @@ Function Start-PSLauncher {
             $DisableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
             $DisableLogging.text = 'Disable Logging'
             $DisableLogging.width = 100
-            $DisableLogging.height = 30
+            $DiPSLauncherSettings.sableLogging.height = 30
             $DisableLogging.location = New-Object System.Drawing.Point(100, 540)
             $DisableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-            $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+            $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($PSLauncherSettings.Color1st)
             $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
             $DisableLogging.Add_Click( { DisableLogging })
 
@@ -516,10 +491,10 @@ Function Start-PSLauncher {
             $AddToConfig.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
             $AddToConfig.text = 'Add Gui Config'
             $AddToConfig.width = 100
-            $AddToConfig.height = 30
+            PSLauncherSettings.$AddToConfig.height = 30
             $AddToConfig.location = New-Object System.Drawing.Point(1, 570)
             $AddToConfig.Font = New-Object System.Drawing.Font('Tahoma', 8)
-            $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+            $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($PSLauncherSettings.Color1st)
             $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
             $AddToConfig.Add_Click( {
                     ShowConsole
@@ -531,10 +506,10 @@ Function Start-PSLauncher {
             $OpenConfigButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
             $OpenConfigButton.text = 'Open Config File'
             $OpenConfigButton.width = 100
-            $OpenConfigButton.height = 30
+            $OpenPSLauncherSettings.ConfigButton.height = 30
             $OpenConfigButton.location = New-Object System.Drawing.Point(100, 570)
             $OpenConfigButton.Font = New-Object System.Drawing.Font('Tahoma', 8)
-            $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+            $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($PSLauncherSettings.Color1st)
             $OpenConfigButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
             $OpenConfigButton.Add_Click( {
                     if (Get-Command code -ErrorAction SilentlyContinue) {code $PSLauncherConfigFile }
@@ -563,7 +538,6 @@ Function Start-PSLauncher {
             #ShowConsole
             HideConsole
             [void]$Form.ShowDialog()
-
         })
 
     $pscmd.runspace = $rs

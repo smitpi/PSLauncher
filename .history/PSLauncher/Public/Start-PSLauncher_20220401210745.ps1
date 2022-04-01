@@ -407,7 +407,7 @@ Function Start-PSLauncher {
 
             $Form = New-Object system.Windows.Forms.Form
             $Form.ClientSize = New-Object System.Drawing.Point(1050, 800)
-            $Form.text = "$($jsondata.Config.AppTitle) (ver: $($module.Version)) "
+            $Form.text = $jsondata.Config.AppTitle
             $Form.StartPosition = 'CenterScreen'
             $Form.TopMost = $false
             $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)

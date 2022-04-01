@@ -291,6 +291,7 @@ Function Start-PSLauncherColorPicker {
                             LogoUrl    = $($box4.Text)
                             TextColor  = $($box5.Text)
                             AppTitle   = $($jsondata.Config.AppTitle)
+                            ModuleRoot = $($jsondata.Config.ModuleRoot)
                         }
                         Buttons = $jsondata.Buttons
                     }

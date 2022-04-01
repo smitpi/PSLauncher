@@ -281,6 +281,7 @@ Function Start-PSLauncher {
                 }
             }
             function AddToConfig {
+                $form.close()
                 $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
 
                 Clear-Host
@@ -402,12 +403,9 @@ Function Start-PSLauncher {
             #endregion
 
             #region build main form
-            $module = Get-Module pslauncher
-            if (-not($module)){Get-Module pslauncher -ListAvailable}
-
             $Form = New-Object system.Windows.Forms.Form
             $Form.ClientSize = New-Object System.Drawing.Point(1050, 800)
-            $Form.text = "$($jsondata.Config.AppTitle) (ver: $($module.Version)) "
+            $Form.text = $jsondata.Config.AppTitle
             $Form.StartPosition = 'CenterScreen'
             $Form.TopMost = $false
             $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
@@ -422,7 +420,6 @@ Function Start-PSLauncher {
             $Form.Height = $objImage.Height
             $Form.AutoSizeMode = [System.Windows.Forms.AutoSizeMode]::GrowAndShrink
             $Form.AutoScroll = $True
-            $Form.Refresh()
             #endregion
 
             #region create panels and buttons

@@ -82,17 +82,9 @@ Function Start-PSLauncher {
     $rs.ThreadOptions = 'ReuseThread'
     $rs.Open()
 
-    $rs.SessionStateProxy.SetVariable('jsondata', $jsondata)
-    $rs.SessionStateProxy.SetVariable('KeepOpen', $KeepOpen)
-    $rs.SessionStateProxy.SetVariable('PanelDraw', $PanelDraw)
-    $rs.SessionStateProxy.SetVariable('Color1st', $Color1st)
-    $rs.SessionStateProxy.SetVariable('Color2nd', $Color2nd)
-    $rs.SessionStateProxy.SetVariable('LabelColor', $LabelColor)
-    $rs.SessionStateProxy.SetVariable('TextColor', $TextColor)
-    $rs.SessionStateProxy.SetVariable('PSLauncherConfigFile', $PSLauncherConfigFile)
-    $rs.SessionStateProxy.SetVariable('Runspace', $rs)
+    $rs.SessionStateProxy.SetVariable('PSClockSettings', $global:PSClockSettings)
 
-
+    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Defining the runspace command"
     $psCmd = [PowerShell]::Create().AddScript({
             #region Assembly
             Add-Type -AssemblyName System.Windows.Forms
@@ -281,6 +273,7 @@ Function Start-PSLauncher {
                 }
             }
             function AddToConfig {
+                $form.close()
                 $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
 
                 Clear-Host
@@ -402,12 +395,9 @@ Function Start-PSLauncher {
             #endregion
 
             #region build main form
-            $module = Get-Module pslauncher
-            if (-not($module)){Get-Module pslauncher -ListAvailable}
-
             $Form = New-Object system.Windows.Forms.Form
             $Form.ClientSize = New-Object System.Drawing.Point(1050, 800)
-            $Form.text = "$($jsondata.Config.AppTitle) (ver: $($module.Version)) "
+            $Form.text = $jsondata.Config.AppTitle
             $Form.StartPosition = 'CenterScreen'
             $Form.TopMost = $false
             $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
@@ -422,7 +412,6 @@ Function Start-PSLauncher {
             $Form.Height = $objImage.Height
             $Form.AutoSizeMode = [System.Windows.Forms.AutoSizeMode]::GrowAndShrink
             $Form.AutoScroll = $True
-            $Form.Refresh()
             #endregion
 
             #region create panels and buttons
@@ -456,14 +445,6 @@ Function Start-PSLauncher {
             $exit.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
             $exit.Add_Click( {
                     Write-Output 'exiting Util'
-                    #define a thread job to clean up the runspace
-                    $cmd = {
-                        Param([int]$ID)
-                        $r = Get-Runspace -Id $id
-                        $r.close()
-                        $r.dispose()
-                    }
-                    Start-ThreadJob -ScriptBlock $cmd -ArgumentList $runspace.id
                     $Form.Close()
                     Stop-Process $pid
                 })
@@ -480,13 +461,6 @@ Function Start-PSLauncher {
             $reload.Add_Click( {
                     Write-Output 'Reloading Util'
                     Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
-                    $cmd = {
-                        Param([int]$ID)
-                        $r = Get-Runspace -Id $id
-                        $r.close()
-                        $r.dispose()
-                    }
-                    Start-ThreadJob -ScriptBlock $cmd -ArgumentList $runspace.id
                     $Form.Close()
                     Stop-Process $pid
                 })

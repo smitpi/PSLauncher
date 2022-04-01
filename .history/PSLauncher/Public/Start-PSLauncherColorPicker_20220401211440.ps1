@@ -291,6 +291,7 @@ Function Start-PSLauncherColorPicker {
                             LogoUrl    = $($box4.Text)
                             TextColor  = $($box5.Text)
                             AppTitle   = $($jsondata.Config.AppTitle)
+                            ModuleRoot = $($jsondata.Config.ModuleRoot)
                         }
                         Buttons = $jsondata.Buttons
                     }
@@ -324,6 +325,7 @@ Function Start-PSLauncherColorPicker {
             $Form.controls.AddRange($box4_Label)
             $Form.controls.AddRange($box5)
             $Form.controls.AddRange($box5_Label)
+
 
             HideConsole
             [void]$Form.ShowDialog()

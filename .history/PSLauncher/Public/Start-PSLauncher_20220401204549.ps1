@@ -281,6 +281,7 @@ Function Start-PSLauncher {
                 }
             }
             function AddToConfig {
+                $form.close()
                 $jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
 
                 Clear-Host
@@ -402,12 +403,9 @@ Function Start-PSLauncher {
             #endregion
 
             #region build main form
-            $module = Get-Module pslauncher
-            if (-not($module)){Get-Module pslauncher -ListAvailable}
-
             $Form = New-Object system.Windows.Forms.Form
             $Form.ClientSize = New-Object System.Drawing.Point(1050, 800)
-            $Form.text = "$($jsondata.Config.AppTitle) (ver: $($module.Version)) "
+            $Form.text = $jsondata.Config.AppTitle
             $Form.StartPosition = 'CenterScreen'
             $Form.TopMost = $false
             $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
@@ -422,7 +420,6 @@ Function Start-PSLauncher {
             $Form.Height = $objImage.Height
             $Form.AutoSizeMode = [System.Windows.Forms.AutoSizeMode]::GrowAndShrink
             $Form.AutoScroll = $True
-            $Form.Refresh()
             #endregion
 
             #region create panels and buttons
@@ -456,6 +453,7 @@ Function Start-PSLauncher {
             $exit.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
             $exit.Add_Click( {
                     Write-Output 'exiting Util'
+                    $form.close()
                     #define a thread job to clean up the runspace
                     $cmd = {
                         Param([int]$ID)
@@ -480,13 +478,6 @@ Function Start-PSLauncher {
             $reload.Add_Click( {
                     Write-Output 'Reloading Util'
                     Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
-                    $cmd = {
-                        Param([int]$ID)
-                        $r = Get-Runspace -Id $id
-                        $r.close()
-                        $r.dispose()
-                    }
-                    Start-ThreadJob -ScriptBlock $cmd -ArgumentList $runspace.id
                     $Form.Close()
                     Stop-Process $pid
                 })
