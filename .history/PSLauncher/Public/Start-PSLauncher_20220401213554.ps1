@@ -423,7 +423,7 @@ Function Start-PSLauncher {
             $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
             $AddToConfig.Add_Click( {
                     ShowConsole
-                    Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Add-PSLauncherEntry -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
+                    AddToConfig
                     HideConsole
                 })
 

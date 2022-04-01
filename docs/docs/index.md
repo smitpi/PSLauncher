@@ -25,6 +25,7 @@ Get-Help about_PSLauncher
 Documentation can be found at: [Github_Pages](https://smitpi.github.io/PSLauncher)
  
 ## Functions
+- [Add-PSLauncherEntry](https://smitpi.github.io/PSLauncher/#Add-PSLauncherEntry) -- Add a button or panal to the config
 - [New-PSLauncherConfigFile](https://smitpi.github.io/PSLauncher/#New-PSLauncherConfigFile) -- Creates the config file with the provided settings
 - [Start-PSLauncher](https://smitpi.github.io/PSLauncher/#Start-PSLauncher) -- Reads the config file and launches the gui
 - [Start-PSLauncherColorPicker](https://smitpi.github.io/PSLauncher/#Start-PSLauncherColorPicker) -- Launches a Gui form to test and change the Color of PSLauncher.
