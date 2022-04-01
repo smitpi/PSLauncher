@@ -6,6 +6,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://smitpi.github.io/PSLauncher/Add-PSLauncherEntry/</loc>
+         <lastmod>2022-04-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://smitpi.github.io/PSLauncher/New-PSLauncherConfigFile/</loc>
          <lastmod>2022-04-01</lastmod>
          <changefreq>daily</changefreq>
