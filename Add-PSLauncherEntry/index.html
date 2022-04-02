@@ -438,21 +438,6 @@
   
 
     
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Start-PSSysTrayLauncher/" class="md-nav__link">
-        Start-PSSysTrayLauncher
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -602,31 +587,31 @@
 
 <h1 id="add-pslauncherentry">Add-PSLauncherEntry</h1>
 <h2 id="synopsis">SYNOPSIS</h2>
-<p>Add a button or panal to the config</p>
+<p>Add a button or panal to the config.</p>
 <h2 id="syntax">SYNTAX</h2>
-<div class="highlight"><pre><span></span><code>Add-PSLauncherEntry [-PSLauncherConfigFile] &lt;FileInfo&gt; [-Execute] [&lt;CommonParameters&gt;]
+<div class="highlight"><pre><span></span><code>Add-PSLauncherEntry [[-PSLauncherConfigFile] &lt;FileInfo&gt;] [-Execute] [&lt;CommonParameters&gt;]
 </code></pre></div>
 <h2 id="description">DESCRIPTION</h2>
-<p>Add a button or panal to the config</p>
+<p>Add a button or panal to the config.</p>
 <h2 id="examples">EXAMPLES</h2>
 <h3 id="example-1">EXAMPLE 1</h3>
-<div class="highlight"><pre><span></span><code>Add-PSLauncherEntry
+<div class="highlight"><pre><span></span><code>Add-PSLauncherEntry -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
 </code></pre></div>
 <h2 id="parameters">PARAMETERS</h2>
 <h3 id="-pslauncherconfigfile">-PSLauncherConfigFile</h3>
-<p>{{ Fill PSLauncherConfigFile Description }}</p>
+<p>Path to the config file created by New-PSLauncherConfigFile</p>
 <div class="highlight"><pre><span></span><code><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FileInfo</span><span class="w"></span>
 <span class="nt">Parameter Sets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(All)</span><span class="w"></span>
 <span class="nt">Aliases</span><span class="p">:</span><span class="w"></span>
 
-<span class="nt">Required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
+<span class="nt">Required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
 <span class="nt">Position</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 <span class="nt">Default value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">None</span><span class="w"></span>
 <span class="nt">Accept pipeline input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
 <span class="nt">Accept wildcard characters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
 </code></pre></div>
 <h3 id="-execute">-Execute</h3>
-<p>{{ Fill Execute Description }}</p>
+<p>Run Start-PSLauncher after config change.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SwitchParameter</span><span class="w"></span>
 <span class="nt">Parameter Sets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(All)</span><span class="w"></span>
 <span class="nt">Aliases</span><span class="p">:</span><span class="w"></span>
