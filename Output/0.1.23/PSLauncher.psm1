@@ -5,7 +5,7 @@
 ############################################
 # source: Add-PSLauncherEntry.ps1
 # Module: PSLauncher
-# version: 0.1.22
+# version: 0.1.23
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -30,8 +30,6 @@ Add-PSLauncherEntry -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
 Function Add-PSLauncherEntry {
 	[Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/Add-PSLauncherEntry')]
 	Param (
-		[ValidateScript( { if ((Test-Path $_) -and ((Get-Item $_).Extension -eq '.csv')) { $true}
-				else {throw 'Not a valid config file.'} })]
 		[System.IO.FileInfo]$PSLauncherConfigFile,
 		[switch]$Execute = $false
 	)
@@ -222,7 +220,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ############################################
 # source: New-PSLauncherConfigFile.ps1
 # Module: PSLauncher
-# version: 0.1.22
+# version: 0.1.23
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -372,7 +370,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ############################################
 # source: Start-PSLauncher.ps1
 # Module: PSLauncher
-# version: 0.1.22
+# version: 0.1.23
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -394,10 +392,8 @@ Start-PSLauncher -PSLauncherConfigFile c:\temp\config.json
 Function Start-PSLauncher {
     [Cmdletbinding(HelpURI = 'https://smitpi.github.io/Start-PSLauncher/')]
     Param (
-        [ValidateScript( { if ((Test-Path $_) -and ((Get-Item $_).Extension -eq '.csv')) { $true}
-                else {throw 'Not a valid config file.'} })]
         [System.IO.FileInfo]$PSLauncherConfigFile
-        )
+    )
 
     try {
         $Script:jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json -ErrorAction stop
@@ -727,7 +723,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
 # Module: PSLauncher
-# version: 0.1.22
+# version: 0.1.23
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -749,8 +745,6 @@ Start-PSLauncherColorPicker -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
 Function Start-PSLauncherColorPicker {
     [Cmdletbinding(HelpURI = 'https://smitpi.github.io/Start-PSLauncherColorPicker/')]
     Param (
-        [ValidateScript( { if ((Test-Path $_) -and ((Get-Item $_).Extension -eq '.csv')) { $true}
-                else {throw 'Not a valid config file.'} })]
         [System.IO.FileInfo]$PSLauncherConfigFile
     )
 
