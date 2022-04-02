@@ -1,0 +1,21 @@
+
+PSLauncher
+	 about_PSLauncher
+ 
+SHORT DESCRIPTION
+	 A GUI to launch any PowerShell script, function, file, or any other executables. You can also create a SysTray tool for quick access. Both apps use the same json config file. So, all your config is in sync.
+    Also created menus that assists in creating the buttons and panels. It just asks you a couple of questions, and it adds the config to the json file. After a refresh, the new buttons or panels are available to everyone using it.
+
+ 
+NOTES
+Functions in this module:
+	 Add-PSLauncherEntry -- Add a button or panal to the config.
+	 New-PSLauncherConfigFile -- Creates the config file with the provided settings
+	 Start-PSLauncher -- Reads the config file and launches the gui
+	 Start-PSLauncherColorPicker -- Launches a Gui form to test and change the Color of PSLauncher.
+ 
+SEE ALSO
+	 https://github.com/smitpi/PSLauncher
+
+	 https://smitpi.github.io/PSLauncher/
+

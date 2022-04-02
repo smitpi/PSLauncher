@@ -19,7 +19,7 @@
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES 
+.EXTERNALMODULEDEPENDENCIES
 
 .REQUIREDSCRIPTS
 
@@ -32,40 +32,80 @@ Created [01/04/2022_21:34] Initial Script Creating
 
 #>
 
-#Requires -Module ImportExcel
-#Requires -Module PSWriteHTML
 #Requires -Module PSWriteColor
 
-<# 
+<#
 
-.DESCRIPTION 
- Add a button or panal to the config 
+.DESCRIPTION
+ Add a button or panal to the config
 
-#> 
+#>
 
 
 <#
 .SYNOPSIS
-Add a button or panal to the config
+Add a button or panal to the config.
 
 .DESCRIPTION
-Add a button or panal to the config
+Add a button or panal to the config.
+
+.PARAMETER PSLauncherConfigFile
+Path to the config file created by New-PSLauncherConfigFile
+
+.PARAMETER Execute
+Run Start-PSLauncher after config change.
 
 .EXAMPLE
-Add-PSLauncherEntry
+Add-PSLauncherEntry -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
 
 #>
 Function Add-PSLauncherEntry {
-	[Cmdletbinding(DefaultParameterSetName = 'Set1', HelpURI = 'https://smitpi.github.io/PSLauncher/Add-PSLauncherEntry')]
+	[Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/Add-PSLauncherEntry')]
 	Param (
-		[Parameter(Mandatory = $true)]
-		[ValidateScript( { if ((Test-Path $_) -and ((Get-Item $_).Extension -eq '.json')) { $true}
-				else {throw 'Not a valid config file.'} })]
 		[System.IO.FileInfo]$PSLauncherConfigFile,
 		[switch]$Execute = $false
 	)
 
-	$jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
+	try {
+		$jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json -ErrorAction stop
+	} catch {
+		Add-Type -AssemblyName System.Windows.Forms
+		$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ Filter = 'JSON | *.json' }
+		[void]$FileBrowser.ShowDialog()
+		$PSLauncherConfigFile = Get-Item $FileBrowser.FileName
+		$jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
+	}
+
+	
+	function options {
+		Write-Color -Text 'Execution Options' -Color DarkGray -LinesAfter 1
+		Write-Color '1: ', 'Window Hidden' -Color Yellow, Green
+		Write-Color '2: ', 'Window Minimized' -Color Yellow, Green
+		Write-Color '3: ', 'Run As Admin' -Color Yellow, Green
+		Write-Color '4: ', 'New Process' -Color Yellow, Green
+		Write-Color '5: ', 'None' -Color Yellow, Green
+
+		$selection = Read-Host 'Please make a selection'
+		switch ($selection) {
+			'1' { 'Hide' }
+			'2' { 'Minimized' }
+			'3' { 'AsAdmin' }
+			'4' { 'NewProcess' }
+			'5' { '' }
+		}
+	}
+	function mode {
+		Write-Color -Text 'Execution Mode' -Color DarkGray -LinesAfter 1
+		Write-Color '1: ', 'PowerShell Script File' -Color Yellow, Green
+		Write-Color '2: ', 'Powershell Command' -Color Yellow, Green
+		Write-Color '3: ', 'Other Executable' -Color Yellow, Green
+		$selection = Read-Host 'Please make a selection'
+		switch ($selection) {
+			'1' { 'PSFile' }
+			'2' { 'PSCommand' }
+			'3' { 'Other' }
+		}
+	}
 
 	Clear-Host
 	Write-Color 'Do you want to add a Button or a Panel' -Color DarkYellow -LinesAfter 1
@@ -73,7 +113,7 @@ Function Add-PSLauncherEntry {
 	Write-Color '1', ': ', 'Button' -Color Yellow, Yellow, Green
 	Write-Color '2', ': ', 'Launch Color Picker' -Color Yellow, Yellow, Green
 	Write-Output ' '
-	[int]$GuiAddChoice = Read-Host 'Decide '
+	[int]$GuiAddChoice = Read-Host 'Answer'
 
 
 	if ($GuiAddChoice -eq 0) {
@@ -126,24 +166,67 @@ Function Add-PSLauncherEntry {
 		[int]$indexnum = Read-Host 'Panel Number '
 
 		do {
-			Write-Color 'Details of the button' -Color DarkYellow -LinesAfter 1
-			$Mode = mode
-			if ($Mode -like 'ps*') {
-				$jsondata.Buttons.($panellistSorted[$indexnum].name).buttons += [PSCustomObject] @{
-					Name      = Read-Host 'New Button Name '
-					Command   = 'PowerShell.exe'
-					Arguments = Read-Host '<PS Command> or <Path to ps1 file> '
-					Mode      = $mode
-					Options   = options
+			$name = Read-Host 'New Button Name'
+
+			Write-Color 'Choose the mode:' -Color DarkRed -StartTab 1 -LinesBefore 2
+			Write-Color '0) ', 'PowerShell Script file' -Color Yellow, Green
+			Write-Color '1) ', 'PowerShell Command' -Color Yellow, Green
+			Write-Color '2) ', 'Other Executable' -Color Yellow, Green
+			$modechoose = Read-Host 'Answer'
+
+			switch ($modechoose) {
+				'0' {
+					$mode = 'PSFile'
+					$command = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+					$arguments = Read-Host 'Path to .ps1 file'
 				}
-			} else {
-				$jsondata.Buttons.($panellistSorted[$indexnum].name).buttons += [PSCustomObject] @{
-					Name      = Read-Host 'New Button Name '
-					Command   = Read-Host 'Path to exe file'
-					Arguments = Read-Host 'Arguments to run exe'
-					Mode      = $Mode
-					Options   = options
+				'1' {
+					$mode = 'PSCommand'
+					$command = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+					$arguments = Read-Host 'PowerShell command or scriptblock'
+
 				}
+				'2' {
+					$mode = 'Other'
+					$command = Read-Host 'Path to executable'
+					$arguments = Read-Host 'Arguments for the executable'
+				}
+			}
+			$cmd = [PSCustomObject]@{
+				mode      = $mode
+				command   = $command
+				arguments = $arguments
+			}
+
+			Write-Color 'Choose the window size:' -Color DarkRed -StartTab 1 -LinesBefore 2
+			Write-Color '0) ', 'Hidden' -Color Yellow, Green
+			Write-Color '1) ', 'Normal' -Color Yellow, Green
+			Write-Color '2) ', 'Minimized' -Color Yellow, Green
+			Write-Color '3) ', 'Maximized' -Color Yellow, Green
+			$modechoose = Read-Host 'Answer'
+
+			switch ($modechoose) {
+				'0' {$Window = 'Hidden'}
+				'1' {$Window = 'Normal'}
+				'2' {$Window = 'Minimized'}
+				'3' {$Window = 'Maximized'}
+			}
+
+			Write-Color 'Run As Admin:' -Color DarkRed -StartTab 1 -LinesBefore 2
+			Write-Color '0) ', 'Yes' -Color Yellow, Green
+			Write-Color '1) ', 'No' -Color Yellow, Green
+			$modechoose = Read-Host 'Answer'
+			switch ($modechoose) {
+				'0' {$RunAs = 'Yes'}
+				'1' {$RunAs = 'No'}
+			}
+			$jsondata.Buttons.($panellistSorted[$indexnum].name).buttons += [PSCustomObject] @{
+				Name       = $name
+				Command    = $cmd.command
+				Arguments  = $cmd.arguments
+				Mode       = $cmd.mode
+				Window     = $Window
+				RunAsAdmin = $RunAs
 			}
 			Write-Output ' '
 			$yn = Read-Host "Add another button in $($panellistSorted[$indexnum].name) (y/n)"

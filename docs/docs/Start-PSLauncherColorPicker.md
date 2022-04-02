@@ -13,7 +13,7 @@ Launches a Gui form to test and change the Color of PSLauncher.
 ## SYNTAX
 
 ```
-Start-PSLauncherColorPicker [-PSLauncherConfigFile] <FileInfo> [<CommonParameters>]
+Start-PSLauncherColorPicker [[-PSLauncherConfigFile] <FileInfo>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,7 +23,7 @@ Launches a Gui form to test and change the Color of PSLauncher.
 
 ### EXAMPLE 1
 ```
-Start-PSLauncherColorPicker -PSLauncherConfigFile c:\temp\config.json
+Start-PSLauncherColorPicker -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
 ```
 
 ## PARAMETERS
@@ -36,7 +36,7 @@ Type: FileInfo
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False

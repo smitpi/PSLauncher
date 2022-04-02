@@ -8,35 +8,35 @@ schema: 2.0.0
 # Add-PSLauncherEntry
 
 ## SYNOPSIS
-Add a button or panal to the config
+Add a button or panal to the config.
 
 ## SYNTAX
 
 ```
-Add-PSLauncherEntry [-PSLauncherConfigFile] <FileInfo> [-Execute] [<CommonParameters>]
+Add-PSLauncherEntry [[-PSLauncherConfigFile] <FileInfo>] [-Execute] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Add a button or panal to the config
+Add a button or panal to the config.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Add-PSLauncherEntry
+Add-PSLauncherEntry -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
 ```
 
 ## PARAMETERS
 
 ### -PSLauncherConfigFile
-{{ Fill PSLauncherConfigFile Description }}
+Path to the config file created by New-PSLauncherConfigFile
 
 ```yaml
 Type: FileInfo
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False
@@ -44,7 +44,7 @@ Accept wildcard characters: False
 ```
 
 ### -Execute
-{{ Fill Execute Description }}
+Run Start-PSLauncher after config change.
 
 ```yaml
 Type: SwitchParameter

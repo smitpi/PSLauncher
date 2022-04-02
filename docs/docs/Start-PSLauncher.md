@@ -13,7 +13,7 @@ Reads the config file and launches the gui
 ## SYNTAX
 
 ```
-Start-PSLauncher [-PSLauncherConfigFile] <FileInfo> [<CommonParameters>]
+Start-PSLauncher [[-PSLauncherConfigFile] <FileInfo>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,7 +36,7 @@ Type: FileInfo
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False

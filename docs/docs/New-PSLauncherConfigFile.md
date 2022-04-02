@@ -130,7 +130,7 @@ Aliases:
 
 Required: False
 Position: 6
-Default value: Https://gist.githubusercontent.com/smitpi/0e36b701419dbf9282ecfc6d0f7b654c/raw/8fe6a2fc91a27a9ebccb753f6508a2edd039c208/default-monochrome-black.png
+Default value: Https://gist.githubusercontent.com/smitpi/ecdaae80dd79ad585e571b1ba16ce272/raw/6d0645968c7ba4553e7ab762c55270ebcc054f04/default-monochrome%2520(2).png
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
