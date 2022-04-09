@@ -5,7 +5,7 @@
 ############################################
 # source: Add-PSLauncherEntry.ps1
 # Module: PSLauncher
-# version: 0.1.23
+# version: 0.1.24
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -44,37 +44,6 @@ Function Add-PSLauncherEntry {
 		$jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
 	}
 
-	
-	function options {
-		Write-Color -Text 'Execution Options' -Color DarkGray -LinesAfter 1
-		Write-Color '1: ', 'Window Hidden' -Color Yellow, Green
-		Write-Color '2: ', 'Window Minimized' -Color Yellow, Green
-		Write-Color '3: ', 'Run As Admin' -Color Yellow, Green
-		Write-Color '4: ', 'New Process' -Color Yellow, Green
-		Write-Color '5: ', 'None' -Color Yellow, Green
-
-		$selection = Read-Host 'Please make a selection'
-		switch ($selection) {
-			'1' { 'Hide' }
-			'2' { 'Minimized' }
-			'3' { 'AsAdmin' }
-			'4' { 'NewProcess' }
-			'5' { '' }
-		}
-	}
-	function mode {
-		Write-Color -Text 'Execution Mode' -Color DarkGray -LinesAfter 1
-		Write-Color '1: ', 'PowerShell Script File' -Color Yellow, Green
-		Write-Color '2: ', 'Powershell Command' -Color Yellow, Green
-		Write-Color '3: ', 'Other Executable' -Color Yellow, Green
-		$selection = Read-Host 'Please make a selection'
-		switch ($selection) {
-			'1' { 'PSFile' }
-			'2' { 'PSCommand' }
-			'3' { 'Other' }
-		}
-	}
-
 	Clear-Host
 	Write-Color 'Do you want to add a Button or a Panel' -Color DarkYellow -LinesAfter 1
 	Write-Color '0', ': ', 'Panel' -Color Yellow, Yellow, Green
@@ -111,7 +80,7 @@ Function Add-PSLauncherEntry {
 			Config  = $jsondata.Config
 			Buttons = $NewConfig
 		}
-		$Update | ConvertTo-Json -Depth 5 | Set-Content -Path $PSLauncherConfigFile -Verbose -Force
+		$Update | ConvertTo-Json -Depth 5 | Set-Content -Path $PSLauncherConfigFile -Force
 
 	}
 	if ($GuiAddChoice -eq 1) {
@@ -220,7 +189,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ############################################
 # source: New-PSLauncherConfigFile.ps1
 # Module: PSLauncher
-# version: 0.1.23
+# version: 0.1.24
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -370,7 +339,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ############################################
 # source: Start-PSLauncher.ps1
 # Module: PSLauncher
-# version: 0.1.23
+# version: 0.1.24
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -493,16 +462,20 @@ Function Start-PSLauncher {
             [scriptblock]$clickAction,
             [System.Windows.Forms.Panel]$panel
         )
+
+        if (($panel.Size.Width) -lt 220) {$bwidth = 100}
+        else {$bwidth = ($panel.Size.Width - 20)}
+
         $Button = New-Object system.Windows.Forms.Button
         $Button.text = $text
-        $Button.width = 200
+        $Button.width = $bwidth
         $Button.height = 30
         $Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
         $Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
         $Button.location = New-Object System.Drawing.Point(10, $panel.ButtonDraw)
         $Button.Font = New-Object System.Drawing.Font('Tahoma', 10)
         $button.add_click( $clickAction )
-        $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
+        $button.FlatStyle = [System.Windows.Forms.FlatStyle]::System
 
         $panel.ButtonDraw = $panel.ButtonDraw + 30
         $Panel.controls.AddRange($button)
@@ -512,31 +485,36 @@ Function Start-PSLauncher {
             [string]$LabelText = 'Placeholder Text'
         )
 
+        $Label = New-Object system.Windows.Forms.Label
+        $Label.text = $LabelText
+        $Label.AutoSize = $true
+        $Label.width = $Label.PreferredWidth
+        $Label.height = 30
+        #$Label.location = New-Object System.Drawing.Point(10, 10)
+        $Label.Font = [System.Drawing.Font]::new('Tahoma', 24, [System.Drawing.FontStyle]::Bold)
+        $label.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
+        $Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($LabelColor)
+        $Label.Refresh()
+
+        if ($Label.PreferredWidth -lt 230) {$pwidth = 220}
+        else {$pwidth = ($Label.PreferredWidth + 10)}
+
         $Panel = New-Object system.Windows.Forms.Panel
         $Panel.height = 490
-        $Panel.width = 220
+        $Panel.width = $pwidth
         $Panel.location = New-Object System.Drawing.Point($PanelDraw, 10)
         $Panel.BorderStyle = 'Fixed3D'
         $Panel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color2nd)
         $panel.AutoScroll = $true
         $panel.AutoSizeMode = 'GrowAndShrink'
-
-        $Label = New-Object system.Windows.Forms.Label
-        $Label.text = $LabelText
-        $Label.AutoSize = $true
-        $Label.width = 230
-        $Label.height = 30
-        $Label.location = New-Object System.Drawing.Point(10, 10)
-        $Label.Font = [System.Drawing.Font]::new('Tahoma', 24, [System.Drawing.FontStyle]::Bold)
-        $Label.TextAlign = 'MiddleCenter'
-        $label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($LabelColor)
+        $Panel.Refresh()
 
         $Panel | Add-Member -Name ButtonDraw -Value 70 -MemberType NoteProperty
         $Panel.controls.AddRange(@($Label))
         $Form.controls.AddRange($Panel)
 
         $Panel
-        $script:PanelDraw = $script:PanelDraw + 220
+        $script:PanelDraw = $script:PanelDraw + $Panel.Size.Width
 
     }
     function EnableLogging {
@@ -688,10 +666,8 @@ Function Start-PSLauncher {
     $OpenConfigButton.Font = New-Object System.Drawing.Font('Tahoma', 8)
     $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
     $OpenConfigButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
-    $OpenConfigButton.Add_Click( { . $PSLauncherConfigFile
-            #if (Get-Command code -ErrorAction SilentlyContinue) {code $PSLauncherConfigFile }
-            #else {notepad.exe $PSLauncherConfigFile}
-        })
+    $OpenConfigButton.Add_Click( { . $PSLauncherConfigFile })
+
     $Form.controls.AddRange($exit)
     $Form.controls.AddRange($reload)
     $Form.controls.AddRange($EnableLogging)
@@ -723,7 +699,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
 # Module: PSLauncher
-# version: 0.1.23
+# version: 0.1.24
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################

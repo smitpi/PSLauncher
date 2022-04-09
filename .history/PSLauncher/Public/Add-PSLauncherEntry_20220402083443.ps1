@@ -76,6 +76,20 @@ Function Add-PSLauncherEntry {
 		$jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
 	}
 
+	
+	function mode {
+		Write-Color -Text 'Execution Mode' -Color DarkGray -LinesAfter 1
+		Write-Color '1: ', 'PowerShell Script File' -Color Yellow, Green
+		Write-Color '2: ', 'Powershell Command' -Color Yellow, Green
+		Write-Color '3: ', 'Other Executable' -Color Yellow, Green
+		$selection = Read-Host 'Please make a selection'
+		switch ($selection) {
+			'1' { 'PSFile' }
+			'2' { 'PSCommand' }
+			'3' { 'Other' }
+		}
+	}
+
 	Clear-Host
 	Write-Color 'Do you want to add a Button or a Panel' -Color DarkYellow -LinesAfter 1
 	Write-Color '0', ': ', 'Panel' -Color Yellow, Yellow, Green
@@ -112,7 +126,7 @@ Function Add-PSLauncherEntry {
 			Config  = $jsondata.Config
 			Buttons = $NewConfig
 		}
-		$Update | ConvertTo-Json -Depth 5 | Set-Content -Path $PSLauncherConfigFile -Force
+		$Update | ConvertTo-Json -Depth 5 | Set-Content -Path $PSLauncherConfigFile -Verbose -Force
 
 	}
 	if ($GuiAddChoice -eq 1) {

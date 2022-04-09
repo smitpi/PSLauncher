@@ -2,27 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://smitpi.github.io/PSLauncher/</loc>
-         <lastmod>2022-04-02</lastmod>
+         <lastmod>2022-04-09</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://smitpi.github.io/PSLauncher/Add-PSLauncherEntry/</loc>
-         <lastmod>2022-04-02</lastmod>
+         <lastmod>2022-04-09</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://smitpi.github.io/PSLauncher/New-PSLauncherConfigFile/</loc>
-         <lastmod>2022-04-02</lastmod>
+         <lastmod>2022-04-09</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://smitpi.github.io/PSLauncher/Start-PSLauncher/</loc>
-         <lastmod>2022-04-02</lastmod>
+         <lastmod>2022-04-09</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://smitpi.github.io/PSLauncher/Start-PSLauncherColorPicker/</loc>
-         <lastmod>2022-04-02</lastmod>
+         <lastmod>2022-04-09</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
