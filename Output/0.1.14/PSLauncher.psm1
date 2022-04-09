@@ -5,7 +5,7 @@
 ############################################
 # source: Add-PSLauncherEntry.ps1
 # Module: PSLauncher
-# version: 0.1.24
+# version: 0.1.14
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -189,7 +189,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ############################################
 # source: New-PSLauncherConfigFile.ps1
 # Module: PSLauncher
-# version: 0.1.24
+# version: 0.1.14
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -339,7 +339,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ############################################
 # source: Start-PSLauncher.ps1
 # Module: PSLauncher
-# version: 0.1.24
+# version: 0.1.14
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -699,7 +699,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
 # Module: PSLauncher
-# version: 0.1.24
+# version: 0.1.14
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
