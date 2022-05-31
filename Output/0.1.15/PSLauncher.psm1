@@ -1,11 +1,13 @@
 ﻿#region Private Functions
 #endregion
+ 
+ 
 #region Public Functions
 #region Add-PSLauncherEntry.ps1
 ############################################
 # source: Add-PSLauncherEntry.ps1
 # Module: PSLauncher
-# version: 0.1.14
+# version: 0.1.15
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -189,7 +191,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ############################################
 # source: New-PSLauncherConfigFile.ps1
 # Module: PSLauncher
-# version: 0.1.14
+# version: 0.1.15
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -339,7 +341,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ############################################
 # source: Start-PSLauncher.ps1
 # Module: PSLauncher
-# version: 0.1.14
+# version: 0.1.15
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -699,7 +701,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
 # Module: PSLauncher
-# version: 0.1.14
+# version: 0.1.15
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
