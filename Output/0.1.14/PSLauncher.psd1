@@ -12,7 +12,7 @@
 RootModule = 'PSLauncher.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.16'
+ModuleVersion = '0.1.15'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
