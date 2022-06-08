@@ -8,7 +8,7 @@ schema: 2.0.0
 # Start-PSLauncherColorPicker
 
 ## SYNOPSIS
-Launches a Gui form to test and change the Color of PSLauncher.
+Launches a GUI form to test and change the Color of PSLauncher.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Start-PSLauncherColorPicker [[-PSLauncherConfigFile] <FileInfo>] [<CommonParamet
 ```
 
 ## DESCRIPTION
-Launches a Gui form to test and change the Color of PSLauncher.
+Launches a GUI form to test and change the Color of PSLauncher.
 
 ## EXAMPLES
 

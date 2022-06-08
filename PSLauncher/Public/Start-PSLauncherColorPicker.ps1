@@ -275,6 +275,7 @@ Function Start-PSLauncherColorPicker {
             $box3_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $box4_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $box5_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
+            $box6_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $Form.Refresh()
         })
     $Update_Button.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard

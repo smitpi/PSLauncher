@@ -7,7 +7,7 @@
 ############################################
 # source: Add-PSLauncherEntry.ps1
 # Module: PSLauncher
-# version: 0.1.17
+# version: 0.1.19
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -191,7 +191,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ############################################
 # source: New-PSLauncherConfigFile.ps1
 # Module: PSLauncher
-# version: 0.1.17
+# version: 0.1.19
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -351,7 +351,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ############################################
 # source: Start-PSLauncher.ps1
 # Module: PSLauncher
-# version: 0.1.17
+# version: 0.1.19
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -808,7 +808,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
 # Module: PSLauncher
-# version: 0.1.17
+# version: 0.1.19
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -1044,6 +1044,7 @@ Function Start-PSLauncherColorPicker {
             $box3_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $box4_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $box5_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
+            $box6_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $Form.Refresh()
         })
     $Update_Button.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
