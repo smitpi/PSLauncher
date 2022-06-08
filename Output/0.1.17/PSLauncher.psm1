@@ -1,4 +1,4 @@
-﻿#region Private Functions
+#region Private Functions
 #endregion
  
  
@@ -7,7 +7,7 @@
 ############################################
 # source: Add-PSLauncherEntry.ps1
 # Module: PSLauncher
-# version: 0.1.15
+# version: 0.1.17
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -191,7 +191,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ############################################
 # source: New-PSLauncherConfigFile.ps1
 # Module: PSLauncher
-# version: 0.1.15
+# version: 0.1.17
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -213,6 +213,9 @@ Run Start-PSLauncherColorPicker to change.
 Run Start-PSLauncherColorPicker to change.
 
 .PARAMETER LabelColor
+Run Start-PSLauncherColorPicker to change.
+
+.PARAMETER ButtonColor
 Run Start-PSLauncherColorPicker to change.
 
 .PARAMETER TextColor
@@ -254,6 +257,7 @@ Function New-PSLauncherConfigFile {
         [string]$Color1 = '#E5E5E5',
         [string]$Color2 = '#061820',
         [string]$LabelColor = '#FFD400',
+        [string]$ButtonColor = '#84ae46',
         [string]$TextColor = '#000000',
         [string]$LogoPath = 'https://gist.githubusercontent.com/smitpi/ecdaae80dd79ad585e571b1ba16ce272/raw/6d0645968c7ba4553e7ab762c55270ebcc054f04/default-monochrome%2520(2).png',
         [string]$Title = 'PowerShell Launcher',
@@ -270,6 +274,7 @@ Function New-PSLauncherConfigFile {
                        "Description": "$Description",
                        "Color2nd":  "$color2",
                        "LabelColor": "$labelColor",
+                       "ButtonColor": "$ButtonColor",
                        "TextColor": "$TextColor",
                        "LogoUrl":  "$LogoPath",
                        "AppTitle":  "$title"
@@ -346,7 +351,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ############################################
 # source: Start-PSLauncher.ps1
 # Module: PSLauncher
-# version: 0.1.15
+# version: 0.1.17
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -382,11 +387,12 @@ Function Start-PSLauncher {
     }
 
     $KeepOpen = $false
-    $Global:PanelDraw = 10
-    $Global:Color1st = $jsondata.Config.Color1st
-    $Global:Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
-    $Global:LabelColor = $jsondata.Config.LabelColor
-    $Global:TextColor = $jsondata.Config.TextColor
+    $script:PanelDraw = 10
+    $script:Color1st = $jsondata.Config.Color1st
+    $script:Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
+    $script:ButtonColor = $jsondata.Config.ButtonColor 
+    $script:LabelColor = $jsondata.Config.LabelColor
+    $script:TextColor = $jsondata.Config.TextColor
 
 
     #region Assembly
@@ -477,14 +483,14 @@ Function Start-PSLauncher {
         $Button.text = $text
         $Button.width = $bwidth
         $Button.height = 30
-        $Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color1st)
-        $Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:TextColor)
+        $Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+        $Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
         $Button.location = New-Object System.Drawing.Point(10, $panel.ButtonDraw)
         $Button.Font = New-Object System.Drawing.Font('Tahoma', 10)
         $button.add_click( $clickAction )
         $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
 
-        $panel.ButtonDraw = $panel.ButtonDraw + 30
+        $panel.ButtonDraw = $panel.ButtonDraw + 35
         $Panel.controls.AddRange($button)
     }
     function NPanel {
@@ -501,7 +507,7 @@ Function Start-PSLauncher {
         $Label.height = 50
         $Label.location = New-Object System.Drawing.Point(10, 10)
         $Label.Font = [System.Drawing.Font]::new('Tahoma', 24, [System.Drawing.FontStyle]::Bold)
-        $Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:LabelColor)
+        $Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:LabelColor)
         $Label.Refresh()
 
         if ($Label.PreferredWidth -lt 230) {$pwidth = 220}
@@ -512,7 +518,7 @@ Function Start-PSLauncher {
         $Panel.width = $pwidth
         $Panel.location = New-Object System.Drawing.Point($PanelDraw, 10)
         $Panel.BorderStyle = 'Fixed3D'
-        $Panel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color2nd)
+        $Panel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:Color2nd)
         $panel.AutoScroll = $true
         $panel.AutoSizeMode = 'GrowAndShrink'
         $Panel.Refresh()
@@ -522,7 +528,7 @@ Function Start-PSLauncher {
         $Form.controls.AddRange($Panel)
 
         $Panel
-        $Global:PanelDraw = $Global:PanelDraw + $Panel.Size.Width
+        $script:PanelDraw = $script:PanelDraw + $Panel.Size.Width
 
     }
     function EnableLogging {
@@ -556,7 +562,7 @@ Function Start-PSLauncher {
     $Form.text = "$($jsondata.Config.AppTitle) (ver: $($module.Version)) "
     $Form.StartPosition = 'CenterScreen'
     $Form.TopMost = $false
-    $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color1st)
+    $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:Color1st)
     $Form.AutoScaleDimensions = '256, 256'
     $Form.AutoScaleMode = 'Dpi'
     $Form.AutoScale = $True
@@ -594,21 +600,21 @@ Function Start-PSLauncher {
     $BGInfoPanel.width = 420
     $BGInfoPanel.location = New-Object System.Drawing.Point($PanelDraw, 10)
     $BGInfoPanel.BorderStyle = 'Fixed3D'
-    $BGInfoPanel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color2nd)
+    $BGInfoPanel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:Color2nd)
     $BGInfoPanel.AutoScroll = $false
     $BGInfoPanel.AutoSizeMode = 'GrowAndShrink'
     $BGInfoPanel.Refresh()
 
     $CompNameLabel = New-Object system.Windows.Forms.Label
-    $CompNameLabel.text = "$(($env:COMPUTERNAME).ToUpper()).$((Get-CimInstance -ClassName Win32_ComputerSystem).domain)"
-    $CompNameLabel.AutoSize = $false
+    $CompNameLabel.text = "$(($env:COMPUTERNAME).ToUpper())"
+    $CompNameLabel.AutoSize = $True
     $CompNameLabel.Dock = [System.Windows.Forms.DockStyle]::Top
     $CompNameLabel.width = 400
     $CompNameLabel.height = 50    
     $CompNameLabel.location = New-Object System.Drawing.Point(1, 10)
-    $CompNameLabel.Font = [System.Drawing.Font]::new('Tahoma', 24, [System.Drawing.FontStyle]::Bold)
+    $CompNameLabel.Font = [System.Drawing.Font]::new('Tahoma', 20, [System.Drawing.FontStyle]::Bold)
     $CompNameLabel.TextAlign = [System.Drawing.ContentAlignment]::TopCenter
-    $CompNameLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:LabelColor)
+    $CompNameLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:LabelColor)
     $CompNameLabel.Refresh()
     $BGInfoPanel.controls.AddRange(@($CompNameLabel))
 
@@ -621,7 +627,7 @@ Function Start-PSLauncher {
     $DestriptionLabel.location = New-Object System.Drawing.Point(1, 60)
     $DestriptionLabel.Font = [System.Drawing.Font]::new('Tahoma', 16)
     $DestriptionLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
-    $DestriptionLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:LabelColor)
+    $DestriptionLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:LabelColor)
     $DestriptionLabel.Refresh()
     $BGInfoPanel.controls.AddRange(@($DestriptionLabel))
 
@@ -640,14 +646,15 @@ Function Start-PSLauncher {
 
     try {
         $BginfoDetails = [PSCustomObject]@{
-            'User Name'    = $env:USERNAME
-            'User Domain'  = $env:USERDNSDOMAIN
-            OS             = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
-            'Boot Time'    = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
-            'Install Date' = (Get-CimInstance -ClassName Win32_OperatingSystem).InstallDate
-            Memory         = "$([Math]::Round((Get-CimInstance -ClassName Win32_ComputerSystem).TotalPhysicalMemory / 1gb)) GB"
-            IP             = @(((Get-CimInstance -Class Win32_NetworkAdapterConfiguration -Filter IPEnabled=$true).ipaddress | Out-String).Trim())
-            'Free Space'   = @(((Get-CimInstance -Namespace root/cimv2 -ClassName win32_logicaldisk | Where-Object {$_.DriveType -like 3} | ForEach-Object {"$($_.DeviceID) $([Math]::Round($_.FreeSpace / 1gb)) GB"}) | Out-String).trim())
+            'Computer Domain' = [string]((Get-CimInstance -ClassName Win32_ComputerSystem).domain).tolower()
+            'User Name'       = $env:USERNAME
+            'User Domain'     = $env:USERDNSDOMAIN
+            OS                = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
+            'Boot Time'       = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
+            'Install Date'    = (Get-CimInstance -ClassName Win32_OperatingSystem).InstallDate
+            Memory            = "$([Math]::Round((Get-CimInstance -ClassName Win32_ComputerSystem).TotalPhysicalMemory / 1gb)) GB"
+            IP                = @(((Get-CimInstance -Class Win32_NetworkAdapterConfiguration -Filter IPEnabled=$true).ipaddress | Out-String).Trim())
+            'Free Space'      = @(((Get-CimInstance -Namespace root/cimv2 -ClassName win32_logicaldisk | Where-Object {$_.DriveType -like 3} | ForEach-Object {"$($_.DeviceID) $([Math]::Round($_.FreeSpace / 1gb)) GB"}) | Out-String).trim())
         }
     } catch {Write-Warning 'Unable to collect pc details'}
     
@@ -661,7 +668,7 @@ Function Start-PSLauncher {
         $TmpLabelName.location = New-Object System.Drawing.Point(10, $HightIndex)
         $TmpLabelName.Font = [System.Drawing.Font]::new('Tahoma', 10, [System.Drawing.FontStyle]::Bold)
         $TmpLabelName.TextAlign = [System.Drawing.ContentAlignment]::MiddleRight
-        $TmpLabelName.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:LabelColor)
+        $TmpLabelName.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:LabelColor)
         $TmpLabelName.Refresh()
         $BGInfoPanel.controls.AddRange(@($TmpLabelName))
 
@@ -674,7 +681,7 @@ Function Start-PSLauncher {
         $TmpLabelValue.location = New-Object System.Drawing.Point(160, $HightIndex)
         $TmpLabelValue.Font = [System.Drawing.Font]::new('Tahoma', 10)
         $TmpLabelValue.TextAlign = [System.Drawing.ContentAlignment]::MiddleLeft
-        $TmpLabelValue.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:LabelColor)
+        $TmpLabelValue.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:LabelColor)
         $TmpLabelValue.Refresh()
         $BGInfoPanel.controls.AddRange(@($TmpLabelValue))
 
@@ -690,8 +697,8 @@ Function Start-PSLauncher {
     $exit.height = 30
     $exit.location = New-Object System.Drawing.Point(1, 510)
     $exit.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $exit.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color1st)
-    $exit.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:TextColor)
+    $exit.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $exit.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $exit.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
     $exit.Add_Click( {
             Write-Output 'exiting Util'
@@ -712,8 +719,8 @@ Function Start-PSLauncher {
     $reload.height = 30
     $reload.location = New-Object System.Drawing.Point(100, 510)
     $reload.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $reload.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color1st)
-    $reload.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:TextColor)
+    $reload.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $reload.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $reload.Add_Click( {
             Write-Output 'Reloading Util'
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
@@ -727,8 +734,8 @@ Function Start-PSLauncher {
     $EnableLogging.height = 30
     $EnableLogging.location = New-Object System.Drawing.Point(1, 540)
     $EnableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color1st)
-    $EnableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:TextColor)
+    $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $EnableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $EnableLogging.Add_Click( { EnableLogging })
 
     $DisableLogging = New-Object system.Windows.Forms.Button
@@ -738,8 +745,8 @@ Function Start-PSLauncher {
     $DisableLogging.height = 30
     $DisableLogging.location = New-Object System.Drawing.Point(100, 540)
     $DisableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color1st)
-    $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:TextColor)
+    $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $DisableLogging.Add_Click( { DisableLogging })
 
     $AddToConfig = New-Object system.Windows.Forms.Button
@@ -749,8 +756,8 @@ Function Start-PSLauncher {
     $AddToConfig.height = 30
     $AddToConfig.location = New-Object System.Drawing.Point(1, 570)
     $AddToConfig.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color1st)
-    $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:TextColor)
+    $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $AddToConfig.Add_Click( {
             ShowConsole
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Add-PSLauncherEntry -PSLauncherConfigFile $($PSLauncherConfigFile) -execute}"""
@@ -766,8 +773,8 @@ Function Start-PSLauncher {
     $OpenConfigButton.height = 30
     $OpenConfigButton.location = New-Object System.Drawing.Point(100, 570)
     $OpenConfigButton.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Global:Color1st)
-    $OpenConfigButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Global:TextColor)
+    $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $OpenConfigButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $OpenConfigButton.Add_Click( { . $PSLauncherConfigFile })
 
     $Form.controls.AddRange($exit)
@@ -801,17 +808,17 @@ Export-ModuleMember -Function Start-PSLauncher
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
 # Module: PSLauncher
-# version: 0.1.15
+# version: 0.1.17
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
  
 <#
 .SYNOPSIS
-Launches a Gui form to test and change the Color of PSLauncher.
+Launches a GUI form to test and change the Color of PSLauncher.
 
 .DESCRIPTION
-Launches a Gui form to test and change the Color of PSLauncher.
+Launches a GUI form to test and change the Color of PSLauncher.
 
 .PARAMETER PSLauncherConfigFile
 Path to the config file created by New-PSLauncherConfigFile
@@ -836,10 +843,13 @@ Function Start-PSLauncherColorPicker {
         $Script:jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
     }
 
-    $Script:Color1st = $jsondata.Config.Color1st
-    $Script:Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
-    $Script:LabelColor = $jsondata.Config.LabelColor
-    $Script:TextColor = $jsondata.Config.TextColor
+
+    $script:PanelDraw = 10
+    $script:Color1st = $jsondata.Config.Color1st
+    $script:Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
+    $script:ButtonColor = $jsondata.Config.ButtonColor 
+    $script:LabelColor = $jsondata.Config.LabelColor
+    $script:TextColor = $jsondata.Config.TextColor
 
 
     #region Assembly
@@ -972,26 +982,39 @@ Function Start-PSLauncherColorPicker {
     $box5_Label.location = New-Object System.Drawing.Point(1, 350)
     $box5_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
 
+    $box6 = New-Object System.Windows.Forms.TextBox
+    $box6.AutoSize = $true
+    $box6.Width = 100
+    $box6.Height = 30
+    $box6.Text = $ButtonColor
+    $box6.Location = New-Object System.Drawing.Point(100, 380)
+    $box6_Label = New-Object system.Windows.Forms.Label
+    $box6_Label.text = 'Button Color'
+    $box6_Label.AutoSize = $true
+    $box6_Label.width = 100
+    $box6_Label.height = 30
+    $box6_Label.location = New-Object System.Drawing.Point(1, 380)
+    $box6_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
 
     $box4 = New-Object System.Windows.Forms.TextBox
     $box4.AutoSize = $true
     $box4.Width = 100
     $box4.Height = 30
     $box4.Text = $jsondata.Config.LogoUrl
-    $box4.Location = New-Object System.Drawing.Point(100, 380)
+    $box4.Location = New-Object System.Drawing.Point(100, 410)
     $box4_Label = New-Object system.Windows.Forms.Label
     $box4_Label.text = 'Logo URL'
     $box4_Label.AutoSize = $true
     $box4_Label.width = 100
     $box4_Label.height = 30
-    $box4_Label.location = New-Object System.Drawing.Point(1, 380)
+    $box4_Label.location = New-Object System.Drawing.Point(1, 410)
     $box4_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
 
     #region picture
     $PictureBox1 = New-Object system.Windows.Forms.PictureBox
     $PictureBox1.width = 200
     $PictureBox1.height = 100
-    $PictureBox1.location = New-Object System.Drawing.Point(10, 410)
+    $PictureBox1.location = New-Object System.Drawing.Point(10, 430)
     $PictureBox1.imageLocation = $jsondata.Config.LogoUrl
     $PictureBox1.SizeMode = [System.Windows.Forms.PictureBoxSizeMode]::zoom
     $Form.controls.AddRange($PictureBox1)
@@ -1003,7 +1026,7 @@ Function Start-PSLauncherColorPicker {
     $Update_Button.text = 'update'
     $Update_Button.width = 200
     $Update_Button.height = 30
-    $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+    $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($ButtonColor)
     $Update_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
     $Update_Button.location = New-Object System.Drawing.Point(10, 60)
     $Update_Button.Font = New-Object System.Drawing.Font('Tahoma', 10)
@@ -1012,7 +1035,7 @@ Function Start-PSLauncherColorPicker {
             $Panel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box2.Text)
             $label.ForeColor = $box3.Text
             $PictureBox1.imageLocation = $box4.Text
-            $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box1.Text)
+            $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box6.Text)
             $Set_Button.BackColor = $box1.Text
             $Update_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $Set_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
@@ -1030,19 +1053,21 @@ Function Start-PSLauncherColorPicker {
     $Set_Button.text = 'Set'
     $Set_Button.width = 200
     $Set_Button.height = 30
-    $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+    $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $Set_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
     $Set_Button.location = New-Object System.Drawing.Point(10, 90)
     $Set_Button.Font = New-Object System.Drawing.Font('Tahoma', 10)
     $Set_Button.add_click( {
             $new = [psobject]@{
                 Config  = [psobject] @{
-                    Color1st   = $($box1.Text)
-                    Color2nd   = $($box2.Text)
-                    LabelColor = $($box3.Text)
-                    LogoUrl    = $($box4.Text)
-                    TextColor  = $($box5.Text)
-                    AppTitle   = $($jsondata.Config.AppTitle)
+                    Color1st    = $($box1.Text)
+                    Color2nd    = $($box2.Text)
+                    LabelColor  = $($box3.Text)
+                    Description = $($jsondata.Config.Discription)
+                    LogoUrl     = $($box4.Text)
+                    TextColor   = $($box5.Text)
+                    ButtonColor = $($box6.Text)
+                    AppTitle    = $($jsondata.Config.AppTitle)
                 }
                 Buttons = $jsondata.Buttons
             }
@@ -1073,6 +1098,8 @@ Function Start-PSLauncherColorPicker {
     $Form.controls.AddRange($box4_Label)
     $Form.controls.AddRange($box5)
     $Form.controls.AddRange($box5_Label)
+    $Form.controls.AddRange($box6)
+    $Form.controls.AddRange($box6_Label)
 
     HideConsole
     [void]$Form.ShowDialog()

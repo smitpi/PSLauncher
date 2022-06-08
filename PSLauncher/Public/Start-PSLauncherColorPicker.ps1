@@ -41,15 +41,15 @@ Updated [24/10/2021_06:00] 'Updated module/script info'
 <#
 
 .DESCRIPTION
-Launches a Gui form to test and change the Color of PSLauncher.
+Launches a GUI form to test and change the Color of PSLauncher.
 
 #>
 <#
 .SYNOPSIS
-Launches a Gui form to test and change the Color of PSLauncher.
+Launches a GUI form to test and change the Color of PSLauncher.
 
 .DESCRIPTION
-Launches a Gui form to test and change the Color of PSLauncher.
+Launches a GUI form to test and change the Color of PSLauncher.
 
 .PARAMETER PSLauncherConfigFile
 Path to the config file created by New-PSLauncherConfigFile
@@ -74,10 +74,13 @@ Function Start-PSLauncherColorPicker {
         $Script:jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
     }
 
-    $Script:Color1st = $jsondata.Config.Color1st
-    $Script:Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
-    $Script:LabelColor = $jsondata.Config.LabelColor
-    $Script:TextColor = $jsondata.Config.TextColor
+
+    $script:PanelDraw = 10
+    $script:Color1st = $jsondata.Config.Color1st
+    $script:Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
+    $script:ButtonColor = $jsondata.Config.ButtonColor 
+    $script:LabelColor = $jsondata.Config.LabelColor
+    $script:TextColor = $jsondata.Config.TextColor
 
 
     #region Assembly
@@ -210,26 +213,39 @@ Function Start-PSLauncherColorPicker {
     $box5_Label.location = New-Object System.Drawing.Point(1, 350)
     $box5_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
 
+    $box6 = New-Object System.Windows.Forms.TextBox
+    $box6.AutoSize = $true
+    $box6.Width = 100
+    $box6.Height = 30
+    $box6.Text = $ButtonColor
+    $box6.Location = New-Object System.Drawing.Point(100, 380)
+    $box6_Label = New-Object system.Windows.Forms.Label
+    $box6_Label.text = 'Button Color'
+    $box6_Label.AutoSize = $true
+    $box6_Label.width = 100
+    $box6_Label.height = 30
+    $box6_Label.location = New-Object System.Drawing.Point(1, 380)
+    $box6_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
 
     $box4 = New-Object System.Windows.Forms.TextBox
     $box4.AutoSize = $true
     $box4.Width = 100
     $box4.Height = 30
     $box4.Text = $jsondata.Config.LogoUrl
-    $box4.Location = New-Object System.Drawing.Point(100, 380)
+    $box4.Location = New-Object System.Drawing.Point(100, 410)
     $box4_Label = New-Object system.Windows.Forms.Label
     $box4_Label.text = 'Logo URL'
     $box4_Label.AutoSize = $true
     $box4_Label.width = 100
     $box4_Label.height = 30
-    $box4_Label.location = New-Object System.Drawing.Point(1, 380)
+    $box4_Label.location = New-Object System.Drawing.Point(1, 410)
     $box4_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
 
     #region picture
     $PictureBox1 = New-Object system.Windows.Forms.PictureBox
     $PictureBox1.width = 200
     $PictureBox1.height = 100
-    $PictureBox1.location = New-Object System.Drawing.Point(10, 410)
+    $PictureBox1.location = New-Object System.Drawing.Point(10, 430)
     $PictureBox1.imageLocation = $jsondata.Config.LogoUrl
     $PictureBox1.SizeMode = [System.Windows.Forms.PictureBoxSizeMode]::zoom
     $Form.controls.AddRange($PictureBox1)
@@ -241,7 +257,7 @@ Function Start-PSLauncherColorPicker {
     $Update_Button.text = 'update'
     $Update_Button.width = 200
     $Update_Button.height = 30
-    $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+    $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($ButtonColor)
     $Update_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
     $Update_Button.location = New-Object System.Drawing.Point(10, 60)
     $Update_Button.Font = New-Object System.Drawing.Font('Tahoma', 10)
@@ -250,7 +266,7 @@ Function Start-PSLauncherColorPicker {
             $Panel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box2.Text)
             $label.ForeColor = $box3.Text
             $PictureBox1.imageLocation = $box4.Text
-            $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box1.Text)
+            $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box6.Text)
             $Set_Button.BackColor = $box1.Text
             $Update_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $Set_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
@@ -268,19 +284,21 @@ Function Start-PSLauncherColorPicker {
     $Set_Button.text = 'Set'
     $Set_Button.width = 200
     $Set_Button.height = 30
-    $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+    $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $Set_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
     $Set_Button.location = New-Object System.Drawing.Point(10, 90)
     $Set_Button.Font = New-Object System.Drawing.Font('Tahoma', 10)
     $Set_Button.add_click( {
             $new = [psobject]@{
                 Config  = [psobject] @{
-                    Color1st   = $($box1.Text)
-                    Color2nd   = $($box2.Text)
-                    LabelColor = $($box3.Text)
-                    LogoUrl    = $($box4.Text)
-                    TextColor  = $($box5.Text)
-                    AppTitle   = $($jsondata.Config.AppTitle)
+                    Color1st    = $($box1.Text)
+                    Color2nd    = $($box2.Text)
+                    LabelColor  = $($box3.Text)
+                    Description = $($jsondata.Config.Discription)
+                    LogoUrl     = $($box4.Text)
+                    TextColor   = $($box5.Text)
+                    ButtonColor = $($box6.Text)
+                    AppTitle    = $($jsondata.Config.AppTitle)
                 }
                 Buttons = $jsondata.Buttons
             }
@@ -311,6 +329,8 @@ Function Start-PSLauncherColorPicker {
     $Form.controls.AddRange($box4_Label)
     $Form.controls.AddRange($box5)
     $Form.controls.AddRange($box5_Label)
+    $Form.controls.AddRange($box6)
+    $Form.controls.AddRange($box6_Label)
 
     HideConsole
     [void]$Form.ShowDialog()

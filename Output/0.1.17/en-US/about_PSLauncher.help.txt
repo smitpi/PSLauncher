@@ -11,7 +11,7 @@ Functions in this module:
 	 Add-PSLauncherEntry -- Add a button or panal to the config.
 	 New-PSLauncherConfigFile -- Creates the config file with the provided settings
 	 Start-PSLauncher -- Reads the config file and launches the GUI
-	 Start-PSLauncherColorPicker -- Launches a Gui form to test and change the Color of PSLauncher.
+	 Start-PSLauncherColorPicker -- Launches a GUI form to test and change the Color of PSLauncher.
  
 SEE ALSO
 	 https://github.com/smitpi/PSLauncher

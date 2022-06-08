@@ -63,6 +63,9 @@ Run Start-PSLauncherColorPicker to change.
 .PARAMETER LabelColor
 Run Start-PSLauncherColorPicker to change.
 
+.PARAMETER ButtonColor
+Run Start-PSLauncherColorPicker to change.
+
 .PARAMETER TextColor
 Run Start-PSLauncherColorPicker to change. 
 
@@ -102,6 +105,7 @@ Function New-PSLauncherConfigFile {
         [string]$Color1 = '#E5E5E5',
         [string]$Color2 = '#061820',
         [string]$LabelColor = '#FFD400',
+        [string]$ButtonColor = '#84ae46',
         [string]$TextColor = '#000000',
         [string]$LogoPath = 'https://gist.githubusercontent.com/smitpi/ecdaae80dd79ad585e571b1ba16ce272/raw/6d0645968c7ba4553e7ab762c55270ebcc054f04/default-monochrome%2520(2).png',
         [string]$Title = 'PowerShell Launcher',
@@ -118,6 +122,7 @@ Function New-PSLauncherConfigFile {
                        "Description": "$Description",
                        "Color2nd":  "$color2",
                        "LabelColor": "$labelColor",
+                       "ButtonColor": "$ButtonColor",
                        "TextColor": "$TextColor",
                        "LogoUrl":  "$LogoPath",
                        "AppTitle":  "$title"
