@@ -13,9 +13,10 @@ Creates the config file with the provided settings
 ## SYNTAX
 
 ```
-New-PSLauncherConfigFile [-ConfigPath] <DirectoryInfo> [-CreateShortcut] [[-Color1] <String>]
- [[-Color2] <String>] [[-LabelColor] <String>] [[-TextColor] <String>] [[-LogoPath] <String>]
- [[-Title] <String>] [[-Panel01] <String>] [[-Panel02] <String>] [-LaunchColorPicker] [<CommonParameters>]
+New-PSLauncherConfigFile [-ConfigPath] <DirectoryInfo> [-CreateShortcut] [[-Description] <String>]
+ [[-Color1] <String>] [[-Color2] <String>] [[-LabelColor] <String>] [[-TextColor] <String>]
+ [[-LogoPath] <String>] [[-Title] <String>] [[-Panel01] <String>] [[-Panel02] <String>] [-LaunchColorPicker]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -60,6 +61,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Description
+Text to be used in the info panel.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Color1
 Run Start-PSLauncherColorPicker to change.
 
@@ -69,7 +85,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 3
 Default value: #E5E5E5
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -84,7 +100,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 4
 Default value: #061820
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -99,7 +115,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: 5
 Default value: #FFD400
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -114,7 +130,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: 6
 Default value: #000000
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -129,7 +145,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 7
 Default value: Https://gist.githubusercontent.com/smitpi/ecdaae80dd79ad585e571b1ba16ce272/raw/6d0645968c7ba4553e7ab762c55270ebcc054f04/default-monochrome%2520(2).png
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -144,7 +160,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 8
 Default value: PowerShell Launcher
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -159,7 +175,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 9
 Default value: First
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -174,7 +190,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 9
+Position: 10
 Default value: Second
 Accept pipeline input: False
 Accept wildcard characters: False

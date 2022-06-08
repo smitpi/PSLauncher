@@ -51,6 +51,9 @@ Creates the config file with the provided settings
 .DESCRIPTION
 Creates the config file with the provided settings
 
+.PARAMETER Description
+Text to be used in the info panel.
+
 .PARAMETER Color1
 Run Start-PSLauncherColorPicker to change.
 
@@ -61,7 +64,7 @@ Run Start-PSLauncherColorPicker to change.
 Run Start-PSLauncherColorPicker to change.
 
 .PARAMETER TextColor
-Run Start-PSLauncherColorPicker to change.
+Run Start-PSLauncherColorPicker to change. 
 
 .PARAMETER LogoPath
 Run Start-PSLauncherColorPicker to change.
@@ -95,6 +98,7 @@ Function New-PSLauncherConfigFile {
         [ValidateScript( { (Test-Path $_) })]
         [System.IO.DirectoryInfo]$ConfigPath,
         [switch]$CreateShortcut = $false,
+        [string]$Description,
         [string]$Color1 = '#E5E5E5',
         [string]$Color2 = '#061820',
         [string]$LabelColor = '#FFD400',
@@ -111,6 +115,7 @@ Function New-PSLauncherConfigFile {
     "Config":  [
                    {
                        "Color1st":  "$color1",
+                       "Description": "$Description",
                        "Color2nd":  "$color2",
                        "LabelColor": "$labelColor",
                        "TextColor": "$TextColor",

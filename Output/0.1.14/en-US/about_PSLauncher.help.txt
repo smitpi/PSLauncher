@@ -3,14 +3,14 @@ PSLauncher
 	 about_PSLauncher
  
 SHORT DESCRIPTION
-	 A GUI to launch any PowerShell script, function, or any other executables. Everything is saved in a json config file. Also created menu items that assists in creating the buttons and panels. The function will ask you a couple of questions, and adds the result to the json file.
+	 A GUI to launch any PowerShell script, function, or any other executables. You have the option to run any of these options as a normal user or as an Admin. Everything is saved in a json config file. Also created menu items that assists in creating the buttons, panels, and colour schemes. There is no need to manually edit the config file.
 
  
 NOTES
 Functions in this module:
 	 Add-PSLauncherEntry -- Add a button or panal to the config.
 	 New-PSLauncherConfigFile -- Creates the config file with the provided settings
-	 Start-PSLauncher -- Reads the config file and launches the gui
+	 Start-PSLauncher -- Reads the config file and launches the GUI
 	 Start-PSLauncherColorPicker -- Launches a Gui form to test and change the Color of PSLauncher.
  
 SEE ALSO

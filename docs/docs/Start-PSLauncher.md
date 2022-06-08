@@ -8,7 +8,7 @@ schema: 2.0.0
 # Start-PSLauncher
 
 ## SYNOPSIS
-Reads the config file and launches the gui
+Reads the config file and launches the GUI
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Start-PSLauncher [[-PSLauncherConfigFile] <FileInfo>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Reads the config file and launches the gui
+Reads the config file and launches the GUI
 
 ## EXAMPLES
 

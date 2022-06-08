@@ -111,7 +111,31 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
+          <maml:name>Panel02</maml:name>
+          <maml:description>
+            <maml:para>Name of the 2nd panel</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Second</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Description</maml:name>
+          <maml:description>
+            <maml:para>Text to be used in the info panel.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
           <maml:name>Color1</maml:name>
           <maml:description>
             <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -123,7 +147,7 @@
           </dev:type>
           <dev:defaultValue>#E5E5E5</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
           <maml:name>Color2</maml:name>
           <maml:description>
             <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -135,7 +159,7 @@
           </dev:type>
           <dev:defaultValue>#061820</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
           <maml:name>LabelColor</maml:name>
           <maml:description>
             <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -147,7 +171,7 @@
           </dev:type>
           <dev:defaultValue>#FFD400</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
           <maml:name>TextColor</maml:name>
           <maml:description>
             <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -159,7 +183,7 @@
           </dev:type>
           <dev:defaultValue>#000000</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
           <maml:name>LogoPath</maml:name>
           <maml:description>
             <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -171,7 +195,7 @@
           </dev:type>
           <dev:defaultValue>Https://gist.githubusercontent.com/smitpi/ecdaae80dd79ad585e571b1ba16ce272/raw/6d0645968c7ba4553e7ab762c55270ebcc054f04/default-monochrome%2520(2).png</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
           <maml:name>Title</maml:name>
           <maml:description>
             <maml:para>Text in the title of the app.</maml:para>
@@ -183,7 +207,7 @@
           </dev:type>
           <dev:defaultValue>PowerShell Launcher</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
           <maml:name>Panel01</maml:name>
           <maml:description>
             <maml:para>Name of the 1st panel</maml:para>
@@ -194,18 +218,6 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>First</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
-          <maml:name>Panel02</maml:name>
-          <maml:description>
-            <maml:para>Name of the 2nd panel</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>Second</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CreateShortcut</maml:name>
@@ -257,6 +269,18 @@
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Description</maml:name>
+        <maml:description>
+          <maml:para>Text to be used in the info panel.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
         <maml:name>Color1</maml:name>
         <maml:description>
           <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -268,7 +292,7 @@
         </dev:type>
         <dev:defaultValue>#E5E5E5</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
         <maml:name>Color2</maml:name>
         <maml:description>
           <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -280,7 +304,7 @@
         </dev:type>
         <dev:defaultValue>#061820</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
         <maml:name>LabelColor</maml:name>
         <maml:description>
           <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -292,7 +316,7 @@
         </dev:type>
         <dev:defaultValue>#FFD400</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
         <maml:name>TextColor</maml:name>
         <maml:description>
           <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -304,7 +328,7 @@
         </dev:type>
         <dev:defaultValue>#000000</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
         <maml:name>LogoPath</maml:name>
         <maml:description>
           <maml:para>Run Start-PSLauncherColorPicker to change.</maml:para>
@@ -316,7 +340,7 @@
         </dev:type>
         <dev:defaultValue>Https://gist.githubusercontent.com/smitpi/ecdaae80dd79ad585e571b1ba16ce272/raw/6d0645968c7ba4553e7ab762c55270ebcc054f04/default-monochrome%2520(2).png</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
         <maml:name>Title</maml:name>
         <maml:description>
           <maml:para>Text in the title of the app.</maml:para>
@@ -328,7 +352,7 @@
         </dev:type>
         <dev:defaultValue>PowerShell Launcher</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
         <maml:name>Panel01</maml:name>
         <maml:description>
           <maml:para>Name of the 1st panel</maml:para>
@@ -340,7 +364,7 @@
         </dev:type>
         <dev:defaultValue>First</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
         <maml:name>Panel02</maml:name>
         <maml:description>
           <maml:para>Name of the 2nd panel</maml:para>
@@ -389,11 +413,11 @@
       <command:verb>Start</command:verb>
       <command:noun>PSLauncher</command:noun>
       <maml:description>
-        <maml:para>Reads the config file and launches the gui</maml:para>
+        <maml:para>Reads the config file and launches the GUI</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Reads the config file and launches the gui</maml:para>
+      <maml:para>Reads the config file and launches the GUI</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
