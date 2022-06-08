@@ -295,7 +295,7 @@ Function Start-PSLauncherColorPicker {
                     Color1st    = $($box1.Text)
                     Color2nd    = $($box2.Text)
                     LabelColor  = $($box3.Text)
-                    Description = $($jsondata.Config.Discription)
+                    Description = $($jsondata.Config.Description)
                     LogoUrl     = $($box4.Text)
                     TextColor   = $($box5.Text)
                     ButtonColor = $($box6.Text)

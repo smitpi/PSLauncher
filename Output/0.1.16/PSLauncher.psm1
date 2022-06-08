@@ -7,7 +7,7 @@
 ############################################
 # source: Add-PSLauncherEntry.ps1
 # Module: PSLauncher
-# version: 0.1.20
+# version: 0.1.16
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -191,7 +191,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ############################################
 # source: New-PSLauncherConfigFile.ps1
 # Module: PSLauncher
-# version: 0.1.20
+# version: 0.1.16
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -351,7 +351,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ############################################
 # source: Start-PSLauncher.ps1
 # Module: PSLauncher
-# version: 0.1.20
+# version: 0.1.16
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -808,7 +808,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
 # Module: PSLauncher
-# version: 0.1.20
+# version: 0.1.16
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -1064,7 +1064,7 @@ Function Start-PSLauncherColorPicker {
                     Color1st    = $($box1.Text)
                     Color2nd    = $($box2.Text)
                     LabelColor  = $($box3.Text)
-                    Description = $($jsondata.Config.Discription)
+                    Description = $($jsondata.Config.Description)
                     LogoUrl     = $($box4.Text)
                     TextColor   = $($box5.Text)
                     ButtonColor = $($box6.Text)
