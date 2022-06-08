@@ -7,7 +7,7 @@
 ############################################
 # source: Add-PSLauncherEntry.ps1
 # Module: PSLauncher
-# version: 0.1.14
+# version: 0.1.15
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -191,7 +191,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ############################################
 # source: New-PSLauncherConfigFile.ps1
 # Module: PSLauncher
-# version: 0.1.14
+# version: 0.1.15
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -346,7 +346,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ############################################
 # source: Start-PSLauncher.ps1
 # Module: PSLauncher
-# version: 0.1.14
+# version: 0.1.15
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -477,8 +477,8 @@ Function Start-PSLauncher {
         $Button.text = $text
         $Button.width = $bwidth
         $Button.height = 30
-        $Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
-        $Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
+        $Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color1st)
+        $Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:TextColor)
         $Button.location = New-Object System.Drawing.Point(10, $panel.ButtonDraw)
         $Button.Font = New-Object System.Drawing.Font('Tahoma', 10)
         $button.add_click( $clickAction )
@@ -501,7 +501,7 @@ Function Start-PSLauncher {
         $Label.height = 50
         $Label.location = New-Object System.Drawing.Point(10, 10)
         $Label.Font = [System.Drawing.Font]::new('Tahoma', 24, [System.Drawing.FontStyle]::Bold)
-        $Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($LabelColor)
+        $Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:LabelColor)
         $Label.Refresh()
 
         if ($Label.PreferredWidth -lt 230) {$pwidth = 220}
@@ -512,7 +512,7 @@ Function Start-PSLauncher {
         $Panel.width = $pwidth
         $Panel.location = New-Object System.Drawing.Point($PanelDraw, 10)
         $Panel.BorderStyle = 'Fixed3D'
-        $Panel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color2nd)
+        $Panel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color2nd)
         $panel.AutoScroll = $true
         $panel.AutoSizeMode = 'GrowAndShrink'
         $Panel.Refresh()
@@ -556,7 +556,7 @@ Function Start-PSLauncher {
     $Form.text = "$($jsondata.Config.AppTitle) (ver: $($module.Version)) "
     $Form.StartPosition = 'CenterScreen'
     $Form.TopMost = $false
-    $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
+    $Form.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color1st)
     $Form.AutoScaleDimensions = '256, 256'
     $Form.AutoScaleMode = 'Dpi'
     $Form.AutoScale = $True
@@ -594,7 +594,7 @@ Function Start-PSLauncher {
     $BGInfoPanel.width = 420
     $BGInfoPanel.location = New-Object System.Drawing.Point($PanelDraw, 10)
     $BGInfoPanel.BorderStyle = 'Fixed3D'
-    $BGInfoPanel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color2nd)
+    $BGInfoPanel.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color2nd)
     $BGInfoPanel.AutoScroll = $false
     $BGInfoPanel.AutoSizeMode = 'GrowAndShrink'
     $BGInfoPanel.Refresh()
@@ -608,7 +608,7 @@ Function Start-PSLauncher {
     $CompNameLabel.location = New-Object System.Drawing.Point(1,10)
     $CompNameLabel.Font = [System.Drawing.Font]::new('Tahoma', 24, [System.Drawing.FontStyle]::Bold)
     $CompNameLabel.TextAlign = [System.Drawing.ContentAlignment]::TopCenter
-    $CompNameLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($LabelColor)
+    $CompNameLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:LabelColor)
     $CompNameLabel.Refresh()
     $BGInfoPanel.controls.AddRange(@($CompNameLabel))
 
@@ -621,7 +621,7 @@ Function Start-PSLauncher {
     $DestriptionLabel.location = New-Object System.Drawing.Point(1,60)
     $DestriptionLabel.Font = [System.Drawing.Font]::new('Tahoma', 16)
     $DestriptionLabel.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
-    $DestriptionLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($LabelColor)
+    $DestriptionLabel.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:LabelColor)
     $DestriptionLabel.Refresh()
     $BGInfoPanel.controls.AddRange(@($DestriptionLabel))
 
@@ -661,7 +661,7 @@ Function Start-PSLauncher {
         $TmpLabelName.location = New-Object System.Drawing.Point(10, $HightIndex)
         $TmpLabelName.Font = [System.Drawing.Font]::new('Tahoma', 10, [System.Drawing.FontStyle]::Bold)
         $TmpLabelName.TextAlign = [System.Drawing.ContentAlignment]::MiddleRight
-        $TmpLabelName.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($LabelColor)
+        $TmpLabelName.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:LabelColor)
         $TmpLabelName.Refresh()
         $BGInfoPanel.controls.AddRange(@($TmpLabelName))
 
@@ -674,7 +674,7 @@ Function Start-PSLauncher {
         $TmpLabelValue.location = New-Object System.Drawing.Point(160, $HightIndex)
         $TmpLabelValue.Font = [System.Drawing.Font]::new('Tahoma', 10)
         $TmpLabelValue.TextAlign = [System.Drawing.ContentAlignment]::MiddleLeft
-        $TmpLabelValue.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($LabelColor)
+        $TmpLabelValue.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:LabelColor)
         $TmpLabelValue.Refresh()
         $BGInfoPanel.controls.AddRange(@($TmpLabelValue))
 
@@ -690,8 +690,8 @@ Function Start-PSLauncher {
     $exit.height = 30
     $exit.location = New-Object System.Drawing.Point(1, 510)
     $exit.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $exit.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
-    $exit.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
+    $exit.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color1st)
+    $exit.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:TextColor)
     $exit.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
     $exit.Add_Click( {
             Write-Output 'exiting Util'
@@ -712,8 +712,8 @@ Function Start-PSLauncher {
     $reload.height = 30
     $reload.location = New-Object System.Drawing.Point(100, 510)
     $reload.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $reload.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
-    $reload.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
+    $reload.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color1st)
+    $reload.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:TextColor)
     $reload.Add_Click( {
             Write-Output 'Reloading Util'
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
@@ -727,8 +727,8 @@ Function Start-PSLauncher {
     $EnableLogging.height = 30
     $EnableLogging.location = New-Object System.Drawing.Point(1, 540)
     $EnableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
-    $EnableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
+    $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color1st)
+    $EnableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:TextColor)
     $EnableLogging.Add_Click( { EnableLogging })
 
     $DisableLogging = New-Object system.Windows.Forms.Button
@@ -738,8 +738,8 @@ Function Start-PSLauncher {
     $DisableLogging.height = 30
     $DisableLogging.location = New-Object System.Drawing.Point(100, 540)
     $DisableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
-    $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
+    $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color1st)
+    $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:TextColor)
     $DisableLogging.Add_Click( { DisableLogging })
 
     $AddToConfig = New-Object system.Windows.Forms.Button
@@ -749,8 +749,8 @@ Function Start-PSLauncher {
     $AddToConfig.height = 30
     $AddToConfig.location = New-Object System.Drawing.Point(1, 570)
     $AddToConfig.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
-    $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
+    $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color1st)
+    $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:TextColor)
     $AddToConfig.Add_Click( {
             ShowConsole
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Add-PSLauncherEntry -PSLauncherConfigFile $($PSLauncherConfigFile) -execute}"""
@@ -766,8 +766,8 @@ Function Start-PSLauncher {
     $OpenConfigButton.height = 30
     $OpenConfigButton.location = New-Object System.Drawing.Point(100, 570)
     $OpenConfigButton.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Color1st)
-    $OpenConfigButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
+    $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($Script:Color1st)
+    $OpenConfigButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($Script:TextColor)
     $OpenConfigButton.Add_Click( { . $PSLauncherConfigFile })
 
     $Form.controls.AddRange($exit)
@@ -801,7 +801,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
 # Module: PSLauncher
-# version: 0.1.14
+# version: 0.1.15
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
