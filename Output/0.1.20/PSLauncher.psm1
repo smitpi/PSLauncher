@@ -7,7 +7,7 @@
 ############################################
 # source: Add-PSLauncherEntry.ps1
 # Module: PSLauncher
-# version: 0.1.19
+# version: 0.1.20
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -191,7 +191,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ############################################
 # source: New-PSLauncherConfigFile.ps1
 # Module: PSLauncher
-# version: 0.1.19
+# version: 0.1.20
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -351,7 +351,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ############################################
 # source: Start-PSLauncher.ps1
 # Module: PSLauncher
-# version: 0.1.19
+# version: 0.1.20
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -607,7 +607,7 @@ Function Start-PSLauncher {
 
     $CompNameLabel = New-Object system.Windows.Forms.Label
     $CompNameLabel.text = "$(($env:COMPUTERNAME).ToUpper())"
-    $CompNameLabel.AutoSize = $True
+    $CompNameLabel.AutoSize = $false
     $CompNameLabel.Dock = [System.Windows.Forms.DockStyle]::Top
     $CompNameLabel.width = 400
     $CompNameLabel.height = 50    
@@ -646,9 +646,9 @@ Function Start-PSLauncher {
 
     try {
         $BginfoDetails = [PSCustomObject]@{
-            'Computer Domain' = [string]((Get-CimInstance -ClassName Win32_ComputerSystem).domain).tolower()
-            'User Name'       = $env:USERNAME
-            'User Domain'     = $env:USERDNSDOMAIN
+            'PC Domain'       = [string]((Get-CimInstance -ClassName Win32_ComputerSystem).domain).tolower()
+            'User Name'       = "$($env:USERDOMAIN)\$(($env:USERNAME).ToLower())"
+            'User Domain'     = ($env:USERDNSDOMAIN).tolower()
             OS                = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
             'Boot Time'       = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
             'Install Date'    = (Get-CimInstance -ClassName Win32_OperatingSystem).InstallDate
@@ -662,12 +662,12 @@ Function Start-PSLauncher {
     $BginfoDetails.psobject.properties | Select-Object name, value | ForEach-Object {
         $TmpLabelName = New-Object system.Windows.Forms.Label
         $TmpLabelName.text = $_.name
-        $TmpLabelName.AutoSize = $true
+        $TmpLabelName.AutoSize = $false
         $TmpLabelName.width = 150
         $TmpLabelName.height = 10
         $TmpLabelName.location = New-Object System.Drawing.Point(10, $HightIndex)
         $TmpLabelName.Font = [System.Drawing.Font]::new('Tahoma', 10, [System.Drawing.FontStyle]::Bold)
-        $TmpLabelName.TextAlign = [System.Drawing.ContentAlignment]::MiddleRight
+        $TmpLabelName.TextAlign = [System.Drawing.ContentAlignment]::MiddleLeft
         $TmpLabelName.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:LabelColor)
         $TmpLabelName.Refresh()
         $BGInfoPanel.controls.AddRange(@($TmpLabelName))
@@ -808,7 +808,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ############################################
 # source: Start-PSLauncherColorPicker.ps1
 # Module: PSLauncher
-# version: 0.1.19
+# version: 0.1.20
 # Author: Pierre Smit
 # Company: HTPCZA Tech
 #############################################
@@ -1036,7 +1036,7 @@ Function Start-PSLauncherColorPicker {
             $label.ForeColor = $box3.Text
             $PictureBox1.imageLocation = $box4.Text
             $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box6.Text)
-            $Set_Button.BackColor = $box1.Text
+            $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box6.Text)
             $Update_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $Set_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $box1_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
@@ -1054,7 +1054,7 @@ Function Start-PSLauncherColorPicker {
     $Set_Button.text = 'Set'
     $Set_Button.width = 200
     $Set_Button.height = 30
-    $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($ButtonColor)
     $Set_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
     $Set_Button.location = New-Object System.Drawing.Point(10, 90)
     $Set_Button.Font = New-Object System.Drawing.Font('Tahoma', 10)

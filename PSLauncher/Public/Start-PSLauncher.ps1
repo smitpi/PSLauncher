@@ -296,7 +296,7 @@ Function Start-PSLauncher {
 
     $CompNameLabel = New-Object system.Windows.Forms.Label
     $CompNameLabel.text = "$(($env:COMPUTERNAME).ToUpper())"
-    $CompNameLabel.AutoSize = $True
+    $CompNameLabel.AutoSize = $false
     $CompNameLabel.Dock = [System.Windows.Forms.DockStyle]::Top
     $CompNameLabel.width = 400
     $CompNameLabel.height = 50    
@@ -335,9 +335,9 @@ Function Start-PSLauncher {
 
     try {
         $BginfoDetails = [PSCustomObject]@{
-            'Computer Domain' = [string]((Get-CimInstance -ClassName Win32_ComputerSystem).domain).tolower()
-            'User Name'       = $env:USERNAME
-            'User Domain'     = $env:USERDNSDOMAIN
+            'PC Domain'       = [string]((Get-CimInstance -ClassName Win32_ComputerSystem).domain).tolower()
+            'User Name'       = "$($env:USERDOMAIN)\$(($env:USERNAME).ToLower())"
+            'User Domain'     = ($env:USERDNSDOMAIN).tolower()
             OS                = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
             'Boot Time'       = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
             'Install Date'    = (Get-CimInstance -ClassName Win32_OperatingSystem).InstallDate
@@ -351,12 +351,12 @@ Function Start-PSLauncher {
     $BginfoDetails.psobject.properties | Select-Object name, value | ForEach-Object {
         $TmpLabelName = New-Object system.Windows.Forms.Label
         $TmpLabelName.text = $_.name
-        $TmpLabelName.AutoSize = $true
+        $TmpLabelName.AutoSize = $false
         $TmpLabelName.width = 150
         $TmpLabelName.height = 10
         $TmpLabelName.location = New-Object System.Drawing.Point(10, $HightIndex)
         $TmpLabelName.Font = [System.Drawing.Font]::new('Tahoma', 10, [System.Drawing.FontStyle]::Bold)
-        $TmpLabelName.TextAlign = [System.Drawing.ContentAlignment]::MiddleRight
+        $TmpLabelName.TextAlign = [System.Drawing.ContentAlignment]::MiddleLeft
         $TmpLabelName.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:LabelColor)
         $TmpLabelName.Refresh()
         $BGInfoPanel.controls.AddRange(@($TmpLabelName))

@@ -267,7 +267,7 @@ Function Start-PSLauncherColorPicker {
             $label.ForeColor = $box3.Text
             $PictureBox1.imageLocation = $box4.Text
             $Update_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box6.Text)
-            $Set_Button.BackColor = $box1.Text
+            $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($box6.Text)
             $Update_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $Set_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
             $box1_Label.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($box5.Text)
@@ -285,7 +285,7 @@ Function Start-PSLauncherColorPicker {
     $Set_Button.text = 'Set'
     $Set_Button.width = 200
     $Set_Button.height = 30
-    $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $Set_Button.BackColor = [System.Drawing.ColorTranslator]::FromHtml($ButtonColor)
     $Set_Button.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($TextColor)
     $Set_Button.location = New-Object System.Drawing.Point(10, 90)
     $Set_Button.Font = New-Object System.Drawing.Font('Tahoma', 10)
