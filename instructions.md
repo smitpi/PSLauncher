@@ -1,8 +1,7 @@
 # PSLauncher
  
 ## Description
-A GUI to launch any PowerShell script, function, file, or any other executables. You can also create a SysTray tool for quick access. Both apps use the same json config file. So, all your config is in sync.
-    Also created menus that assists in creating the buttons and panels. It just asks you a couple of questions, and it adds the config to the json file. After a refresh, the new buttons or panels are available to everyone using it.
+A GUI to launch any PowerShell script, function, or any other executables. You have the option to run any of these options as a normal user or as an Admin. Everything is saved in a json config file. Also created menu items that assists in creating the buttons, panels, and colour schemes. There is no need to manually edit the config file.
  
 ## Getting Started
 - Install from PowerShell Gallery [PS Gallery](https://www.powershellgallery.com/packages/PSLauncher)
