@@ -1,13 +1,43 @@
-site_name: "PSLauncher"
-site_description: "Documentation for PowerShell Module: PSLauncher"
-site_author: "Pierre Smit"
-site_url: "https://smitpi.github.io/PSLauncher"
-
-repo_url: "https://github.com/smitpi/PSLauncher"
-repo_name: "smitpi/PSLauncher"
-
-copyright: "(c) 2021 Pierre. All rights reserved."
-
+site_name: 'PSLauncher'
+site_description: 'Documentation for PowerShell Module: PSLauncher'
+site_author: 'Pierre Smit'
+site_url: 'https://smitpi.github.io/PSLauncher'
+ 
+repo_url: 'https://github.com/smitpi/PSLauncher'
+repo_name:  'smitpi/PSLauncher'
+ 
+copyright: '(c) 2021 Pierre. All rights reserved.'
+ 
+extra:
+  manifest: manifest.webmanifest
+  social:
+    - icon: fontawesome/brands/github-square
+      link: 'https://smitpi.github.io/PSLauncher'
+ 
+markdown_extensions:
+  - pymdownx.keys
+  - pymdownx.snippets
+  - pymdownx.superfences
+ 
 theme:
-  name: null
-  custom_dir: "cinder"
+  name: material
+  features:
+    - navigation.instant
+  language: en
+  favicon: ''
+  logo: ''
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      primary: blue grey
+      accent: indigo
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      primary: blue grey
+      accent: indigo
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode

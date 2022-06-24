@@ -1,15 +1,14 @@
-﻿#region Private Functions
-#endregion
- 
- 
-#region Public Functions
+﻿#region Public Functions
 #region Add-PSLauncherEntry.ps1
-############################################
-# source: Add-PSLauncherEntry.ps1
-# Module: PSLauncher
-# version: 0.1.17
-# Author: Pierre Smit
-# Company: HTPCZA Tech
+######## Function 1 of 4 ##################
+# Function:         Add-PSLauncherEntry
+# Module:           PSLauncher
+# ModuleVersion:    0.1.17
+# Author:           Pierre Smit
+# Company:          HTPCZA Tech
+# CreatedOn:        2022/04/01 21:34:46
+# ModifiedOn:       2022/04/02 08:36:21
+# Synopsis:         Add a button or panal to the config.
 #############################################
  
 <#
@@ -188,12 +187,15 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 #endregion
  
 #region New-PSLauncherConfigFile.ps1
-############################################
-# source: New-PSLauncherConfigFile.ps1
-# Module: PSLauncher
-# version: 0.1.17
-# Author: Pierre Smit
-# Company: HTPCZA Tech
+######## Function 2 of 4 ##################
+# Function:         New-PSLauncherConfigFile
+# Module:           PSLauncher
+# ModuleVersion:    0.1.17
+# Author:           Pierre Smit
+# Company:          HTPCZA Tech
+# CreatedOn:        2022/03/20 13:17:14
+# ModifiedOn:       2022/06/08 09:55:40
+# Synopsis:         Creates the config file with the provided settings
 #############################################
  
 <#
@@ -348,12 +350,15 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 #endregion
  
 #region Start-PSLauncher.ps1
-############################################
-# source: Start-PSLauncher.ps1
-# Module: PSLauncher
-# version: 0.1.17
-# Author: Pierre Smit
-# Company: HTPCZA Tech
+######## Function 3 of 4 ##################
+# Function:         Start-PSLauncher
+# Module:           PSLauncher
+# ModuleVersion:    0.1.17
+# Author:           Pierre Smit
+# Company:          HTPCZA Tech
+# CreatedOn:        2022/03/20 13:17:14
+# ModifiedOn:       2022/06/08 10:26:51
+# Synopsis:         Reads the config file and launches the GUI
 #############################################
  
 <#
@@ -805,12 +810,15 @@ Export-ModuleMember -Function Start-PSLauncher
 #endregion
  
 #region Start-PSLauncherColorPicker.ps1
-############################################
-# source: Start-PSLauncherColorPicker.ps1
-# Module: PSLauncher
-# version: 0.1.17
-# Author: Pierre Smit
-# Company: HTPCZA Tech
+######## Function 4 of 4 ##################
+# Function:         Start-PSLauncherColorPicker
+# Module:           PSLauncher
+# ModuleVersion:    0.1.17
+# Author:           Pierre Smit
+# Company:          HTPCZA Tech
+# CreatedOn:        2022/03/20 13:17:14
+# ModifiedOn:       2022/06/08 10:41:07
+# Synopsis:         Launches a GUI form to test and change the Color of PSLauncher.
 #############################################
  
 <#
