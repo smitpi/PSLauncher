@@ -130,24 +130,20 @@ Function New-PSLauncherConfigFile {
                ],
     "Buttons":  [
                     {
-                        "$Panel01":  [
+                        "name":  "$Panel01",
+                        "PanelNumber":  0,
+                        "Buttons":  {
+
+                                    }
+
+                                    
+                    },
                                         {
-                                            "Config":  {
-                                                           "PanelNumber":  "1"
-                                                       },
-                                            "buttons":  [
-                                                        ]
-                                        }
-                                    ],
-                        "$Panel02":  [
-                                        {
-                                            "Config":  {
-                                                           "PanelNumber":  "2"
-                                                       },
-                                            "buttons":  [
-                                                        ]
-                                        }
-                                    ]
+                        "name":  "$Panel02",
+                        "PanelNumber":  1,
+                        "Buttons":  {
+
+                                    }
                     }
                 ]
 }

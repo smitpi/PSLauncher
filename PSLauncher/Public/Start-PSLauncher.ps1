@@ -244,7 +244,7 @@ Function Start-PSLauncher {
 
     #region build main form
     $module = Get-Module pslauncher
-    if (-not($module)) {Get-Module pslauncher -ListAvailable}
+    if (-not($module)) {$module = Get-Module pslauncher -ListAvailable}
 
     $Form = New-Object system.Windows.Forms.Form
     $Form.ClientSize = New-Object System.Drawing.Point(1050, 800)
@@ -266,19 +266,13 @@ Function Start-PSLauncher {
 
     #region create panels and buttons
     $data = $jsondata.Buttons
-    $panellist = $data | Get-Member | Where-Object { $_.membertype -eq 'NoteProperty' } | Select-Object name
-    $panellistSorted = $panellist | ForEach-Object { [pscustomobject]@{
-            name        = $_.Name
-            PanelNumber = $data.($_.name).config.PanelNumber
-        }
-    } | Sort-Object -Property PanelNumber
-
-
-    foreach ($pan in $panellistSorted) {
+    foreach ($pan in $data) {
         $panel = NPanel -LabelText $pan.name
-        foreach ($but in $data.($pan.name).buttons) {
-            [scriptblock]$clickAction = [scriptblock]::Create( "Invoke-Action -control `$_ -name `"$($but.Name)`" -command `"$($but.command)`" -arguments `"$(($but|Select-Object -ExpandProperty arguments -ErrorAction SilentlyContinue) -replace '"' , '`"`"')`" -mode $($but.Mode) -Window `"$($but.Window)`" -RunAsAdmin `"$($but.RunAsAdmin)`"" )
-            NButton -Text $but.Name -clickAction $clickAction -panel $panel
+        foreach ($but in $pan.buttons) {
+            if (-not([string]::IsNullOrEmpty($but))) {
+                [scriptblock]$clickAction = [scriptblock]::Create( "Invoke-Action -control `$_ -name `"$($but.Name)`" -command `"$($but.command)`" -arguments `"$(($but|Select-Object -ExpandProperty arguments -ErrorAction SilentlyContinue) -replace '"' , '`"`"')`" -mode $($but.Mode) -Window `"$($but.Window)`" -RunAsAdmin `"$($but.RunAsAdmin)`"" )
+                NButton -Text $but.Name -clickAction $clickAction -panel $panel
+            }
         }
     }
     #endregion
@@ -335,15 +329,15 @@ Function Start-PSLauncher {
 
     try {
         $BginfoDetails = [PSCustomObject]@{
-            'PC Domain'       = [string]((Get-CimInstance -ClassName Win32_ComputerSystem).domain).tolower()
-            'User Name'       = "$($env:USERDOMAIN)\$(($env:USERNAME).ToLower())"
-            'User Domain'     = ($env:USERDNSDOMAIN).tolower()
-            OS                = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
-            'Boot Time'       = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
-            'Install Date'    = (Get-CimInstance -ClassName Win32_OperatingSystem).InstallDate
-            Memory            = "$([Math]::Round((Get-CimInstance -ClassName Win32_ComputerSystem).TotalPhysicalMemory / 1gb)) GB"
-            IP                = @(((Get-CimInstance -Class Win32_NetworkAdapterConfiguration -Filter IPEnabled=$true).ipaddress | Out-String).Trim())
-            'Free Space'      = @(((Get-CimInstance -Namespace root/cimv2 -ClassName win32_logicaldisk | Where-Object {$_.DriveType -like 3} | ForEach-Object {"$($_.DeviceID) $([Math]::Round($_.FreeSpace / 1gb)) GB"}) | Out-String).trim())
+            'PC Domain'    = [string]((Get-CimInstance -ClassName Win32_ComputerSystem).domain).tolower()
+            'User Name'    = "$($env:USERDOMAIN)\$(($env:USERNAME).ToLower())"
+            'User Domain'  = ($env:USERDNSDOMAIN).tolower()
+            OS             = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
+            'Boot Time'    = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
+            'Install Date' = (Get-CimInstance -ClassName Win32_OperatingSystem).InstallDate
+            Memory         = "$([Math]::Round((Get-CimInstance -ClassName Win32_ComputerSystem).TotalPhysicalMemory / 1gb)) GB"
+            IP             = @(((Get-CimInstance -Class Win32_NetworkAdapterConfiguration -Filter IPEnabled=$true).ipaddress | Out-String).Trim())
+            'Free Space'   = @(((Get-CimInstance -Namespace root/cimv2 -ClassName win32_logicaldisk | Where-Object {$_.DriveType -like 3} | ForEach-Object {"$($_.DeviceID) $([Math]::Round($_.FreeSpace / 1gb)) GB"}) | Out-String).trim())
         }
     } catch {Write-Warning 'Unable to collect pc details'}
     
@@ -391,13 +385,6 @@ Function Start-PSLauncher {
     $exit.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
     $exit.Add_Click( {
             Write-Output 'exiting Util'
-            $cmd = {
-                Param([int]$ID)
-                $r = Get-Runspace -Id $id
-                $r.close()
-                $r.dispose()
-            }
-            Start-ThreadJob -ScriptBlock $cmd -ArgumentList $rs.id
             $Form.Close()
         })
 
@@ -413,7 +400,6 @@ Function Start-PSLauncher {
     $reload.Add_Click( {
             Write-Output 'Reloading Util'
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
-            Get-Job -Name PSLauncherJob | Stop-Job
             $Form.Close()
         })
     $EnableLogging = New-Object system.Windows.Forms.Button
@@ -450,7 +436,6 @@ Function Start-PSLauncher {
     $AddToConfig.Add_Click( {
             ShowConsole
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Add-PSLauncherEntry -PSLauncherConfigFile $($PSLauncherConfigFile) -execute}"""
-            Get-Job -Name PSLauncherJob | Stop-Job
             $Form.Close()
             HideConsole
         })

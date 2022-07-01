@@ -1,22 +1,22 @@
-﻿#region Public Functions
+#region Public Functions
 #region Add-PSLauncherEntry.ps1
 ######## Function 1 of 4 ##################
 # Function:         Add-PSLauncherEntry
 # Module:           PSLauncher
-# ModuleVersion:    0.1.17
+# ModuleVersion:    0.1.18
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/04/01 21:34:46
-# ModifiedOn:       2022/04/02 08:36:21
-# Synopsis:         Add a button or panal to the config.
+# ModifiedOn:       2022/07/02 01:15:00
+# Synopsis:         Add a button or panel to the config.
 #############################################
  
 <#
 .SYNOPSIS
-Add a button or panal to the config.
+Add a button or panel to the config.
 
 .DESCRIPTION
-Add a button or panal to the config.
+Add a button or panel to the config.
 
 .PARAMETER PSLauncherConfigFile
 Path to the config file created by New-PSLauncherConfigFile
@@ -36,73 +36,58 @@ Function Add-PSLauncherEntry {
 	)
 
 	try {
-		$jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json -ErrorAction stop
+		[System.Collections.Generic.List[psobject]]$jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json -ErrorAction stop
 	} catch {
 		Add-Type -AssemblyName System.Windows.Forms
 		$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ Filter = 'JSON | *.json' }
 		[void]$FileBrowser.ShowDialog()
 		$PSLauncherConfigFile = Get-Item $FileBrowser.FileName
-		$jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
+		[System.Collections.Generic.List[psobject]]$jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
 	}
 
 	Clear-Host
-	Write-Color 'Do you want to add a Button or a Panel' -Color DarkYellow -LinesAfter 1
-	Write-Color '0', ': ', 'Panel' -Color Yellow, Yellow, Green
-	Write-Color '1', ': ', 'Button' -Color Yellow, Yellow, Green
-	Write-Color '2', ': ', 'Launch Color Picker' -Color Yellow, Yellow, Green
+	Write-Color 'Edit Config File' -Color DarkYellow -LinesAfter 1
+	Write-Color '0', ': ', 'Add a Panel' -Color Yellow, Yellow, Green
+	Write-Color '1', ': ', 'Add a Button' -Color Yellow, Yellow, Green
+	Write-Color '2', ': ', 'Launch Color Picker Window' -Color Yellow, Yellow, Green
+	Write-Color '3', ': ', 'ReOrder Existing Panels' -Color Yellow, Yellow, Green
+	Write-Color '4', ': ', 'ReOrder Existing Buttons' -Color Yellow, Yellow, Green
 	Write-Output ' '
 	[int]$GuiAddChoice = Read-Host 'Answer'
 
 
 	if ($GuiAddChoice -eq 0) {
-		$data = $jsondata.Buttons
-		$NewConfig = @{}
-		$panellist = $jsondata.Buttons | Get-Member | Where-Object { $_.membertype -eq 'NoteProperty' }
-		foreach ($mem in $panellist) {
-			$NewConfig += @{
-				$mem.Name = $jsondata.Buttons.$($mem.Name)
-			}
-		}
-		$PanelName = Read-Host 'Panel Name '
-		[int]$PanelNumber = [int]($NewConfig.Values.config.PanelNumber | Sort-Object -Descending | Select-Object -First 1) + 1
+		Clear-Host
+		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
+		$data.Add(
+			[pscustomobject]@{
+				name        = (Read-Host 'Panel Name')
+				PanelNumber = (($data.panelnumber | Sort-Object -Descending | Select-Object -First 1 ) + 1)
+				Buttons     = [pscustomobject]@{}
+			})
 
-		$AddPanel = @"
-		{
-			"Config": {
-				"PanelNumber": "$($PanelNumber)"
-			},
-			"buttons": [
-			]
-		}
-"@
-		$NewConfig += @{$PanelName = ($AddPanel | ConvertFrom-Json) }
 		$Update = @()
 		$Update = [psobject]@{
 			Config  = $jsondata.Config
-			Buttons = $NewConfig
+			Buttons = $data
 		}
+
 		$Update | ConvertTo-Json -Depth 5 | Set-Content -Path $PSLauncherConfigFile -Force
 
 	}
 	if ($GuiAddChoice -eq 1) {
-		$data = $jsondata.Buttons
-		$panellist = $jsondata.Buttons | Get-Member | Where-Object { $_.membertype -eq 'NoteProperty' } | Select-Object name
-		$panellistSorted = $panellist | ForEach-Object { [pscustomobject]@{
-				name        = $_.Name
-				PanelNumber = $data.($_.name).config.PanelNumber
-			}
-		} | Sort-Object -Property PanelNumber
+		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
 		$index = 0
-
 		Clear-Host
 		Write-Color 'Select the panel where the button will be added' -Color DarkYellow -LinesAfter 1
-		foreach ($p in $panellistSorted) {
+		foreach ($p in $data) {
 			Write-Color $index, ': ', $p.name -Color Yellow, Yellow, Green
 			$index++
 		}
 		Write-Output ' '
 		[int]$indexnum = Read-Host 'Panel Number '
 
+		
 		do {
 			$name = Read-Host 'New Button Name'
 
@@ -158,24 +143,100 @@ Function Add-PSLauncherEntry {
 				'0' {$RunAs = 'Yes'}
 				'1' {$RunAs = 'No'}
 			}
-			$jsondata.Buttons.($panellistSorted[$indexnum].name).buttons += [PSCustomObject] @{
-				Name       = $name
-				Command    = $cmd.command
-				Arguments  = $cmd.arguments
-				Mode       = $cmd.mode
-				Window     = $Window
-				RunAsAdmin = $RunAs
+
+			if ([string]::IsNullOrEmpty($jsondata.Buttons[$indexnum].buttons)) {
+				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].buttons = [PSCustomObject] @{
+					ID         = 0
+					Name       = $name
+					Command    = $cmd.command
+					Arguments  = $cmd.arguments
+					Mode       = $cmd.mode
+					Window     = $Window
+					RunAsAdmin = $RunAs
+				}
+			} else {
+				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].buttons += [PSCustomObject] @{
+					ID         = (($jsondata.Buttons[$indexnum].buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
+					Name       = $name
+					Command    = $cmd.command
+					Arguments  = $cmd.arguments
+					Mode       = $cmd.mode
+					Window     = $Window
+					RunAsAdmin = $RunAs
+				}
 			}
+
 			Write-Output ' '
-			$yn = Read-Host "Add another button in $($panellistSorted[$indexnum].name) (y/n)"
+			$yn = Read-Host "Add another button in $($jsondata.Buttons[$indexnum].name) (y/n)"
 		}
 		until ($yn.ToLower() -eq 'n')
-		$jsondata | ConvertTo-Json -Depth 10 | Out-File $PSLauncherConfigFile
+		$jsondata | ConvertTo-Json -Depth 4 | Out-File $PSLauncherConfigFile
 	}
 	if ($GuiAddChoice -eq 2) {
 		$module = Get-Module pslauncher
 		if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
 		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncherColorPicker -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
+	}
+	if ($GuiAddChoice -eq 3) {
+		[System.Collections.Generic.List[psobject]]$SortData = $jsondata.buttons
+		[System.Collections.Generic.List[psobject]]$NewSortData = @()
+		$index1 = 0
+		do {
+			Clear-Host
+			$index = 0
+			foreach ($d in $SortData) {
+				Write-Color $index, ': ', $d.name -Color Yellow, Yellow, Green
+				$index++
+			}
+			[int]$indexnum = Read-Host 'Select Panel Number '
+			$SortData[$indexnum].PanelNumber = $index1
+			$NewSortData.Add($SortData[$indexnum])
+			$SortData.Remove($SortData[$indexnum])
+			$index1++   
+		}
+		while ($SortData.Count -gt 0)
+
+		$Update = @()
+		$Update = [psobject]@{
+			Config  = $jsondata.Config
+			Buttons = $NewSortData
+		}
+		$Update | ConvertTo-Json -Depth 5 | Set-Content -Path $PSLauncherConfigFile -Force
+	}
+
+
+	if ($GuiAddChoice -eq 4) {
+		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
+		$index = 0
+		Clear-Host
+		Write-Color 'Select the panel to ReOrder buttons' -Color DarkYellow -LinesAfter 1
+		foreach ($p in $data) {
+			Write-Color $index, ': ', $p.name -Color Yellow, Yellow, Green
+			$index++
+		}
+		Write-Output ' '
+		[int]$indexnum = Read-Host 'Panel Number '
+
+		[System.Collections.Generic.List[psobject]]$SortData = $jsondata.Buttons[$indexnum].buttons
+		[System.Collections.Generic.List[psobject]]$NewSortData = @()
+		$index1 = 0
+		do {
+			Clear-Host
+			$index = 0
+			foreach ($d in $SortData) {
+				Write-Color $index, ': ', $d.name -Color Yellow, Yellow, Green
+				$index++
+			}
+			[int]$num = Read-Host 'Button Number '
+			$SortData[$num].ID = $index1
+			$NewSortData.Add($SortData[$num])
+			$SortData.Remove($SortData[$num])
+			$index1++   
+		}
+		while ($SortData.Count -gt 0)
+		$jsondata.Buttons[$indexnum].buttons = $NewSortData
+		$jsondata | ConvertTo-Json -Depth 4 | Out-File $PSLauncherConfigFile
+
 	}
 	if ($Execute) {
 		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
@@ -190,11 +251,11 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.17
+# ModuleVersion:    0.1.18
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
-# ModifiedOn:       2022/06/08 09:55:40
+# ModifiedOn:       2022/07/02 00:36:12
 # Synopsis:         Creates the config file with the provided settings
 #############################################
  
@@ -284,24 +345,20 @@ Function New-PSLauncherConfigFile {
                ],
     "Buttons":  [
                     {
-                        "$Panel01":  [
+                        "name":  "$Panel01",
+                        "PanelNumber":  0,
+                        "Buttons":  {
+
+                                    }
+
+                                    
+                    },
                                         {
-                                            "Config":  {
-                                                           "PanelNumber":  "1"
-                                                       },
-                                            "buttons":  [
-                                                        ]
-                                        }
-                                    ],
-                        "$Panel02":  [
-                                        {
-                                            "Config":  {
-                                                           "PanelNumber":  "2"
-                                                       },
-                                            "buttons":  [
-                                                        ]
-                                        }
-                                    ]
+                        "name":  "$Panel02",
+                        "PanelNumber":  1,
+                        "Buttons":  {
+
+                                    }
                     }
                 ]
 }
@@ -353,11 +410,11 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.17
+# ModuleVersion:    0.1.18
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
-# ModifiedOn:       2022/06/08 10:26:51
+# ModifiedOn:       2022/07/02 01:16:32
 # Synopsis:         Reads the config file and launches the GUI
 #############################################
  
@@ -560,7 +617,7 @@ Function Start-PSLauncher {
 
     #region build main form
     $module = Get-Module pslauncher
-    if (-not($module)) {Get-Module pslauncher -ListAvailable}
+    if (-not($module)) {$module = Get-Module pslauncher -ListAvailable}
 
     $Form = New-Object system.Windows.Forms.Form
     $Form.ClientSize = New-Object System.Drawing.Point(1050, 800)
@@ -582,19 +639,13 @@ Function Start-PSLauncher {
 
     #region create panels and buttons
     $data = $jsondata.Buttons
-    $panellist = $data | Get-Member | Where-Object { $_.membertype -eq 'NoteProperty' } | Select-Object name
-    $panellistSorted = $panellist | ForEach-Object { [pscustomobject]@{
-            name        = $_.Name
-            PanelNumber = $data.($_.name).config.PanelNumber
-        }
-    } | Sort-Object -Property PanelNumber
-
-
-    foreach ($pan in $panellistSorted) {
+    foreach ($pan in $data) {
         $panel = NPanel -LabelText $pan.name
-        foreach ($but in $data.($pan.name).buttons) {
-            [scriptblock]$clickAction = [scriptblock]::Create( "Invoke-Action -control `$_ -name `"$($but.Name)`" -command `"$($but.command)`" -arguments `"$(($but|Select-Object -ExpandProperty arguments -ErrorAction SilentlyContinue) -replace '"' , '`"`"')`" -mode $($but.Mode) -Window `"$($but.Window)`" -RunAsAdmin `"$($but.RunAsAdmin)`"" )
-            NButton -Text $but.Name -clickAction $clickAction -panel $panel
+        foreach ($but in $pan.buttons) {
+            if (-not([string]::IsNullOrEmpty($but))) {
+                [scriptblock]$clickAction = [scriptblock]::Create( "Invoke-Action -control `$_ -name `"$($but.Name)`" -command `"$($but.command)`" -arguments `"$(($but|Select-Object -ExpandProperty arguments -ErrorAction SilentlyContinue) -replace '"' , '`"`"')`" -mode $($but.Mode) -Window `"$($but.Window)`" -RunAsAdmin `"$($but.RunAsAdmin)`"" )
+                NButton -Text $but.Name -clickAction $clickAction -panel $panel
+            }
         }
     }
     #endregion
@@ -651,15 +702,15 @@ Function Start-PSLauncher {
 
     try {
         $BginfoDetails = [PSCustomObject]@{
-            'PC Domain'       = [string]((Get-CimInstance -ClassName Win32_ComputerSystem).domain).tolower()
-            'User Name'       = "$($env:USERDOMAIN)\$(($env:USERNAME).ToLower())"
-            'User Domain'     = ($env:USERDNSDOMAIN).tolower()
-            OS                = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
-            'Boot Time'       = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
-            'Install Date'    = (Get-CimInstance -ClassName Win32_OperatingSystem).InstallDate
-            Memory            = "$([Math]::Round((Get-CimInstance -ClassName Win32_ComputerSystem).TotalPhysicalMemory / 1gb)) GB"
-            IP                = @(((Get-CimInstance -Class Win32_NetworkAdapterConfiguration -Filter IPEnabled=$true).ipaddress | Out-String).Trim())
-            'Free Space'      = @(((Get-CimInstance -Namespace root/cimv2 -ClassName win32_logicaldisk | Where-Object {$_.DriveType -like 3} | ForEach-Object {"$($_.DeviceID) $([Math]::Round($_.FreeSpace / 1gb)) GB"}) | Out-String).trim())
+            'PC Domain'    = [string]((Get-CimInstance -ClassName Win32_ComputerSystem).domain).tolower()
+            'User Name'    = "$($env:USERDOMAIN)\$(($env:USERNAME).ToLower())"
+            'User Domain'  = ($env:USERDNSDOMAIN).tolower()
+            OS             = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
+            'Boot Time'    = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
+            'Install Date' = (Get-CimInstance -ClassName Win32_OperatingSystem).InstallDate
+            Memory         = "$([Math]::Round((Get-CimInstance -ClassName Win32_ComputerSystem).TotalPhysicalMemory / 1gb)) GB"
+            IP             = @(((Get-CimInstance -Class Win32_NetworkAdapterConfiguration -Filter IPEnabled=$true).ipaddress | Out-String).Trim())
+            'Free Space'   = @(((Get-CimInstance -Namespace root/cimv2 -ClassName win32_logicaldisk | Where-Object {$_.DriveType -like 3} | ForEach-Object {"$($_.DeviceID) $([Math]::Round($_.FreeSpace / 1gb)) GB"}) | Out-String).trim())
         }
     } catch {Write-Warning 'Unable to collect pc details'}
     
@@ -707,13 +758,6 @@ Function Start-PSLauncher {
     $exit.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
     $exit.Add_Click( {
             Write-Output 'exiting Util'
-            $cmd = {
-                Param([int]$ID)
-                $r = Get-Runspace -Id $id
-                $r.close()
-                $r.dispose()
-            }
-            Start-ThreadJob -ScriptBlock $cmd -ArgumentList $rs.id
             $Form.Close()
         })
 
@@ -729,7 +773,6 @@ Function Start-PSLauncher {
     $reload.Add_Click( {
             Write-Output 'Reloading Util'
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
-            Get-Job -Name PSLauncherJob | Stop-Job
             $Form.Close()
         })
     $EnableLogging = New-Object system.Windows.Forms.Button
@@ -766,7 +809,6 @@ Function Start-PSLauncher {
     $AddToConfig.Add_Click( {
             ShowConsole
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Add-PSLauncherEntry -PSLauncherConfigFile $($PSLauncherConfigFile) -execute}"""
-            Get-Job -Name PSLauncherJob | Stop-Job
             $Form.Close()
             HideConsole
         })
@@ -813,7 +855,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.17
+# ModuleVersion:    0.1.18
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
