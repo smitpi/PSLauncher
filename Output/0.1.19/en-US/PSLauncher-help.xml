@@ -6,11 +6,11 @@
       <command:verb>Add</command:verb>
       <command:noun>PSLauncherEntry</command:noun>
       <maml:description>
-        <maml:para>Add a button or panal to the config.</maml:para>
+        <maml:para>Add a button or panel to the config.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Add a button or panal to the config.</maml:para>
+      <maml:para>Add a button or panel to the config.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>

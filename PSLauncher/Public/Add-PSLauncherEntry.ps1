@@ -77,22 +77,24 @@ Function Add-PSLauncherEntry {
 	}
 
 	Clear-Host
-	Write-Color 'Edit Config File' -Color DarkYellow -LinesAfter 1
-	Write-Color '0', ': ', 'Add a Panel' -Color Yellow, Yellow, Green
-	Write-Color '1', ': ', 'Add a Button' -Color Yellow, Yellow, Green
-	Write-Color '2', ': ', 'Launch Color Picker Window' -Color Yellow, Yellow, Green
-	Write-Color '3', ': ', 'ReOrder Existing Panels' -Color Yellow, Yellow, Green
-	Write-Color '4', ': ', 'ReOrder Existing Buttons' -Color Yellow, Yellow, Green
+	Write-Color 'Do you want to Configure' -Color DarkYellow -LinesAfter 1
+	Write-Color '0', ') ', 'Add a Panel' -Color Yellow, Yellow, Green
+	Write-Color '1', ') ', 'Add a Button' -Color Yellow, Yellow, Green
+	Write-Color '2', ') ', 'Bulk Add Buttons from script folder' -Color Yellow, Yellow, Green
+	Write-Color '3', ') ', 'ReOrder Existing Panels' -Color Yellow, Yellow, Green
+	Write-Color '4', ') ', 'ReOrder Existing Buttons' -Color Yellow, Yellow, Green
+	Write-Color '5', ') ', 'Move Button between Panels' -Color Yellow, Yellow, Green
+	Write-Color '6', ') ', 'Launch Color Picker Window' -Color Yellow, Yellow, Green
 	Write-Output ' '
 	[int]$GuiAddChoice = Read-Host 'Answer'
 
 
 	if ($GuiAddChoice -eq 0) {
-		Clear-Host
 		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
+		Clear-Host
 		$data.Add(
 			[pscustomobject]@{
-				name        = (Read-Host 'Panel Name')
+				name        = (Read-Host 'New Panel Name')
 				PanelNumber = (($data.panelnumber | Sort-Object -Descending | Select-Object -First 1 ) + 1)
 				Buttons     = [pscustomobject]@{}
 			})
@@ -112,13 +114,12 @@ Function Add-PSLauncherEntry {
 		Clear-Host
 		Write-Color 'Select the panel where the button will be added' -Color DarkYellow -LinesAfter 1
 		foreach ($p in $data) {
-			Write-Color $index, ': ', $p.name -Color Yellow, Yellow, Green
+			Write-Color $index, ') ', $p.name -Color Yellow, Yellow, Green
 			$index++
 		}
 		Write-Output ' '
 		[int]$indexnum = Read-Host 'Panel Number '
-
-		
+			
 		do {
 			$name = Read-Host 'New Button Name'
 
@@ -175,8 +176,8 @@ Function Add-PSLauncherEntry {
 				'1' {$RunAs = 'No'}
 			}
 
-			if ([string]::IsNullOrEmpty($jsondata.Buttons[$indexnum].buttons)) {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].buttons = [PSCustomObject] @{
+			if ($jsondata.Buttons[$indexnum].buttons.name.count -lt 1) {
+				$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
 					ID         = 0
 					Name       = $name
 					Command    = $cmd.command
@@ -186,8 +187,8 @@ Function Add-PSLauncherEntry {
 					RunAsAdmin = $RunAs
 				}
 			} else {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].buttons += [PSCustomObject] @{
-					ID         = (($jsondata.Buttons[$indexnum].buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
+				$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
+					ID         = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
 					Name       = $name
 					Command    = $cmd.command
 					Arguments  = $cmd.arguments
@@ -196,16 +197,13 @@ Function Add-PSLauncherEntry {
 					RunAsAdmin = $RunAs
 				}
 			}
-
-			Write-Output ' '
-			$yn = Read-Host "Add another button in $($jsondata.Buttons[$indexnum].name) (y/n)"
+			$check = Read-Host "Add another button to $($jsondata.Buttons[$indexnum].name) (y/n) "
 		}
-		until ($yn.ToLower() -eq 'n')
-		$jsondata | ConvertTo-Json -Depth 4 | Out-File $PSLauncherConfigFile
+		while ($check.ToLower() -notlike 'n')
+
+		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 	}
-	if ($GuiAddChoice -eq 2) {
-		$module = Get-Module pslauncher
-		if (![bool]$module) { $module = Get-Module pslauncher -ListAvailable }
+	if ($GuiAddChoice -eq 6) {
 		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncherColorPicker -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
 	}
 	if ($GuiAddChoice -eq 3) {
@@ -214,12 +212,13 @@ Function Add-PSLauncherEntry {
 		$index1 = 0
 		do {
 			Clear-Host
+			Write-Color 'Select the next Panel (Left to Right)' -Color DarkYellow -LinesAfter 1
 			$index = 0
 			foreach ($d in $SortData) {
-				Write-Color $index, ': ', $d.name -Color Yellow, Yellow, Green
+				Write-Color $index, ') ', $d.name -Color Yellow, Yellow, Green
 				$index++
 			}
-			[int]$indexnum = Read-Host 'Select Panel Number '
+			[int]$indexnum = Read-Host 'Panel Number '
 			$SortData[$indexnum].PanelNumber = $index1
 			$NewSortData.Add($SortData[$indexnum])
 			$SortData.Remove($SortData[$indexnum])
@@ -234,15 +233,13 @@ Function Add-PSLauncherEntry {
 		}
 		$Update | ConvertTo-Json -Depth 5 | Set-Content -Path $PSLauncherConfigFile -Force
 	}
-
-
 	if ($GuiAddChoice -eq 4) {
 		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
 		$index = 0
 		Clear-Host
 		Write-Color 'Select the panel to ReOrder buttons' -Color DarkYellow -LinesAfter 1
 		foreach ($p in $data) {
-			Write-Color $index, ': ', $p.name -Color Yellow, Yellow, Green
+			Write-Color $index, ') ', $p.name -Color Yellow, Yellow, Green
 			$index++
 		}
 		Write-Output ' '
@@ -253,9 +250,10 @@ Function Add-PSLauncherEntry {
 		$index1 = 0
 		do {
 			Clear-Host
+			Write-Color 'Select the next Button (Top to Bottom)' -Color DarkYellow -LinesAfter 1
 			$index = 0
 			foreach ($d in $SortData) {
-				Write-Color $index, ': ', $d.name -Color Yellow, Yellow, Green
+				Write-Color $index, ') ', $d.name -Color Yellow, Yellow, Green
 				$index++
 			}
 			[int]$num = Read-Host 'Button Number '
@@ -266,8 +264,128 @@ Function Add-PSLauncherEntry {
 		}
 		while ($SortData.Count -gt 0)
 		$jsondata.Buttons[$indexnum].buttons = $NewSortData
-		$jsondata | ConvertTo-Json -Depth 4 | Out-File $PSLauncherConfigFile
+		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
+	}
+	if ($GuiAddChoice -eq 2) {
+		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
+		$index = 0
+		Clear-Host
+		Write-Color 'Select the panel where the button will be added' -Color DarkYellow -LinesAfter 1
+		foreach ($p in $data) {
+			Write-Color $index, ') ', $p.name -Color Yellow, Yellow, Green
+			$index++
+		}
+		Write-Output ' '
+		[int]$indexnum = Read-Host 'Panel Number '
 
+		try {
+			$folder = Get-Item (Read-Host 'Path to script ps1 files')
+			$files = Get-ChildItem "$($folder.FullName)\*.ps1"
+		} catch {Write-Warning "Error: `n`tMessage:$($_.Exception.Message)"}
+
+		Write-Color 'Choose the window size:' -Color DarkRed -StartTab 1 -LinesBefore 2
+		Write-Color '0) ', 'Hidden' -Color Yellow, Green
+		Write-Color '1) ', 'Normal' -Color Yellow, Green
+		Write-Color '2) ', 'Minimized' -Color Yellow, Green
+		Write-Color '3) ', 'Maximized' -Color Yellow, Green
+		$modechoose = Read-Host 'Answer'
+
+		switch ($modechoose) {
+			'0' {$Window = 'Hidden'}
+			'1' {$Window = 'Normal'}
+			'2' {$Window = 'Minimized'}
+			'3' {$Window = 'Maximized'}
+		}
+
+		Write-Color 'Run As Admin:' -Color DarkRed -StartTab 1 -LinesBefore 2
+		Write-Color '0) ', 'Yes' -Color Yellow, Green
+		Write-Color '1) ', 'No' -Color Yellow, Green
+		$modechoose = Read-Host 'Answer'
+		switch ($modechoose) {
+			'0' {$RunAs = 'Yes'}
+			'1' {$RunAs = 'No'}
+		}
+
+		foreach ($psfile in $files) {
+			if ($jsondata.Buttons[$indexnum].buttons.name.count -lt 1) {
+				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
+					ID         = 0
+					Name       = $psfile.BaseName
+					Command    = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+					Arguments  = $psfile.FullName
+					Mode       = 'PSFile'
+					Window     = $Window
+					RunAsAdmin = $RunAs
+				}
+			} else {
+				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
+					ID         = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
+					Name       = $psfile.BaseName
+					Command    = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+					Arguments  = $psfile.FullName
+					Mode       = 'PSFile'
+					Window     = $Window
+					RunAsAdmin = $RunAs
+				}
+			}
+		}
+		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
+	}
+	if ($GuiAddChoice -eq 5) {
+		do {
+			[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
+			$index = 0
+			Clear-Host
+			Write-Color 'Original Panel' -Color DarkYellow -LinesAfter 1
+			foreach ($p in $data) {
+				Write-Color $index, ') ', $p.name -Color Yellow, Yellow, Green
+				$index++
+			}
+			Write-Output ' '
+			[int]$indexnum = Read-Host 'Panel Number '
+
+			[System.Collections.Generic.List[psobject]]$OldPanel = $jsondata.buttons[$indexnum].Buttons
+			$index = 0
+			Write-Color 'Button to move' -Color DarkYellow -LinesAfter 1
+			foreach ($but in $OldPanel) {
+    Write-Color $index, ') ', $but.name -Color Yellow, Yellow, Green
+    $index++
+			}
+			Write-Output ' '
+			[int]$indexbut = Read-Host 'Button Number '
+
+			$index = 0
+			Write-Color 'Destination Panel' -Color DarkYellow -LinesAfter 1
+			foreach ($p in $data) {
+				Write-Color $index, ') ', $p.name -Color Yellow, Yellow, Green
+				$index++
+			}
+			Write-Output ' '
+			[int]$destnum = Read-Host 'Panel Number '
+			[System.Collections.Generic.List[psobject]]$NewPanel = $jsondata.buttons[$destnum].Buttons
+
+			if ($NewPanel.id) { $OldPanel[$indexbut].ID = (($NewPanel.id | Sort-Object -Descending)[0] + 1)}
+			else {$OldPanel[$indexbut].ID = 0}
+ 
+			[void]$NewPanel.Add($OldPanel[$indexbut])
+			$OldPanel.Remove($OldPanel[$indexbut])
+
+			$buttonsort = 0
+			$OldPanel | Sort-Object -Property ID | ForEach-Object {
+    $_.ID = $buttonsort
+    $buttonsort++
+			}
+
+			$NewPanel | Where-Object {$_ -like $null} | ForEach-Object {$NewPanel.Remove($_)}
+			$OldPanel | Where-Object {$_ -like $null} | ForEach-Object {$OldPanel.Remove($_)}
+
+			$jsondata.buttons[$indexnum].Buttons = $OldPanel
+			$jsondata.buttons[$destnum].Buttons = $NewPanel
+			$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
+
+			$check = Read-Host 'Move another button (y/n) '
+		}
+		while ($check.ToLower() -notlike 'n')
 	}
 	if ($Execute) {
 		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""

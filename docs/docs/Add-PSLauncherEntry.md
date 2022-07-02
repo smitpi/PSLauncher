@@ -8,7 +8,7 @@ schema: 2.0.0
 # Add-PSLauncherEntry
 
 ## SYNOPSIS
-Add a button or panal to the config.
+Add a button or panel to the config.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Add-PSLauncherEntry [[-PSLauncherConfigFile] <FileInfo>] [-Execute] [<CommonPara
 ```
 
 ## DESCRIPTION
-Add a button or panal to the config.
+Add a button or panel to the config.
 
 ## EXAMPLES
 
