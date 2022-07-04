@@ -177,7 +177,7 @@ Function Add-PSLauncherEntry {
 			}
 
 			if ($jsondata.Buttons[$indexnum].buttons.name.count -lt 1) {
-				$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
+				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
 					ID         = 0
 					Name       = $name
 					Command    = $cmd.command
@@ -187,7 +187,7 @@ Function Add-PSLauncherEntry {
 					RunAsAdmin = $RunAs
 				}
 			} else {
-				$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
+				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
 					ID         = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
 					Name       = $name
 					Command    = $cmd.command
