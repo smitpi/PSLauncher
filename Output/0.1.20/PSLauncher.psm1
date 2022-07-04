@@ -3,11 +3,11 @@
 ######## Function 1 of 4 ##################
 # Function:         Add-PSLauncherEntry
 # Module:           PSLauncher
-# ModuleVersion:    0.1.19
+# ModuleVersion:    0.1.20
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/04/01 21:34:46
-# ModifiedOn:       2022/07/02 07:35:07
+# ModifiedOn:       2022/07/04 08:06:28
 # Synopsis:         Add a button or panel to the config.
 #############################################
  
@@ -146,7 +146,7 @@ Function Add-PSLauncherEntry {
 			}
 
 			if ($jsondata.Buttons[$indexnum].buttons.name.count -lt 1) {
-				$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
+				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
 					ID         = 0
 					Name       = $name
 					Command    = $cmd.command
@@ -156,7 +156,7 @@ Function Add-PSLauncherEntry {
 					RunAsAdmin = $RunAs
 				}
 			} else {
-				$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
+				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
 					ID         = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
 					Name       = $name
 					Command    = $cmd.command
@@ -369,7 +369,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.19
+# ModuleVersion:    0.1.20
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
@@ -528,7 +528,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.19
+# ModuleVersion:    0.1.20
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
@@ -973,7 +973,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.19
+# ModuleVersion:    0.1.20
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
