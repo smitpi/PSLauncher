@@ -176,26 +176,17 @@ Function Add-PSLauncherEntry {
 				'1' {$RunAs = 'No'}
 			}
 
-			if ($jsondata.Buttons[$indexnum].buttons.name.count -lt 1) {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
-					ID         = 0
-					Name       = $name
-					Command    = $cmd.command
-					Arguments  = $cmd.arguments
-					Mode       = $cmd.mode
-					Window     = $Window
-					RunAsAdmin = $RunAs
-				}
-			} else {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
-					ID         = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
-					Name       = $name
-					Command    = $cmd.command
-					Arguments  = $cmd.arguments
-					Mode       = $cmd.mode
-					Window     = $Window
-					RunAsAdmin = $RunAs
-				}
+			if ([string]::IsNullOrEmpty($jsondata.Buttons[$indexnum].Buttons.id)) {[int]$ID = 0}
+			else { [int]$ID = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)}
+
+			[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
+				ID         = 0
+				Name       = $name
+				Command    = $cmd.command
+				Arguments  = $cmd.arguments
+				Mode       = $cmd.mode
+				Window     = $Window
+				RunAsAdmin = $RunAs
 			}
 			$check = Read-Host "Add another button to $($jsondata.Buttons[$indexnum].name) (y/n) "
 		}
@@ -307,26 +298,17 @@ Function Add-PSLauncherEntry {
 		}
 
 		foreach ($psfile in $files) {
-			if ($jsondata.Buttons[$indexnum].buttons.name.count -lt 1) {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
-					ID         = 0
-					Name       = $psfile.BaseName
-					Command    = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-					Arguments  = $psfile.FullName
-					Mode       = 'PSFile'
-					Window     = $Window
-					RunAsAdmin = $RunAs
-				}
-			} else {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
-					ID         = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
-					Name       = $psfile.BaseName
-					Command    = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-					Arguments  = $psfile.FullName
-					Mode       = 'PSFile'
-					Window     = $Window
-					RunAsAdmin = $RunAs
-				}
+			if ([string]::IsNullOrEmpty($jsondata.Buttons[$indexnum].Buttons.id)) {[int]$ID = 0}
+			else { [int]$ID = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)}
+
+			[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
+				ID         = 0
+				Name       = $name
+				Command    = $cmd.command
+				Arguments  = $cmd.arguments
+				Mode       = $cmd.mode
+				Window     = $Window
+				RunAsAdmin = $RunAs
 			}
 		}
 		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile

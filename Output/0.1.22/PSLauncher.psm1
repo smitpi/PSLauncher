@@ -3,11 +3,11 @@
 ######## Function 1 of 4 ##################
 # Function:         Add-PSLauncherEntry
 # Module:           PSLauncher
-# ModuleVersion:    0.1.21
+# ModuleVersion:    0.1.22
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/04/01 21:34:46
-# ModifiedOn:       2022/07/04 08:06:28
+# ModifiedOn:       2022/07/05 22:19:58
 # Synopsis:         Add a button or panel to the config.
 #############################################
  
@@ -145,26 +145,17 @@ Function Add-PSLauncherEntry {
 				'1' {$RunAs = 'No'}
 			}
 
-			if ($jsondata.Buttons[$indexnum].buttons.name.count -lt 1) {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
-					ID         = 0
-					Name       = $name
-					Command    = $cmd.command
-					Arguments  = $cmd.arguments
-					Mode       = $cmd.mode
-					Window     = $Window
-					RunAsAdmin = $RunAs
-				}
-			} else {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
-					ID         = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
-					Name       = $name
-					Command    = $cmd.command
-					Arguments  = $cmd.arguments
-					Mode       = $cmd.mode
-					Window     = $Window
-					RunAsAdmin = $RunAs
-				}
+			if ([string]::IsNullOrEmpty($jsondata.Buttons[$indexnum].Buttons.id)) {[int]$ID = 0}
+			else { [int]$ID = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)}
+
+			[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
+				ID         = 0
+				Name       = $name
+				Command    = $cmd.command
+				Arguments  = $cmd.arguments
+				Mode       = $cmd.mode
+				Window     = $Window
+				RunAsAdmin = $RunAs
 			}
 			$check = Read-Host "Add another button to $($jsondata.Buttons[$indexnum].name) (y/n) "
 		}
@@ -276,26 +267,17 @@ Function Add-PSLauncherEntry {
 		}
 
 		foreach ($psfile in $files) {
-			if ($jsondata.Buttons[$indexnum].buttons.name.count -lt 1) {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons = [PSCustomObject] @{
-					ID         = 0
-					Name       = $psfile.BaseName
-					Command    = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-					Arguments  = $psfile.FullName
-					Mode       = 'PSFile'
-					Window     = $Window
-					RunAsAdmin = $RunAs
-				}
-			} else {
-				[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
-					ID         = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)
-					Name       = $psfile.BaseName
-					Command    = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-					Arguments  = $psfile.FullName
-					Mode       = 'PSFile'
-					Window     = $Window
-					RunAsAdmin = $RunAs
-				}
+			if ([string]::IsNullOrEmpty($jsondata.Buttons[$indexnum].Buttons.id)) {[int]$ID = 0}
+			else { [int]$ID = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)}
+
+			[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
+				ID         = 0
+				Name       = $name
+				Command    = $cmd.command
+				Arguments  = $cmd.arguments
+				Mode       = $cmd.mode
+				Window     = $Window
+				RunAsAdmin = $RunAs
 			}
 		}
 		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
@@ -369,7 +351,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.21
+# ModuleVersion:    0.1.22
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
@@ -528,7 +510,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.21
+# ModuleVersion:    0.1.22
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
@@ -973,7 +955,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.21
+# ModuleVersion:    0.1.22
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
