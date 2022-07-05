@@ -192,6 +192,7 @@ Function Add-PSLauncherEntry {
 		}
 		while ($check.ToLower() -notlike 'n')
 
+		$jsondata.Buttons[$indexnum].buttons = $jsondata.Buttons[$indexnum].buttons | Where-Object {$_ -notlike $null}
 		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 	}
 	if ($GuiAddChoice -eq 6) {
