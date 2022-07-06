@@ -3,11 +3,11 @@
 ######## Function 1 of 4 ##################
 # Function:         Add-PSLauncherEntry
 # Module:           PSLauncher
-# ModuleVersion:    0.1.25
+# ModuleVersion:    0.1.26
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/04/01 21:34:46
-# ModifiedOn:       2022/07/06 04:31:42
+# ModifiedOn:       2022/07/06 05:22:25
 # Synopsis:         Add a button or panel to the config.
 #############################################
  
@@ -295,7 +295,8 @@ Function Add-PSLauncherEntry {
 			Write-Output ' '
 			[int]$indexnum = Read-Host 'Panel Number '
 
-			[System.Collections.Generic.List[psobject]]$OldPanel = $jsondata.buttons[$indexnum].Buttons
+			[System.Collections.Generic.List[psobject]]$OldPanel = @()
+			$jsondata.buttons[$indexnum].Buttons | ForEach-Object {[void]$OldPanel.Add($_)}
 			$index = 0
 			Write-Color 'Button to move' -Color DarkYellow -LinesAfter 1
 			foreach ($but in $OldPanel) {
@@ -313,22 +314,23 @@ Function Add-PSLauncherEntry {
 			}
 			Write-Output ' '
 			[int]$destnum = Read-Host 'Panel Number '
-			[System.Collections.Generic.List[psobject]]$NewPanel = $jsondata.buttons[$destnum].Buttons
+			[System.Collections.Generic.List[psobject]]$NewPanel = @()
+			$jsondata.buttons[$destnum].Buttons | ForEach-Object {[void]$NewPanel.Add($_)}
 
-			if ($NewPanel.id) { $OldPanel[$indexbut].ID = (($NewPanel.id | Sort-Object -Descending)[0] + 1)}
-			else {$OldPanel[$indexbut].ID = 0}
+			if ([string]::IsNullOrEmpty($NewPanel.id)) {$OldPanel[$indexbut].ID = 0}
+			else {$OldPanel[$indexbut].ID = (($NewPanel.id | Sort-Object -Descending)[0] + 1)}
  
 			[void]$NewPanel.Add($OldPanel[$indexbut])
-			$OldPanel.Remove($OldPanel[$indexbut])
+			[void]$OldPanel.Remove($OldPanel[$indexbut])
+
+			$NewPanel | Where-Object {$_ -like $null} | ForEach-Object {$NewPanel.Remove($_)}
+			$OldPanel | Where-Object {$_ -like $null} | ForEach-Object {$OldPanel.Remove($_)}
 
 			$buttonsort = 0
 			$OldPanel | Sort-Object -Property ID | ForEach-Object {
     $_.ID = $buttonsort
     $buttonsort++
 			}
-
-			$NewPanel | Where-Object {$_ -like $null} | ForEach-Object {$NewPanel.Remove($_)}
-			$OldPanel | Where-Object {$_ -like $null} | ForEach-Object {$OldPanel.Remove($_)}
 
 			$jsondata.buttons[$indexnum].Buttons = $OldPanel
 			$jsondata.buttons[$destnum].Buttons = $NewPanel
@@ -351,7 +353,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.25
+# ModuleVersion:    0.1.26
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
@@ -510,7 +512,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.25
+# ModuleVersion:    0.1.26
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
@@ -955,7 +957,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.25
+# ModuleVersion:    0.1.26
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
