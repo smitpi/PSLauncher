@@ -3,11 +3,11 @@
 ######## Function 1 of 4 ##################
 # Function:         Add-PSLauncherEntry
 # Module:           PSLauncher
-# ModuleVersion:    0.1.23
+# ModuleVersion:    0.1.24
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/04/01 21:34:46
-# ModifiedOn:       2022/07/05 22:38:59
+# ModifiedOn:       2022/07/06 04:12:32
 # Synopsis:         Add a button or panel to the config.
 #############################################
  
@@ -157,12 +157,11 @@ Function Add-PSLauncherEntry {
 				Window     = $Window
 				RunAsAdmin = $RunAs
 			}
+			$jsondata.Buttons[$indexnum].buttons = $jsondata.Buttons[$indexnum].buttons | Where-Object {$_ -notlike $null}
+			$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 			$check = Read-Host "Add another button to $($jsondata.Buttons[$indexnum].name) (y/n) "
 		}
 		while ($check.ToLower() -notlike 'n')
-
-		$jsondata.Buttons[$indexnum].buttons = $jsondata.Buttons[$indexnum].buttons | Where-Object {$_ -notlike $null}
-		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 	}
 	if ($GuiAddChoice -eq 6) {
 		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncherColorPicker -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
@@ -280,8 +279,9 @@ Function Add-PSLauncherEntry {
 				Window     = $Window
 				RunAsAdmin = $RunAs
 			}
+			$jsondata.Buttons[$indexnum].buttons = $jsondata.Buttons[$indexnum].buttons | Where-Object {$_ -notlike $null}
+			$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 		}
-		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 	}
 	if ($GuiAddChoice -eq 5) {
 		do {
@@ -352,7 +352,7 @@ Export-ModuleMember -Function Add-PSLauncherEntry
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.23
+# ModuleVersion:    0.1.24
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
@@ -511,7 +511,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.23
+# ModuleVersion:    0.1.24
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
@@ -956,7 +956,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.23
+# ModuleVersion:    0.1.24
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14

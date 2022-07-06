@@ -188,12 +188,11 @@ Function Add-PSLauncherEntry {
 				Window     = $Window
 				RunAsAdmin = $RunAs
 			}
+			$jsondata.Buttons[$indexnum].buttons = $jsondata.Buttons[$indexnum].buttons | Where-Object {$_ -notlike $null}
+			$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 			$check = Read-Host "Add another button to $($jsondata.Buttons[$indexnum].name) (y/n) "
 		}
 		while ($check.ToLower() -notlike 'n')
-
-		$jsondata.Buttons[$indexnum].buttons = $jsondata.Buttons[$indexnum].buttons | Where-Object {$_ -notlike $null}
-		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 	}
 	if ($GuiAddChoice -eq 6) {
 		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncherColorPicker -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
@@ -311,8 +310,9 @@ Function Add-PSLauncherEntry {
 				Window     = $Window
 				RunAsAdmin = $RunAs
 			}
+			$jsondata.Buttons[$indexnum].buttons = $jsondata.Buttons[$indexnum].buttons | Where-Object {$_ -notlike $null}
+			$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 		}
-		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 	}
 	if ($GuiAddChoice -eq 5) {
 		do {
