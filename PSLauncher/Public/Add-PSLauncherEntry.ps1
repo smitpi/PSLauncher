@@ -120,79 +120,76 @@ Function Add-PSLauncherEntry {
 		Write-Output ' '
 		[int]$indexnum = Read-Host 'Panel Number '
 			
-		do {
-			$name = Read-Host 'New Button Name'
+		$name = Read-Host 'New Button Name'
 
-			Write-Color 'Choose the mode:' -Color DarkRed -StartTab 1 -LinesBefore 2
-			Write-Color '0) ', 'PowerShell Script file' -Color Yellow, Green
-			Write-Color '1) ', 'PowerShell Command' -Color Yellow, Green
-			Write-Color '2) ', 'Other Executable' -Color Yellow, Green
-			$modechoose = Read-Host 'Answer'
+		Write-Color 'Choose the mode:' -Color DarkRed -StartTab 1 -LinesBefore 2
+		Write-Color '0) ', 'PowerShell Script file' -Color Yellow, Green
+		Write-Color '1) ', 'PowerShell Command' -Color Yellow, Green
+		Write-Color '2) ', 'Other Executable' -Color Yellow, Green
+		$modechoose = Read-Host 'Answer'
 
-			switch ($modechoose) {
-				'0' {
-					$mode = 'PSFile'
-					$command = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-					$arguments = Read-Host 'Path to .ps1 file'
-				}
-				'1' {
-					$mode = 'PSCommand'
-					$command = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
-					$arguments = Read-Host 'PowerShell command or scriptblock'
-
-				}
-				'2' {
-					$mode = 'Other'
-					$command = Read-Host 'Path to executable'
-					$arguments = Read-Host 'Arguments for the executable'
-				}
+		switch ($modechoose) {
+			'0' {
+				$mode = 'PSFile'
+				$command = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+				$arguments = Read-Host 'Path to .ps1 file'
 			}
-			$cmd = [PSCustomObject]@{
-				mode      = $mode
-				command   = $command
-				arguments = $arguments
+			'1' {
+				$mode = 'PSCommand'
+				$command = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+				$arguments = Read-Host 'PowerShell command or scriptblock'
+
 			}
-
-			Write-Color 'Choose the window size:' -Color DarkRed -StartTab 1 -LinesBefore 2
-			Write-Color '0) ', 'Hidden' -Color Yellow, Green
-			Write-Color '1) ', 'Normal' -Color Yellow, Green
-			Write-Color '2) ', 'Minimized' -Color Yellow, Green
-			Write-Color '3) ', 'Maximized' -Color Yellow, Green
-			$modechoose = Read-Host 'Answer'
-
-			switch ($modechoose) {
-				'0' {$Window = 'Hidden'}
-				'1' {$Window = 'Normal'}
-				'2' {$Window = 'Minimized'}
-				'3' {$Window = 'Maximized'}
+			'2' {
+				$mode = 'Other'
+				$command = Read-Host 'Path to executable'
+				$arguments = Read-Host 'Arguments for the executable'
 			}
+		}
+		$cmd = [PSCustomObject]@{
+			mode      = $mode
+			command   = $command
+			arguments = $arguments
+		}
 
-			Write-Color 'Run As Admin:' -Color DarkRed -StartTab 1 -LinesBefore 2
-			Write-Color '0) ', 'Yes' -Color Yellow, Green
-			Write-Color '1) ', 'No' -Color Yellow, Green
-			$modechoose = Read-Host 'Answer'
-			switch ($modechoose) {
-				'0' {$RunAs = 'Yes'}
-				'1' {$RunAs = 'No'}
-			}
+		Write-Color 'Choose the window size:' -Color DarkRed -StartTab 1 -LinesBefore 2
+		Write-Color '0) ', 'Hidden' -Color Yellow, Green
+		Write-Color '1) ', 'Normal' -Color Yellow, Green
+		Write-Color '2) ', 'Minimized' -Color Yellow, Green
+		Write-Color '3) ', 'Maximized' -Color Yellow, Green
+		$modechoose = Read-Host 'Answer'
 
-			if ([string]::IsNullOrEmpty($jsondata.Buttons[$indexnum].Buttons.id)) {[int]$ID = 0}
-			else { [int]$ID = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)}
+		switch ($modechoose) {
+			'0' {$Window = 'Hidden'}
+			'1' {$Window = 'Normal'}
+			'2' {$Window = 'Minimized'}
+			'3' {$Window = 'Maximized'}
+		}
 
-			[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
-				ID         = 0
+		Write-Color 'Run As Admin:' -Color DarkRed -StartTab 1 -LinesBefore 2
+		Write-Color '0) ', 'Yes' -Color Yellow, Green
+		Write-Color '1) ', 'No' -Color Yellow, Green
+		$modechoose = Read-Host 'Answer'
+		switch ($modechoose) {
+			'0' {$RunAs = 'Yes'}
+			'1' {$RunAs = 'No'}
+		}
+
+		if ([string]::IsNullOrEmpty($jsondata.Buttons[$indexnum].Buttons.id)) {[int]$ID = 0}
+		else { [int]$ID = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)}
+		[System.Collections.Generic.List[psobject]]$TempButtons = @()
+		$jsondata.Buttons[$indexnum].Buttons | ForEach-Object {$TempButtons.Add($_)}
+		$TempButtons.Add([PSCustomObject] @{
+				ID         = $ID
 				Name       = $name
 				Command    = $cmd.command
 				Arguments  = $cmd.arguments
 				Mode       = $cmd.mode
 				Window     = $Window
 				RunAsAdmin = $RunAs
-			}
-			$jsondata.Buttons[$indexnum].buttons = $jsondata.Buttons[$indexnum].buttons | Where-Object {$_ -notlike $null}
-			$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
-			$check = Read-Host "Add another button to $($jsondata.Buttons[$indexnum].name) (y/n) "
-		}
-		while ($check.ToLower() -notlike 'n')
+			})
+		$jsondata.Buttons[$indexnum].Buttons = $TempButtons
+		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 	}
 	if ($GuiAddChoice -eq 6) {
 		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncherColorPicker -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
@@ -297,22 +294,24 @@ Function Add-PSLauncherEntry {
 			'1' {$RunAs = 'No'}
 		}
 
+		[System.Collections.Generic.List[psobject]]$TempButtons = @()
+		$jsondata.Buttons[$indexnum].Buttons | ForEach-Object {$TempButtons.Add($_)}
 		foreach ($psfile in $files) {
 			if ([string]::IsNullOrEmpty($jsondata.Buttons[$indexnum].Buttons.id)) {[int]$ID = 0}
 			else { [int]$ID = (($jsondata.Buttons[$indexnum].Buttons.id | Sort-Object -Descending | Select-Object -First 1) + 1)}
-
-			[System.Collections.Generic.List[psobject]]$jsondata.Buttons[$indexnum].Buttons += [PSCustomObject] @{
-				ID         = 0
-				Name       = $name
-				Command    = $cmd.command
-				Arguments  = $cmd.arguments
-				Mode       = $cmd.mode
-				Window     = $Window
-				RunAsAdmin = $RunAs
-			}
-			$jsondata.Buttons[$indexnum].buttons = $jsondata.Buttons[$indexnum].buttons | Where-Object {$_ -notlike $null}
-			$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
+			
+			$TempButtons.Add([PSCustomObject] @{
+					ID         = $ID
+					Name       = $psfile.BaseName
+					Command    = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+					Arguments  = $psfile.FullName
+					Mode       = 'PSFile'
+					Window     = $Window
+					RunAsAdmin = $RunAs
+				})	
 		}
+		$jsondata.Buttons[$indexnum].Buttons = $TempButtons
+		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 	}
 	if ($GuiAddChoice -eq 5) {
 		do {
