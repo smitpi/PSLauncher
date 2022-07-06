@@ -382,14 +382,14 @@ Function Start-PSLauncher {
     $exit.Font = New-Object System.Drawing.Font('Tahoma', 8)
     $exit.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $exit.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
-    $exit.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
+    $exit.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
     $exit.Add_Click( {
             Write-Output 'exiting Util'
             $Form.Close()
         })
 
     $reload = New-Object system.Windows.Forms.Button
-    $reload.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
+    $reload.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
     $reload.text = 'Reload'
     $reload.width = 100
     $reload.height = 30
@@ -402,34 +402,34 @@ Function Start-PSLauncher {
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
             $Form.Close()
         })
-    $EnableLogging = New-Object system.Windows.Forms.Button
-    $EnableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
-    $EnableLogging.text = 'Enable Logging'
-    $EnableLogging.width = 100
-    $EnableLogging.height = 30
-    $EnableLogging.location = New-Object System.Drawing.Point(1, 540)
-    $EnableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
-    $EnableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
-    $EnableLogging.Add_Click( { EnableLogging })
+    # $EnableLogging = New-Object system.Windows.Forms.Button
+    # $EnableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
+    # $EnableLogging.text = 'Enable Logging'
+    # $EnableLogging.width = 100
+    # $EnableLogging.height = 30
+    # $EnableLogging.location = New-Object System.Drawing.Point(1, 540)
+    # $EnableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
+    # $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    # $EnableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
+    # $EnableLogging.Add_Click( { EnableLogging })
 
-    $DisableLogging = New-Object system.Windows.Forms.Button
-    $DisableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
-    $DisableLogging.text = 'Disable Logging'
-    $DisableLogging.width = 100
-    $DisableLogging.height = 30
-    $DisableLogging.location = New-Object System.Drawing.Point(100, 540)
-    $DisableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
-    $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
-    $DisableLogging.Add_Click( { DisableLogging })
+    # $DisableLogging = New-Object system.Windows.Forms.Button
+    # $DisableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
+    # $DisableLogging.text = 'Disable Logging'
+    # $DisableLogging.width = 100
+    # $DisableLogging.height = 30
+    # $DisableLogging.location = New-Object System.Drawing.Point(100, 540)
+    # $DisableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
+    # $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    # $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
+    # $DisableLogging.Add_Click( { DisableLogging })
 
     $AddToConfig = New-Object system.Windows.Forms.Button
-    $AddToConfig.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
+    $AddToConfig.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
     $AddToConfig.text = 'Add GUI Config'
     $AddToConfig.width = 100
     $AddToConfig.height = 30
-    $AddToConfig.location = New-Object System.Drawing.Point(1, 570)
+    $AddToConfig.location = New-Object System.Drawing.Point(1, 540)
     $AddToConfig.Font = New-Object System.Drawing.Font('Tahoma', 8)
     $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
@@ -441,11 +441,11 @@ Function Start-PSLauncher {
         })
 
     $OpenConfigButton = New-Object system.Windows.Forms.Button
-    $OpenConfigButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
+    $OpenConfigButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
     $OpenConfigButton.text = 'Open Config File'
     $OpenConfigButton.width = 100
     $OpenConfigButton.height = 30
-    $OpenConfigButton.location = New-Object System.Drawing.Point(100, 570)
+    $OpenConfigButton.location = New-Object System.Drawing.Point(100, 540)
     $OpenConfigButton.Font = New-Object System.Drawing.Font('Tahoma', 8)
     $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $OpenConfigButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
