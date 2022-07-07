@@ -7,7 +7,7 @@
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/04/01 21:34:46
-# ModifiedOn:       2022/07/06 05:22:25
+# ModifiedOn:       2022/07/07 05:49:59
 # Synopsis:         Add a button or panel to the config.
 #############################################
  
@@ -54,9 +54,17 @@ Function Add-PSLauncherEntry {
 	Write-Color '4', ') ', 'ReOrder Existing Buttons' -Color Yellow, Yellow, Green
 	Write-Color '5', ') ', 'Move Button between Panels' -Color Yellow, Yellow, Green
 	Write-Color '6', ') ', 'Launch Color Picker Window' -Color Yellow, Yellow, Green
-	Write-Output ' '
-	[int]$GuiAddChoice = Read-Host 'Answer'
+	Write-Color 'Q', ') ', 'Quit this menu' -Color Yellow, Yellow, Green
+    Write-Output ' '
+	$Choice = Read-Host 'Answer'
 
+    if ($Choice.ToLower() -like "q") {
+    	if ($Execute) {
+		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
+	}
+    exit
+    }
+    else {[int]$GuiAddChoice = $Choice}
 
 	if ($GuiAddChoice -eq 0) {
 		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
