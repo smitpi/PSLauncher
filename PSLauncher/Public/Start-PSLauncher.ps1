@@ -75,7 +75,7 @@ Function Start-PSLauncher {
         $Script:jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
     }
 
-    $KeepOpen = $false
+    $script:LoggingEnabled = $false
     $script:PanelDraw = 10
     $script:Color1st = $jsondata.Config.Color1st
     $script:Color2nd = $jsondata.Config.Color2nd #The darker background for the panels
@@ -94,7 +94,6 @@ Function Start-PSLauncher {
     [System.Reflection.Assembly]::LoadWithPartialName('WindowsFormsIntegration') | Out-Null
 
     Add-Type -AssemblyName 'System.Windows.Forms'
-
     Add-Type -Name Window -Namespace Console -MemberDefinition '
     [DllImport("Kernel32.dll")]
     public static extern IntPtr GetConsoleWindow();
@@ -102,19 +101,16 @@ Function Start-PSLauncher {
     [DllImport("user32.dll")]
     public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
 '
+    $Script:PSConsole = [Console.Window]::GetConsoleWindow()
+
     #endregion
 
     #region functions
     function ShowConsole {
-        #Clear-Host
-        $PSConsole = [Console.Window]::GetConsoleWindow()
         [Console.Window]::ShowWindow($PSConsole, 5)
     }
     function HideConsole {
-        if (!$KeepOpen) {
-            $PSConsole = [Console.Window]::GetConsoleWindow()
-            [Console.Window]::ShowWindow($PSConsole, 0)
-        }
+        [Console.Window]::ShowWindow($PSConsole, 0)
     }
     Function Invoke-Action {
         Param (
@@ -130,25 +126,23 @@ Function Start-PSLauncher {
         }
 
         if ( $RunAsAdmin -like 'yes' ) { $processArguments.Add( 'Verb' , 'RunAs' )}
-        if ( $Window -contains 'Hidden' ) { $processArguments.Add('WindowStyle' , 'Hidden') }
-        if ( $Window -contains 'Normal' ) { $processArguments.Add('WindowStyle' , 'Normal') }
-        if ( $Window -contains 'Maximized' ) { $processArguments.Add('WindowStyle' , 'Maximized') }
-        if ( $Window -contains 'Minimized' ) { $processArguments.Add('WindowStyle' , 'Minimized') }
+
+        if ( $Window -contains 'Hidden') { $processArguments.Add('WindowStyle' , 'Hidden') }
+        if ( $Window -contains 'Normal') { $processArguments.Add('WindowStyle' , 'Normal') }
+        if ( $Window -contains 'Maximized') { $processArguments.Add('WindowStyle' , 'Maximized') }
+        if ( $Window -contains 'Minimized') { $processArguments.Add('WindowStyle' , 'Minimized') }
 
         if ($mode -eq 'PSFile') { $AddedArguments = "-NoLogo  -NoProfile -ExecutionPolicy Bypass -File `"$arguments`"" }
         if ($mode -eq 'PSCommand') { $AddedArguments = "-NoLogo -NoProfile -ExecutionPolicy Bypass -command `"& {$arguments}`"" }
+        if (-not($mode -eq 'Other') -and $LoggingEnabled) {$AddedArguments = '-NoExit ' + $AddedArguments}
+
         if ($mode -eq 'Other') { $AddedArguments = $arguments}
 
         if (-not[string]::IsNullOrEmpty( $AddedArguments)) {$processArguments.Add( 'ArgumentList' , [Environment]::ExpandEnvironmentVariables( $AddedArguments)) }
 
-        ShowConsole
-        #Clear-Host
         Write-Color 'Running the following:' -Color DarkYellow -ShowTime
-        Write-Color 'Command: ', $command -Color Cyan, Green -ShowTime
-        Write-Color 'Arguments: ', $arguments -Color Cyan, Green -ShowTime
-        Write-Color 'Mode: ', $Mode -Color Cyan, Green -ShowTime
-        Write-Color 'Window: ', $Window -Color Cyan, Green -ShowTime
-        Write-Color 'RunAsAdmin: ', $RunAsAdmin -Color Cyan, Green -ShowTime -LinesAfter 2
+        $processArguments.GetEnumerator().name | ForEach-Object {Write-Color ('{0,-15}:' -f "$($_)"), ('{0}' -f "$($processArguments.$($_))") -ForegroundColor Cyan, Green -ShowTime}
+
         try {
             Start-Process @processArguments
             Write-Color 'Process Completed' -ShowTime -Color DarkYellow
@@ -156,7 +150,6 @@ Function Start-PSLauncher {
             $Text = $This.Text
             [System.Windows.Forms.MessageBox]::Show("Failed to launch $Text`n`nMessage:$($_.Exception.Message)`nItem:$($_.Exception.ItemName)") > $null
         }
-        HideConsole
     }
     function NButton {
         param(
@@ -221,16 +214,19 @@ Function Start-PSLauncher {
 
     }
     function EnableLogging {
-        $script:KeepOpen = $true
         ShowConsole
-        $script:GUIlogpath = "$env:TEMP\UtilGUI-" + (Get-Date -Format yyyy.MM.dd-HH.mm) + '.log'
-        Write-Output "creating log $GUIlogpath"
-        Start-Transcript -Path $GUIlogpath -IncludeInvocationHeader -Force -NoClobber -Verbose
+        $script:LoggingEnabled = $True
+        $script:GUIlogpath = "$($env:TEMP)\PSLauncher-$(Get-Date -Format yyyy.MM.dd-HH.mm).log"
+        Write-Color 'Creating log file: ', $($GUIlogpath) -Color DarkYellow, DarkRed -ShowTime -LinesBefore 1
+        Write-Color 'Starting Transcript.' -Color DarkYellow -ShowTime -LinesAfter 2
+        Start-Transcript -Path $GUIlogpath -IncludeInvocationHeader -Force -NoClobber
     }
     function DisableLogging {
+        Write-Color 'Stopping Transcript.' -Color DarkYellow -ShowTime -LinesBefore 2
+        Write-Color 'Opening log file: ', $($GUIlogpath) -Color DarkYellow, DarkRed -ShowTime
+        $script:LoggingEnabled = $false
         Stop-Transcript
-        notepad $GUIlogpath
-        $script:KeepOpen = $false
+        . (Get-Item $GUIlogpath).FullName
         HideConsole
     }
     #endregion
@@ -378,7 +374,7 @@ Function Start-PSLauncher {
     $exit.text = 'Exit'
     $exit.width = 100
     $exit.height = 30
-    $exit.location = New-Object System.Drawing.Point(1, 510)
+    $exit.location = New-Object System.Drawing.Point(10, 510)
     $exit.Font = New-Object System.Drawing.Font('Tahoma', 8)
     $exit.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $exit.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
@@ -393,7 +389,7 @@ Function Start-PSLauncher {
     $reload.text = 'Reload'
     $reload.width = 100
     $reload.height = 30
-    $reload.location = New-Object System.Drawing.Point(100, 510)
+    $reload.location = New-Object System.Drawing.Point(115, 510)
     $reload.Font = New-Object System.Drawing.Font('Tahoma', 8)
     $reload.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $reload.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
@@ -402,42 +398,19 @@ Function Start-PSLauncher {
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
             $Form.Close()
         })
-    # $EnableLogging = New-Object system.Windows.Forms.Button
-    # $EnableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
-    # $EnableLogging.text = 'Enable Logging'
-    # $EnableLogging.width = 100
-    # $EnableLogging.height = 30
-    # $EnableLogging.location = New-Object System.Drawing.Point(1, 540)
-    # $EnableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    # $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
-    # $EnableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
-    # $EnableLogging.Add_Click( { EnableLogging })
-
-    # $DisableLogging = New-Object system.Windows.Forms.Button
-    # $DisableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
-    # $DisableLogging.text = 'Disable Logging'
-    # $DisableLogging.width = 100
-    # $DisableLogging.height = 30
-    # $DisableLogging.location = New-Object System.Drawing.Point(100, 540)
-    # $DisableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
-    # $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
-    # $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
-    # $DisableLogging.Add_Click( { DisableLogging })
 
     $AddToConfig = New-Object system.Windows.Forms.Button
     $AddToConfig.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
-    $AddToConfig.text = 'Add GUI Config'
+    $AddToConfig.text = 'Edit GUI Config'
     $AddToConfig.width = 100
     $AddToConfig.height = 30
-    $AddToConfig.location = New-Object System.Drawing.Point(1, 540)
+    $AddToConfig.location = New-Object System.Drawing.Point(10, 545)
     $AddToConfig.Font = New-Object System.Drawing.Font('Tahoma', 8)
     $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $AddToConfig.Add_Click( {
-            ShowConsole
             Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Add-PSLauncherEntry -PSLauncherConfigFile $($PSLauncherConfigFile) -execute}"""
             $Form.Close()
-            HideConsole
         })
 
     $OpenConfigButton = New-Object system.Windows.Forms.Button
@@ -445,14 +418,36 @@ Function Start-PSLauncher {
     $OpenConfigButton.text = 'Open Config File'
     $OpenConfigButton.width = 100
     $OpenConfigButton.height = 30
-    $OpenConfigButton.location = New-Object System.Drawing.Point(100, 540)
+    $OpenConfigButton.location = New-Object System.Drawing.Point(115, 545)
     $OpenConfigButton.Font = New-Object System.Drawing.Font('Tahoma', 8)
     $OpenConfigButton.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $OpenConfigButton.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $OpenConfigButton.Add_Click( { . $PSLauncherConfigFile })
 
+    $EnableLogging = New-Object system.Windows.Forms.Button
+    $EnableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
+    $EnableLogging.text = 'Enable Logging'
+    $EnableLogging.width = 100
+    $EnableLogging.height = 30
+    $EnableLogging.location = New-Object System.Drawing.Point(10, 580)
+    $EnableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
+    $EnableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $EnableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
+    $EnableLogging.Add_Click( { EnableLogging })
+
+    $DisableLogging = New-Object system.Windows.Forms.Button
+    $DisableLogging.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
+    $DisableLogging.text = 'Disable Logging'
+    $DisableLogging.width = 100
+    $DisableLogging.height = 30
+    $DisableLogging.location = New-Object System.Drawing.Point(115, 580)
+    $DisableLogging.Font = New-Object System.Drawing.Font('Tahoma', 8)
+    $DisableLogging.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
+    $DisableLogging.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
+    $DisableLogging.Add_Click( { DisableLogging })
+
     $Form.controls.AddRange($exit)
-    $Form.controls.AddRange($reload)
+    $Form.controls.AddRange($reload)        
     $Form.controls.AddRange($EnableLogging)
     $Form.controls.AddRange($DisableLogging)
     $Form.controls.AddRange($AddToConfig)
@@ -470,7 +465,6 @@ Function Start-PSLauncher {
     $Form.controls.AddRange($PictureBox1)
     #endregion
 
-    #ShowConsole
     HideConsole
     [void]$Form.ShowDialog()
 } #end Function
