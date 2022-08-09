@@ -67,7 +67,7 @@ Run Start-PSLauncherColorPicker to change.
 Run Start-PSLauncherColorPicker to change.
 
 .PARAMETER TextColor
-Run Start-PSLauncherColorPicker to change.
+Run Start-PSLauncherColorPicker to change. 
 
 .PARAMETER LogoPath
 Run Start-PSLauncherColorPicker to change.
