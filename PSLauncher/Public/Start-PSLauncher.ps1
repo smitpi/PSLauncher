@@ -118,15 +118,15 @@ Function Start-PSLauncher {
             [string]$arguments,
             [string]$mode,
             [string]$Window,
-            [string]$RunAsUser,
             [string]$RunAsAdmin
         )
         [hashtable]$processArguments = @{
-            #'PassThru' = $true
+            'PassThru' = $true
             'FilePath' = $command
         }
 
         if ( $RunAsAdmin -like 'yes' ) { $processArguments.Add( 'Verb' , 'RunAs' )}
+
         if ( $Window -contains 'Hidden') { $processArguments.Add('WindowStyle' , 'Hidden') }
         if ( $Window -contains 'Normal') { $processArguments.Add('WindowStyle' , 'Normal') }
         if ( $Window -contains 'Maximized') { $processArguments.Add('WindowStyle' , 'Maximized') }
@@ -144,20 +144,13 @@ Function Start-PSLauncher {
         $processArguments.GetEnumerator().name | ForEach-Object {Write-Color ('{0,-15}:' -f "$($_)"), ('{0}' -f "$($processArguments.$($_))") -ForegroundColor Cyan, Green -ShowTime}
 
         try {
-            if ($RunAsUser -like 'LoggedInUser') {Start-Process @processArguments -ErrorAction Stop}
-            else {
-                Start-Process -FilePath powershell.exe -ArgumentList " -noprofile -command & {
-                write-host $($processArguments.GetEnumerator() | ForEach-Object {" -$($_.name) '$($_.value)'"} | Join-String)
-                write-host $RunAsUser
-                Start-Process $($processArguments.GetEnumerator() | ForEach-Object {" -$($_.name) '$($_.value)'"} | Join-String) }" -Credential (Get-Variable $RunAsUser).Value -WindowStyle Hidden -ErrorAction Stop
-            }
+            Start-Process @processArguments
             Write-Color 'Process Completed' -ShowTime -Color DarkYellow
         } catch {
             $Text = $This.Text
             [System.Windows.Forms.MessageBox]::Show("Failed to launch $Text`n`nMessage:$($_.Exception.Message)`nItem:$($_.Exception.ItemName)") > $null
         }
     }
-
     function NButton {
         param(
             [string]$Text = 'Placeholder Text',
@@ -273,7 +266,7 @@ Function Start-PSLauncher {
         $panel = NPanel -LabelText $pan.name
         foreach ($but in $pan.buttons) {
             if (-not([string]::IsNullOrEmpty($but))) {
-                [scriptblock]$clickAction = [scriptblock]::Create( "Invoke-Action -control `$_ -name `"$($but.Name)`" -command `"$($but.command)`" -arguments `"$(($but|Select-Object -ExpandProperty arguments -ErrorAction SilentlyContinue) -replace '"' , '`"`"')`" -mode $($but.Mode) -Window `"$($but.Window)`" -RunAsUser `"$($but.RunAsUser)`" -RunAsAdmin `"$($but.RunAsAdmin)`"" )
+                [scriptblock]$clickAction = [scriptblock]::Create( "Invoke-Action -control `$_ -name `"$($but.Name)`" -command `"$($but.command)`" -arguments `"$(($but|Select-Object -ExpandProperty arguments -ErrorAction SilentlyContinue) -replace '"' , '`"`"')`" -mode $($but.Mode) -Window `"$($but.Window)`" -RunAsAdmin `"$($but.RunAsAdmin)`"" )
                 NButton -Text $but.Name -clickAction $clickAction -panel $panel
             }
         }
@@ -416,7 +409,7 @@ Function Start-PSLauncher {
     $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $AddToConfig.Add_Click( {
-            Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Edit-PSLauncherConfig -PSLauncherConfigFile $($PSLauncherConfigFile) -execute}"""
+            Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Add-PSLauncherEntry -PSLauncherConfigFile $($PSLauncherConfigFile) -execute}"""
             $Form.Close()
         })
 

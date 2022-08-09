@@ -56,11 +56,11 @@ Path to the config file created by New-PSLauncherConfigFile
 Run Start-PSLauncher after config change.
 
 .EXAMPLE
-Edit-PSLauncherConfig -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
+Add-PSLauncherEntry -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
 
 #>
-Function Edit-PSLauncherConfig {
-	[Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/Edit-PSLauncherConfig')]
+Function Add-PSLauncherEntry {
+	[Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/Add-PSLauncherEntry')]
 	Param (
 		[System.IO.FileInfo]$PSLauncherConfigFile,
 		[switch]$Execute = $false
@@ -83,17 +83,19 @@ Function Edit-PSLauncherConfig {
 	Write-Color '2', ') ', 'Bulk Add Buttons from script folder' -Color Yellow, Yellow, Green
 	Write-Color '3', ') ', 'ReOrder Existing Panels' -Color Yellow, Yellow, Green
 	Write-Color '4', ') ', 'ReOrder Existing Buttons' -Color Yellow, Yellow, Green
+	Write-Color '5', ') ', 'Move Button between Panels' -Color Yellow, Yellow, Green
 	Write-Color '6', ') ', 'Launch Color Picker Window' -Color Yellow, Yellow, Green
 	Write-Color 'Q', ') ', 'Quit this menu' -Color Yellow, Yellow, Green
-	Write-Output ' '
+    Write-Output ' '
 	$Choice = Read-Host 'Answer'
 
-	if ($Choice.ToLower() -like 'q') {
-		if ($Execute) {
-			Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
-		}
-		exit
-	} else {[int]$GuiAddChoice = $Choice}
+    if ($Choice.ToLower() -like "q") {
+    	if ($Execute) {
+		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
+	}
+    exit
+    }
+    else {[int]$GuiAddChoice = $Choice}
 
 	if ($GuiAddChoice -eq 0) {
 		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
@@ -172,15 +174,6 @@ Function Edit-PSLauncherConfig {
 			'3' {$Window = 'Maximized'}
 		}
 
-		Write-Color 'Run As Different User:' -Color DarkRed -StartTab 1 -LinesBefore 2
-		Write-Color '0) ', 'Yes' -Color Yellow, Green
-		Write-Color '1) ', 'No' -Color Yellow, Green
-		$modechoose = Read-Host 'Answer'
-		switch ($modechoose) {
-			'0' {$RunAsUser = read-host "PSCredential Variable Name "}
-			'1' {$RunAsUser = 'LoggedInUser'}
-		}
-
 		Write-Color 'Run As Admin:' -Color DarkRed -StartTab 1 -LinesBefore 2
 		Write-Color '0) ', 'Yes' -Color Yellow, Green
 		Write-Color '1) ', 'No' -Color Yellow, Green
@@ -201,7 +194,6 @@ Function Edit-PSLauncherConfig {
 				Arguments  = $cmd.arguments
 				Mode       = $cmd.mode
 				Window     = $Window
-				RunAsUser  = $RunAsUser
 				RunAsAdmin = $RunAs
 			})
 		$jsondata.Buttons[$indexnum].Buttons = $TempButtons
