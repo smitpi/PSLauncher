@@ -8,7 +8,7 @@ SHORT DESCRIPTION
  
 NOTES
 Functions in this module:
-	 Add-PSLauncherEntry -- Add a button or panel to the config.
+	 Edit-PSLauncherConfig -- Add a button or panel to the config.
 	 New-PSLauncherConfigFile -- Creates the config file with the provided settings
 	 Start-PSLauncher -- Reads the config file and launches the GUI
 	 Start-PSLauncherColorPicker -- Launches a GUI form to test and change the Color of PSLauncher.
