@@ -1,13 +1,13 @@
 ﻿#region Public Functions
-#region Add-PSLauncherEntry.ps1
+#region Edit-PSLauncherConfig.ps1
 ######## Function 1 of 4 ##################
-# Function:         Add-PSLauncherEntry
+# Function:         Edit-PSLauncherConfig
 # Module:           PSLauncher
-# ModuleVersion:    0.1.20
+# ModuleVersion:    0.1.21
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
-# CreatedOn:        2022/04/01 21:34:46
-# ModifiedOn:       2022/07/07 05:49:45
+# CreatedOn:        2022/04/01 22:34:46
+# ModifiedOn:       2022/08/09 07:56:58
 # Synopsis:         Add a button or panel to the config.
 #############################################
  
@@ -25,11 +25,11 @@ Path to the config file created by New-PSLauncherConfigFile
 Run Start-PSLauncher after config change.
 
 .EXAMPLE
-Add-PSLauncherEntry -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
+Edit-PSLauncherConfig -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
 
 #>
-Function Add-PSLauncherEntry {
-	[Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/Add-PSLauncherEntry')]
+Function Edit-PSLauncherConfig {
+	[Cmdletbinding(HelpURI = 'https://smitpi.github.io/PSLauncher/Edit-PSLauncherConfig')]
 	Param (
 		[System.IO.FileInfo]$PSLauncherConfigFile,
 		[switch]$Execute = $false
@@ -52,19 +52,17 @@ Function Add-PSLauncherEntry {
 	Write-Color '2', ') ', 'Bulk Add Buttons from script folder' -Color Yellow, Yellow, Green
 	Write-Color '3', ') ', 'ReOrder Existing Panels' -Color Yellow, Yellow, Green
 	Write-Color '4', ') ', 'ReOrder Existing Buttons' -Color Yellow, Yellow, Green
-	Write-Color '5', ') ', 'Move Button between Panels' -Color Yellow, Yellow, Green
 	Write-Color '6', ') ', 'Launch Color Picker Window' -Color Yellow, Yellow, Green
 	Write-Color 'Q', ') ', 'Quit this menu' -Color Yellow, Yellow, Green
-    Write-Output ' '
+	Write-Output ' '
 	$Choice = Read-Host 'Answer'
 
-    if ($Choice.ToLower() -like "q") {
-    	if ($Execute) {
-		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
-	}
-    exit
-    }
-    else {[int]$GuiAddChoice = $Choice}
+	if ($Choice.ToLower() -like 'q') {
+		if ($Execute) {
+			Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
+		}
+		exit
+	} else {[int]$GuiAddChoice = $Choice}
 
 	if ($GuiAddChoice -eq 0) {
 		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
@@ -143,6 +141,15 @@ Function Add-PSLauncherEntry {
 			'3' {$Window = 'Maximized'}
 		}
 
+		Write-Color 'Run As Different User:' -Color DarkRed -StartTab 1 -LinesBefore 2
+		Write-Color '0) ', 'Yes' -Color Yellow, Green
+		Write-Color '1) ', 'No' -Color Yellow, Green
+		$modechoose = Read-Host 'Answer'
+		switch ($modechoose) {
+			'0' {$RunAsUser = read-host "PSCredential Variable Name "}
+			'1' {$RunAsUser = 'LoggedInUser'}
+		}
+
 		Write-Color 'Run As Admin:' -Color DarkRed -StartTab 1 -LinesBefore 2
 		Write-Color '0) ', 'Yes' -Color Yellow, Green
 		Write-Color '1) ', 'No' -Color Yellow, Green
@@ -163,6 +170,7 @@ Function Add-PSLauncherEntry {
 				Arguments  = $cmd.arguments
 				Mode       = $cmd.mode
 				Window     = $Window
+				RunAsUser  = $RunAsUser
 				RunAsAdmin = $RunAs
 			})
 		$jsondata.Buttons[$indexnum].Buttons = $TempButtons
@@ -354,18 +362,18 @@ Function Add-PSLauncherEntry {
 
 } #end Function
  
-Export-ModuleMember -Function Add-PSLauncherEntry
+Export-ModuleMember -Function Edit-PSLauncherConfig
 #endregion
  
 #region New-PSLauncherConfigFile.ps1
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.20
+# ModuleVersion:    0.1.21
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
-# ModifiedOn:       2022/07/02 00:36:12
+# ModifiedOn:       2022/08/09 07:50:24
 # Synopsis:         Creates the config file with the provided settings
 #############################################
  
@@ -392,7 +400,7 @@ Run Start-PSLauncherColorPicker to change.
 Run Start-PSLauncherColorPicker to change.
 
 .PARAMETER TextColor
-Run Start-PSLauncherColorPicker to change. 
+Run Start-PSLauncherColorPicker to change.
 
 .PARAMETER LogoPath
 Run Start-PSLauncherColorPicker to change.
@@ -520,11 +528,11 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.20
+# ModuleVersion:    0.1.21
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
-# ModifiedOn:       2022/07/07 05:08:25
+# ModifiedOn:       2022/08/09 08:00:03
 # Synopsis:         Reads the config file and launches the GUI
 #############################################
  
@@ -601,15 +609,15 @@ Function Start-PSLauncher {
             [string]$arguments,
             [string]$mode,
             [string]$Window,
+            [string]$RunAsUser,
             [string]$RunAsAdmin
         )
         [hashtable]$processArguments = @{
-            'PassThru' = $true
+            #'PassThru' = $true
             'FilePath' = $command
         }
 
         if ( $RunAsAdmin -like 'yes' ) { $processArguments.Add( 'Verb' , 'RunAs' )}
-
         if ( $Window -contains 'Hidden') { $processArguments.Add('WindowStyle' , 'Hidden') }
         if ( $Window -contains 'Normal') { $processArguments.Add('WindowStyle' , 'Normal') }
         if ( $Window -contains 'Maximized') { $processArguments.Add('WindowStyle' , 'Maximized') }
@@ -627,13 +635,20 @@ Function Start-PSLauncher {
         $processArguments.GetEnumerator().name | ForEach-Object {Write-Color ('{0,-15}:' -f "$($_)"), ('{0}' -f "$($processArguments.$($_))") -ForegroundColor Cyan, Green -ShowTime}
 
         try {
-            Start-Process @processArguments
+            if ($RunAsUser -like 'LoggedInUser') {Start-Process @processArguments -ErrorAction Stop}
+            else {
+                Start-Process -FilePath powershell.exe -ArgumentList " -noprofile -command & {
+                write-host $($processArguments.GetEnumerator() | ForEach-Object {" -$($_.name) '$($_.value)'"} | Join-String)
+                write-host $RunAsUser
+                Start-Process $($processArguments.GetEnumerator() | ForEach-Object {" -$($_.name) '$($_.value)'"} | Join-String) }" -Credential (Get-Variable $RunAsUser).Value -WindowStyle Hidden -ErrorAction Stop
+            }
             Write-Color 'Process Completed' -ShowTime -Color DarkYellow
         } catch {
             $Text = $This.Text
             [System.Windows.Forms.MessageBox]::Show("Failed to launch $Text`n`nMessage:$($_.Exception.Message)`nItem:$($_.Exception.ItemName)") > $null
         }
     }
+
     function NButton {
         param(
             [string]$Text = 'Placeholder Text',
@@ -749,7 +764,7 @@ Function Start-PSLauncher {
         $panel = NPanel -LabelText $pan.name
         foreach ($but in $pan.buttons) {
             if (-not([string]::IsNullOrEmpty($but))) {
-                [scriptblock]$clickAction = [scriptblock]::Create( "Invoke-Action -control `$_ -name `"$($but.Name)`" -command `"$($but.command)`" -arguments `"$(($but|Select-Object -ExpandProperty arguments -ErrorAction SilentlyContinue) -replace '"' , '`"`"')`" -mode $($but.Mode) -Window `"$($but.Window)`" -RunAsAdmin `"$($but.RunAsAdmin)`"" )
+                [scriptblock]$clickAction = [scriptblock]::Create( "Invoke-Action -control `$_ -name `"$($but.Name)`" -command `"$($but.command)`" -arguments `"$(($but|Select-Object -ExpandProperty arguments -ErrorAction SilentlyContinue) -replace '"' , '`"`"')`" -mode $($but.Mode) -Window `"$($but.Window)`" -RunAsUser `"$($but.RunAsUser)`" -RunAsAdmin `"$($but.RunAsAdmin)`"" )
                 NButton -Text $but.Name -clickAction $clickAction -panel $panel
             }
         }
@@ -892,7 +907,7 @@ Function Start-PSLauncher {
     $AddToConfig.BackColor = [System.Drawing.ColorTranslator]::FromHtml($script:ButtonColor)
     $AddToConfig.ForeColor = [System.Drawing.ColorTranslator]::FromHtml($script:TextColor)
     $AddToConfig.Add_Click( {
-            Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Add-PSLauncherEntry -PSLauncherConfigFile $($PSLauncherConfigFile) -execute}"""
+            Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -ExecutionPolicy bypass -command ""& {Edit-PSLauncherConfig -PSLauncherConfigFile $($PSLauncherConfigFile) -execute}"""
             $Form.Close()
         })
 
@@ -959,11 +974,11 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.20
+# ModuleVersion:    0.1.21
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/03/20 13:17:14
-# ModifiedOn:       2022/06/08 10:41:07
+# ModifiedOn:       2022/06/08 11:41:07
 # Synopsis:         Launches a GUI form to test and change the Color of PSLauncher.
 #############################################
  

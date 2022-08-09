@@ -2,9 +2,9 @@
 <helpItems schema="maml" xmlns="http://msh">
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Add-PSLauncherEntry</command:name>
-      <command:verb>Add</command:verb>
-      <command:noun>PSLauncherEntry</command:noun>
+      <command:name>Edit-PSLauncherConfig</command:name>
+      <command:verb>Edit</command:verb>
+      <command:noun>PSLauncherConfig</command:noun>
       <maml:description>
         <maml:para>Add a button or panel to the config.</maml:para>
       </maml:description>
@@ -14,7 +14,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Add-PSLauncherEntry</maml:name>
+        <maml:name>Edit-PSLauncherConfig</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>PSLauncherConfigFile</maml:name>
           <maml:description>
@@ -76,7 +76,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Add-PSLauncherEntry -PSLauncherConfigFile c:\temp\PSLauncherConfig.json</dev:code>
+        <dev:code>Edit-PSLauncherConfig -PSLauncherConfigFile c:\temp\PSLauncherConfig.json</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>

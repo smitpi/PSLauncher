@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Add-PSLauncherEntry
+# Edit-PSLauncherConfig
 
 ## SYNOPSIS
 Add a button or panel to the config.
@@ -13,7 +13,7 @@ Add a button or panel to the config.
 ## SYNTAX
 
 ```
-Add-PSLauncherEntry [[-PSLauncherConfigFile] <FileInfo>] [-Execute] [<CommonParameters>]
+Edit-PSLauncherConfig [[-PSLauncherConfigFile] <FileInfo>] [-Execute] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,7 +23,7 @@ Add a button or panel to the config.
 
 ### EXAMPLE 1
 ```
-Add-PSLauncherEntry -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
+Edit-PSLauncherConfig -PSLauncherConfigFile c:\temp\PSLauncherConfig.json
 ```
 
 ## PARAMETERS
