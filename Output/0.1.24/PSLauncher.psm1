@@ -3,7 +3,7 @@
 ######## Function 1 of 4 ##################
 # Function:         Edit-PSLauncherConfig
 # Module:           PSLauncher
-# ModuleVersion:    0.1.23
+# ModuleVersion:    0.1.24
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 20:43:29
@@ -379,7 +379,7 @@ Export-ModuleMember -Function Edit-PSLauncherConfig
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.23
+# ModuleVersion:    0.1.24
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
@@ -538,11 +538,11 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.23
+# ModuleVersion:    0.1.24
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
-# ModifiedOn:       2022/08/14 18:25:54
+# ModifiedOn:       2022/08/14 18:28:36
 # Synopsis:         Reads the config file and launches the GUI
 #############################################
  
@@ -680,7 +680,7 @@ Function Start-PSLauncher {
                 $BigHash = @{
                     'FilePath'     = 'powershell.exe'
                     'ArgumentList' = "-NoLogo -NoProfile -ExecutionPolicy Bypass -command ""(& {$params})"""
-                    'WindowStyle'  = 'Maximized'
+                    'WindowStyle'  = 'Hidden'
                     'Credential'   = (Get-Variable -Name $RunAsUser -ValueOnly)
                 }
                 if ($LoggingEnabled) {$BigHash.ArgumentList = '-NoExit ' + $BigHash.ArgumentList}
@@ -1019,7 +1019,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.23
+# ModuleVersion:    0.1.24
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56

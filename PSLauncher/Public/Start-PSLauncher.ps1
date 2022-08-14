@@ -179,7 +179,7 @@ Function Start-PSLauncher {
                 $BigHash = @{
                     'FilePath'     = 'powershell.exe'
                     'ArgumentList' = "-NoLogo -NoProfile -ExecutionPolicy Bypass -command ""(& {$params})"""
-                    'WindowStyle'  = 'Maximized'
+                    'WindowStyle'  = 'Hidden'
                     'Credential'   = (Get-Variable -Name $RunAsUser -ValueOnly)
                 }
                 if ($LoggingEnabled) {$BigHash.ArgumentList = '-NoExit ' + $BigHash.ArgumentList}
