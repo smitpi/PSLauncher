@@ -3,7 +3,7 @@
 ######## Function 1 of 4 ##################
 # Function:         Edit-PSLauncherConfig
 # Module:           PSLauncher
-# ModuleVersion:    0.1.22
+# ModuleVersion:    0.1.23
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 20:43:29
@@ -379,7 +379,7 @@ Export-ModuleMember -Function Edit-PSLauncherConfig
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.22
+# ModuleVersion:    0.1.23
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
@@ -538,11 +538,11 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.22
+# ModuleVersion:    0.1.23
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
-# ModifiedOn:       2022/08/14 18:08:30
+# ModifiedOn:       2022/08/14 18:25:54
 # Synopsis:         Reads the config file and launches the GUI
 #############################################
  
@@ -578,7 +578,9 @@ Function Start-PSLauncher {
     }
     $users = $jsondata.buttons.buttons | Where-Object {$_.RunAsUser -notlike 'LoggedInUser'} 
     foreach ($User in ($users.RunAsUser | Sort-Object -Unique)) {
-        if (-not((Get-Variable -Name $User).GetType().Name -ne 'PSCredential' )) {
+        $exists = Get-Variable -Name $User -ErrorAction SilentlyContinue
+        $Vartype = (Get-Variable -Name $User -ErrorAction SilentlyContinue).Value.GetType().Name
+        if (-not($exists) -or $Vartype -notlike 'PSCredential') {
             $tmp = Get-Credential -Message "Username and password for $($User)"
             New-Variable -Name $User -Value $tmp -Option AllScope -Visibility Public -Scope global -Force
             Write-Color '[PSCredential]: ', "$($User): ", 'Complete' -Color Yellow, Cyan, Green
@@ -1017,7 +1019,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.22
+# ModuleVersion:    0.1.23
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56

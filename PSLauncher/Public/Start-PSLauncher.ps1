@@ -77,7 +77,9 @@ Function Start-PSLauncher {
     }
     $users = $jsondata.buttons.buttons | Where-Object {$_.RunAsUser -notlike 'LoggedInUser'} 
     foreach ($User in ($users.RunAsUser | Sort-Object -Unique)) {
-        if (-not((Get-Variable -Name $User).GetType().Name -ne 'PSCredential' )) {
+        $exists = Get-Variable -Name $User -ErrorAction SilentlyContinue
+        $Vartype = (Get-Variable -Name $User -ErrorAction SilentlyContinue).Value.GetType().Name
+        if (-not($exists) -or $Vartype -notlike 'PSCredential') {
             $tmp = Get-Credential -Message "Username and password for $($User)"
             New-Variable -Name $User -Value $tmp -Option AllScope -Visibility Public -Scope global -Force
             Write-Color '[PSCredential]: ', "$($User): ", 'Complete' -Color Yellow, Cyan, Green
