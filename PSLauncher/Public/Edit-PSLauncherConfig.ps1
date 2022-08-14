@@ -100,7 +100,7 @@ Function Edit-PSLauncherConfig {
 		Clear-Host
 		$data.Add(
 			[pscustomobject]@{
-				name        = (Read-Host 'New Panel Name')
+				Name        = (Read-Host 'New Panel Name')
 				PanelNumber = (($data.panelnumber | Sort-Object -Descending | Select-Object -First 1 ) + 1)
 				Buttons     = [pscustomobject]@{}
 			})
@@ -177,7 +177,7 @@ Function Edit-PSLauncherConfig {
 		Write-Color '1) ', 'No' -Color Yellow, Green
 		$modechoose = Read-Host 'Answer'
 		switch ($modechoose) {
-			'0' {$RunAsUser = read-host "PSCredential Variable Name "}
+			'0' {$RunAsUser = Read-Host 'PSCredential Variable Name '}
 			'1' {$RunAsUser = 'LoggedInUser'}
 		}
 
@@ -301,6 +301,15 @@ Function Edit-PSLauncherConfig {
 			'3' {$Window = 'Maximized'}
 		}
 
+		Write-Color 'Run As Different User:' -Color DarkRed -StartTab 1 -LinesBefore 2
+		Write-Color '0) ', 'Yes' -Color Yellow, Green
+		Write-Color '1) ', 'No' -Color Yellow, Green
+		$modechoose = Read-Host 'Answer'
+		switch ($modechoose) {
+			'0' {$RunAsUser = Read-Host 'PSCredential Variable Name '}
+			'1' {$RunAsUser = 'LoggedInUser'}
+		}
+
 		Write-Color 'Run As Admin:' -Color DarkRed -StartTab 1 -LinesBefore 2
 		Write-Color '0) ', 'Yes' -Color Yellow, Green
 		Write-Color '1) ', 'No' -Color Yellow, Green
@@ -323,6 +332,7 @@ Function Edit-PSLauncherConfig {
 					Arguments  = $psfile.FullName
 					Mode       = 'PSFile'
 					Window     = $Window
+					RunAsUser  = $RunAsUser
 					RunAsAdmin = $RunAs
 				})	
 		}

@@ -65,6 +65,7 @@ Function Start-PSLauncher {
         [System.IO.FileInfo]$PSLauncherConfigFile
     )
 
+    #region load json config file
     try {
         $Script:jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json -ErrorAction stop
     } catch {
@@ -74,7 +75,28 @@ Function Start-PSLauncher {
         $PSLauncherConfigFile = Get-Item $FileBrowser.FileName
         $Script:jsondata = Get-Content $PSLauncherConfigFile | ConvertFrom-Json
     }
+    $users = $jsondata.buttons.buttons | Where-Object {$_.RunAsUser -notlike 'LoggedInUser'} 
+    foreach ($User in ($users.RunAsUser | Sort-Object -Unique)) {
+        if (-not((Get-Variable -Name $User).GetType().Name -ne 'PSCredential' )) {
+            $tmp = Get-Credential -Message "Username and password for $($User)"
+            New-Variable -Name $User -Value $tmp -Option AllScope -Visibility Public -Scope global -Force
+            Write-Color '[PSCredential]: ', "$($User): ", 'Complete' -Color Yellow, Cyan, Green
+        } else {Write-Color '[PSCredential]: ', "$($User): ", 'Already Created' -Color Yellow, Cyan, DarkGray}
+    }
+    #endregion
 
+    #region load psconfigfile json config file
+    # try {
+    #     Invoke-PSConfigFile -ConfigFile (Get-Item $PSLauncherCredentialFile).FullName -DisplayOutput -ErrorAction Stop
+    # } catch {
+    #     Add-Type -AssemblyName System.Windows.Forms
+    #     $FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ Filter = 'JSON | *.json' }
+    #     [void]$FileBrowser.ShowDialog()
+    #     Invoke-PSConfigFile -ConfigFile (Get-Item $FileBrowser.FileName).FullName -DisplayOutput -ErrorAction Stop
+    # }
+    #endregion
+
+    #region variables
     $script:LoggingEnabled = $false
     $script:PanelDraw = 10
     $script:Color1st = $jsondata.Config.Color1st
@@ -82,7 +104,7 @@ Function Start-PSLauncher {
     $script:ButtonColor = $jsondata.Config.ButtonColor 
     $script:LabelColor = $jsondata.Config.LabelColor
     $script:TextColor = $jsondata.Config.TextColor
-
+    #endregion
 
     #region Assembly
     Add-Type -AssemblyName System.Windows.Forms
@@ -122,7 +144,7 @@ Function Start-PSLauncher {
             [string]$RunAsAdmin
         )
         [hashtable]$processArguments = @{
-            #'PassThru' = $true
+            #'PassThru' = $($true)
             'FilePath' = $command
         }
 
@@ -133,31 +155,42 @@ Function Start-PSLauncher {
         if ( $Window -contains 'Minimized') { $processArguments.Add('WindowStyle' , 'Minimized') }
 
         if ($mode -eq 'PSFile') { $AddedArguments = "-NoLogo  -NoProfile -ExecutionPolicy Bypass -File `"$arguments`"" }
-        if ($mode -eq 'PSCommand') { $AddedArguments = "-NoLogo -NoProfile -ExecutionPolicy Bypass -command `"& {$arguments}`"" }
+        if ($mode -eq 'PSCommand') { $AddedArguments = "-NoLogo -NoProfile -ExecutionPolicy Bypass -command ""(& {$arguments})""" }
         if (-not($mode -eq 'Other') -and $LoggingEnabled) {$AddedArguments = '-NoExit ' + $AddedArguments}
-
         if ($mode -eq 'Other') { $AddedArguments = $arguments}
-
         if (-not[string]::IsNullOrEmpty( $AddedArguments)) {$processArguments.Add( 'ArgumentList' , [Environment]::ExpandEnvironmentVariables( $AddedArguments)) }
-
-        Write-Color 'Running the following:' -Color DarkYellow -ShowTime
-        $processArguments.GetEnumerator().name | ForEach-Object {Write-Color ('{0,-15}:' -f "$($_)"), ('{0}' -f "$($processArguments.$($_))") -ForegroundColor Cyan, Green -ShowTime}
-
-        try {
-            if ($RunAsUser -like 'LoggedInUser') {Start-Process @processArguments -ErrorAction Stop}
-            else {
-                Start-Process -FilePath powershell.exe -ArgumentList " -noprofile -command & {
-                write-host $($processArguments.GetEnumerator() | ForEach-Object {" -$($_.name) '$($_.value)'"} | Join-String)
-                write-host $RunAsUser
-                Start-Process $($processArguments.GetEnumerator() | ForEach-Object {" -$($_.name) '$($_.value)'"} | Join-String) }" -Credential (Get-Variable $RunAsUser).Value -WindowStyle Hidden -ErrorAction Stop
+        
+        if ($RunAsUser -like 'LoggedInUser') {
+            try {
+                Write-Color 'Running the following ', 'as LoggonUser:' -Color DarkYellow, DarkCyan -ShowTime
+                $processArguments.GetEnumerator().name | ForEach-Object {Write-Color ('{0,-15}:' -f "$($_)"), ('{0}' -f "$($processArguments.$($_))") -ForegroundColor Cyan, Green -ShowTime}
+                Start-Process @processArguments -ErrorAction Stop
+            } catch {
+                $Text = $This.Text
+                [System.Windows.Forms.MessageBox]::Show("Failed to launch $Text`n`nMessage:$($_.Exception.Message)`nItem:$($_.Exception.ItemName)") > $null
             }
-            Write-Color 'Process Completed' -ShowTime -Color DarkYellow
-        } catch {
-            $Text = $This.Text
-            [System.Windows.Forms.MessageBox]::Show("Failed to launch $Text`n`nMessage:$($_.Exception.Message)`nItem:$($_.Exception.ItemName)") > $null
+        } else {
+            try {
+                $ModProcessArg = $processArguments
+                $ModProcessArg.ArgumentList = "'" + $($ModProcessArg.ArgumentList) + "'"
+                $params = "Start-Process $([string]::Join(' ', ($ModProcessArg.GetEnumerator() | ForEach-Object {"-$($_.Key) $($_.Value)"})))"
+                $BigHash = @{
+                    'FilePath'     = 'powershell.exe'
+                    'ArgumentList' = "-NoLogo -NoProfile -ExecutionPolicy Bypass -command ""(& {$params})"""
+                    'WindowStyle'  = 'Maximized'
+                    'Credential'   = (Get-Variable -Name $RunAsUser -ValueOnly)
+                }
+                if ($LoggingEnabled) {$BigHash.ArgumentList = '-NoExit ' + $BigHash.ArgumentList}
+                Write-Color 'Running the following ', "as $((Get-Variable -Name $RunAsUser -ValueOnly).username):" -Color DarkYellow, DarkCyan -ShowTime
+                $BigHash.GetEnumerator().name | ForEach-Object {Write-Color ('{0,-15}:' -f "$($_)"), ('{0}' -f "$($BigHash.$($_))") -ForegroundColor Cyan, Green -ShowTime}
+                Start-Process @BigHash
+            } catch {
+                $Text = $This.Text
+                [System.Windows.Forms.MessageBox]::Show("Failed to launch $Text`n`nMessage:$($_.Exception.Message)`nItem:$($_.Exception.ItemName)") > $null
+            }
         }
     }
-
+ 
     function NButton {
         param(
             [string]$Text = 'Placeholder Text',
