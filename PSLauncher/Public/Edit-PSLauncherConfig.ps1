@@ -80,10 +80,11 @@ Function Edit-PSLauncherConfig {
 	Write-Color 'Do you want to Configure' -Color DarkYellow -LinesAfter 1
 	Write-Color '0', ') ', 'Add a Panel' -Color Yellow, Yellow, Green
 	Write-Color '1', ') ', 'Add a Button' -Color Yellow, Yellow, Green
-	Write-Color '2', ') ', 'Bulk Add Buttons from script folder' -Color Yellow, Yellow, Green
+	Write-Color '2', ') ', 'Bulk Add Buttons from Script Folder' -Color Yellow, Yellow, Green
 	Write-Color '3', ') ', 'ReOrder Existing Panels' -Color Yellow, Yellow, Green
 	Write-Color '4', ') ', 'ReOrder Existing Buttons' -Color Yellow, Yellow, Green
 	Write-Color '6', ') ', 'Launch Color Picker Window' -Color Yellow, Yellow, Green
+	Write-Color '7', ') ', 'Remove a Button' -Color Yellow, Yellow, Green
 	Write-Color 'Q', ') ', 'Quit this menu' -Color Yellow, Yellow, Green
 	Write-Output ' '
 	$Choice = Read-Host 'Answer'
@@ -396,6 +397,37 @@ Function Edit-PSLauncherConfig {
 			$check = Read-Host 'Move another button (y/n) '
 		}
 		while ($check.ToLower() -notlike 'n')
+	}
+	if ($GuiAddChoice -eq 7) {
+		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
+		$index = 0
+		Clear-Host
+		Write-Color 'Select the panel' -Color DarkYellow -LinesAfter 1
+		foreach ($p in $data) {
+			Write-Color $index, ') ', $p.name -Color Yellow, Yellow, Green
+			$index++
+		}
+		Write-Output ' '
+		[int]$indexnum = Read-Host 'Panel Number '
+
+		[System.Collections.Generic.List[psobject]]$SortData = $jsondata.Buttons[$indexnum].buttons
+		Clear-Host
+		Write-Color 'Select the Button' -Color DarkYellow -LinesAfter 1
+		$index = 0
+		foreach ($d in $SortData) {
+			Write-Color $index, ') ', $d.name -Color Yellow, Yellow, Green
+			$index++
+		}
+		[int]$num = Read-Host 'Button Number '
+		$SortData.Remove($SortData[$num])
+		$index = 0 
+		$SortData | ForEach-Object {
+			$_.id = $index
+			$index++
+		}
+
+		$jsondata.Buttons[$indexnum].buttons = $SortData
+		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
 	}
 	if ($Execute) {
 		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""

@@ -3,11 +3,11 @@
 ######## Function 1 of 4 ##################
 # Function:         Edit-PSLauncherConfig
 # Module:           PSLauncher
-# ModuleVersion:    0.1.24
+# ModuleVersion:    0.1.25
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 20:43:29
-# ModifiedOn:       2022/08/14 17:48:47
+# ModifiedOn:       2022/08/21 00:12:17
 # Synopsis:         Add a button or panel to the config.
 #############################################
  
@@ -49,10 +49,11 @@ Function Edit-PSLauncherConfig {
 	Write-Color 'Do you want to Configure' -Color DarkYellow -LinesAfter 1
 	Write-Color '0', ') ', 'Add a Panel' -Color Yellow, Yellow, Green
 	Write-Color '1', ') ', 'Add a Button' -Color Yellow, Yellow, Green
-	Write-Color '2', ') ', 'Bulk Add Buttons from script folder' -Color Yellow, Yellow, Green
+	Write-Color '2', ') ', 'Bulk Add Buttons from Script Folder' -Color Yellow, Yellow, Green
 	Write-Color '3', ') ', 'ReOrder Existing Panels' -Color Yellow, Yellow, Green
 	Write-Color '4', ') ', 'ReOrder Existing Buttons' -Color Yellow, Yellow, Green
 	Write-Color '6', ') ', 'Launch Color Picker Window' -Color Yellow, Yellow, Green
+	Write-Color '7', ') ', 'Remove a Button' -Color Yellow, Yellow, Green
 	Write-Color 'Q', ') ', 'Quit this menu' -Color Yellow, Yellow, Green
 	Write-Output ' '
 	$Choice = Read-Host 'Answer'
@@ -366,6 +367,37 @@ Function Edit-PSLauncherConfig {
 		}
 		while ($check.ToLower() -notlike 'n')
 	}
+	if ($GuiAddChoice -eq 7) {
+		[System.Collections.Generic.List[psobject]]$data = $jsondata.Buttons
+		$index = 0
+		Clear-Host
+		Write-Color 'Select the panel' -Color DarkYellow -LinesAfter 1
+		foreach ($p in $data) {
+			Write-Color $index, ') ', $p.name -Color Yellow, Yellow, Green
+			$index++
+		}
+		Write-Output ' '
+		[int]$indexnum = Read-Host 'Panel Number '
+
+		[System.Collections.Generic.List[psobject]]$SortData = $jsondata.Buttons[$indexnum].buttons
+		Clear-Host
+		Write-Color 'Select the Button' -Color DarkYellow -LinesAfter 1
+		$index = 0
+		foreach ($d in $SortData) {
+			Write-Color $index, ') ', $d.name -Color Yellow, Yellow, Green
+			$index++
+		}
+		[int]$num = Read-Host 'Button Number '
+		$SortData.Remove($SortData[$num])
+		$index = 0 
+		$SortData | ForEach-Object {
+			$_.id = $index
+			$index++
+		}
+
+		$jsondata.Buttons[$indexnum].buttons = $SortData
+		$jsondata | ConvertTo-Json -Depth 5 | Out-File $PSLauncherConfigFile
+	}
 	if ($Execute) {
 		Start-Process -FilePath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -ArgumentList "-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy bypass -command ""& {Start-PSLauncher -PSLauncherConfigFile $($PSLauncherConfigFile)}"""
 	}
@@ -379,7 +411,7 @@ Export-ModuleMember -Function Edit-PSLauncherConfig
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.24
+# ModuleVersion:    0.1.25
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
@@ -538,7 +570,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.24
+# ModuleVersion:    0.1.25
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
@@ -1019,7 +1051,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.24
+# ModuleVersion:    0.1.25
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
