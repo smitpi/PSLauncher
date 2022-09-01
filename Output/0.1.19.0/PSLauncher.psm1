@@ -1,4 +1,4 @@
-﻿#region Public Functions
+#region Public Functions
 #region Edit-PSLauncherConfig.ps1
 ######## Function 1 of 4 ##################
 # Function:         Edit-PSLauncherConfig
