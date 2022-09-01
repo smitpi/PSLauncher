@@ -3,7 +3,7 @@
 ######## Function 1 of 4 ##################
 # Function:         Edit-PSLauncherConfig
 # Module:           PSLauncher
-# ModuleVersion:    0.1.25
+# ModuleVersion:    0.1.19.0
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 20:43:29
@@ -411,7 +411,7 @@ Export-ModuleMember -Function Edit-PSLauncherConfig
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.25
+# ModuleVersion:    0.1.19.0
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
@@ -570,7 +570,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.25
+# ModuleVersion:    0.1.19.0
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
@@ -1051,7 +1051,7 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.25
+# ModuleVersion:    0.1.19.0
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
