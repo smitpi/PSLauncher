@@ -1,9 +1,9 @@
-﻿
+
 <#PSScriptInfo
 
-.VERSION 1.1.2
+.VERSION 1.0.0
 
-.GUID 1f51337a-a640-4852-9499-e5f150edc13a
+.GUID 3b758a6f-432e-4f56-aa9d-eedf543e33d7
 
 .AUTHOR Pierre Smit
 
@@ -11,7 +11,7 @@
 
 .COPYRIGHT
 
-.TAGS ps
+.TAGS
 
 .LICENSEURI
 
@@ -19,31 +19,29 @@
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES
+.EXTERNALMODULEDEPENDENCIES 
 
 .REQUIREDSCRIPTS
 
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Created [30/09/2021_21:16] Initial Script Creating
-Updated [05/10/2021_08:31] Added Color Button
-Updated [24/10/2021_06:00] 'Updated module/script info'
+
 
 .PRIVATEDATA
 
 #>
 
+<# 
+
+.DESCRIPTION 
+ Launches a GUI form to test and change the Color of PSLauncher. 
+
+#> 
+
+Param()
 
 
-
-
-<#
-
-.DESCRIPTION
-Launches a GUI form to test and change the Color of PSLauncher.
-
-#>
 <#
 .SYNOPSIS
 Launches a GUI form to test and change the Color of PSLauncher.

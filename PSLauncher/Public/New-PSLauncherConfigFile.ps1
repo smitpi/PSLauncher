@@ -1,9 +1,9 @@
-﻿
+
 <#PSScriptInfo
 
-.VERSION 1.1.2
+.VERSION 1.0.0
 
-.GUID fc2f6108-c6fb-494e-98e3-015eb6ea8e38
+.GUID 0905b655-31e5-4aff-931b-f83241754788
 
 .AUTHOR Pierre Smit
 
@@ -11,7 +11,7 @@
 
 .COPYRIGHT
 
-.TAGS ps
+.TAGS
 
 .LICENSEURI
 
@@ -19,31 +19,28 @@
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES
+.EXTERNALMODULEDEPENDENCIES 
 
 .REQUIREDSCRIPTS
 
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Created [30/09/2021_21:20] Initial Script Creating
-Updated [05/10/2021_08:30] Spit into more functions
-Updated [24/10/2021_05:59] 'Updated module/script info'
+
 
 .PRIVATEDATA
 
 #>
 
+<# 
+
+.DESCRIPTION 
+ Creates the config file with the provided settings 
+
+#> 
 
 
 
-
-<#
-
-.DESCRIPTION
-Creates the config file with the provided settings
-
-#>
 <#
 .SYNOPSIS
 Creates the config file with the provided settings

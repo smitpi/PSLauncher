@@ -3,7 +3,7 @@
 ######## Function 1 of 4 ##################
 # Function:         Edit-PSLauncherConfig
 # Module:           PSLauncher
-# ModuleVersion:    0.1.19.1
+# ModuleVersion:    0.1.19.2
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 20:43:29
@@ -411,11 +411,11 @@ Export-ModuleMember -Function Edit-PSLauncherConfig
 ######## Function 2 of 4 ##################
 # Function:         New-PSLauncherConfigFile
 # Module:           PSLauncher
-# ModuleVersion:    0.1.19.1
+# ModuleVersion:    0.1.19.2
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
-# ModifiedOn:       2022/08/09 19:18:05
+# ModifiedOn:       2022/09/01 18:57:11
 # Synopsis:         Creates the config file with the provided settings
 #############################################
  
@@ -570,7 +570,7 @@ Export-ModuleMember -Function New-PSLauncherConfigFile
 ######## Function 3 of 4 ##################
 # Function:         Start-PSLauncher
 # Module:           PSLauncher
-# ModuleVersion:    0.1.19.1
+# ModuleVersion:    0.1.19.2
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
@@ -1051,11 +1051,11 @@ Export-ModuleMember -Function Start-PSLauncher
 ######## Function 4 of 4 ##################
 # Function:         Start-PSLauncherColorPicker
 # Module:           PSLauncher
-# ModuleVersion:    0.1.19.1
+# ModuleVersion:    0.1.19.2
 # Author:           Pierre Smit
 # Company:          HTPCZA Tech
 # CreatedOn:        2022/08/09 19:17:56
-# ModifiedOn:       2022/08/09 19:17:56
+# ModifiedOn:       2022/09/01 18:52:10
 # Synopsis:         Launches a GUI form to test and change the Color of PSLauncher.
 #############################################
  
