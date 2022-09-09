@@ -8,9 +8,14 @@ A GUI to launch any PowerShell script, function, or any other executables. You h
 ```
 Install-Module -Name PSLauncher -Verbose
 ```
-- or from GitHub [GitHub Repo](https://github.com/smitpi/PSLauncher)
+- or run this script to install from GitHub [GitHub Repo](https://github.com/smitpi/PSLauncher)
 ```
-git clone https://github.com/smitpi/PSLauncher (Join-Path (get-item (Join-Path (Get-Item $profile).Directory 'Modules')).FullName -ChildPath PSLauncher)
+$CurrentLocation = Get-Item .
+$ModuleDestination = (Join-Path (Get-Item (Join-Path (Get-Item $profile).Directory 'Modules')).FullName -ChildPath PSLauncher)
+git clone --depth 1 https://github.com/smitpi/PSLauncher $ModuleDestination 2>&1 | Write-Host -ForegroundColor Yellow
+Set-Location $ModuleDestination
+git filter-branch --prune-empty --subdirectory-filter Output HEAD 2>&1 | Write-Host -ForegroundColor Yellow
+Set-Location $CurrentLocation
 ```
 - Then import the module into your session
 ```
